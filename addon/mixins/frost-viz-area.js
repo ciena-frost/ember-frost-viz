@@ -1,5 +1,5 @@
 import Ember from 'ember'
-import { mapObj } from 'ember-frost-viz/utils/frost-viz-data-transform'
+import { mapObj } from 'ciena-frost-viz/utils/frost-viz-data-transform'
 
 export default Ember.Mixin.create({
   actions: {

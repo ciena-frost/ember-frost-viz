@@ -1,8 +1,8 @@
 import Ember from 'ember'
-import Area from 'ember-frost-viz/mixins/frost-viz-area'
+import Area from 'ciena-frost-viz/mixins/frost-viz-area'
 import PropTypesMixin, {PropTypes} from 'ember-prop-types'
-// import Rectangle from 'ember-frost-viz/utils/frost-viz-rectangle'
-// import {ChartScope} from 'ember-frost-viz/utils/chart-scope'
+// import Rectangle from 'ciena-frost-viz/utils/frost-viz-rectangle'
+// import {ChartScope} from 'ciena-frost-viz/utils/chart-scope'
 
 const TransformScope = Ember.Object.extend(PropTypesMixin, {
   propTypes: {

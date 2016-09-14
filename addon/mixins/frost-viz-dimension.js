@@ -15,7 +15,7 @@ import Ember from 'ember'
  * In the eager domain case, the helper builds the mapping function and it is directly used.
  *
  * In the lazy domain case, we return a dimension with most of its public API unbound. The domain manager mixin detects
- * this and behaves appropriately. See ember-frost-viz/mixins/frost-viz-dimension-manager
+ * this and behaves appropriately. See ciena-frost-viz/mixins/frost-viz-dimension-manager
  **/
 
 const fUndef = () => undefined

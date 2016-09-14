@@ -6,7 +6,7 @@ import {
 } from 'mocha';
 import {
   frostVizFormatDefault
-} from 'ember-frost-viz/helpers/frost-viz/format/default';
+} from 'ciena-frost-viz/helpers/frost-viz/format/default';
 
 describe('FrostVizFormatDefaultHelper', function() {
   // Replace this with your real tests.

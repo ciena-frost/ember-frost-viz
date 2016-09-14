@@ -1,11 +1,11 @@
 import Ember from 'ember'
 import layout from '../../templates/components/frost-viz/chart'
 import { PropTypes } from 'ember-prop-types'
-import DOMBox from 'ember-frost-viz/mixins/frost-viz-dom-box'
-import Area from 'ember-frost-viz/mixins/frost-viz-area'
-import Rectangle from 'ember-frost-viz/utils/frost-viz-rectangle'
-import { bindFunctionMap } from 'ember-frost-viz/utils/frost-viz-data-transform'
-import DimensionManager from 'ember-frost-viz/mixins/frost-viz-dimension-manager'
+import DOMBox from 'ciena-frost-viz/mixins/frost-viz-dom-box'
+import Area from 'ciena-frost-viz/mixins/frost-viz-area'
+import Rectangle from 'ciena-frost-viz/utils/frost-viz-rectangle'
+import { bindFunctionMap } from 'ciena-frost-viz/utils/frost-viz-data-transform'
+import DimensionManager from 'ciena-frost-viz/mixins/frost-viz-dimension-manager'
 
 const Chart = Ember.Component.extend(DOMBox, Area, DimensionManager, {
   layout,

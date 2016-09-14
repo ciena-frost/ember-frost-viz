@@ -6,7 +6,7 @@ import {
 } from 'mocha';
 import {
   frostVizDimensionLog
-} from 'ember-frost-viz/helpers/frost-viz/dimension/log';
+} from 'ciena-frost-viz/helpers/frost-viz/dimension/log';
 
 describe('FrostVizDimensionLogHelper', function() {
   // Replace this with your real tests.

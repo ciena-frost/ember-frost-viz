@@ -6,7 +6,7 @@ import {
 } from 'mocha';
 import {
   frostVizSupportToJson
-} from 'ember-frost-viz/helpers/frost-viz/support/to-json';
+} from 'ciena-frost-viz/helpers/frost-viz/support/to-json';
 
 describe('FrostVizSupportToJsonHelper', function() {
   // Replace this with your real tests.

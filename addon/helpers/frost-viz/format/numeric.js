@@ -1,5 +1,5 @@
 import Ember from 'ember'
-import FormatterBase from 'ember-frost-viz/mixins/frost-viz-format'
+import FormatterBase from 'ciena-frost-viz/mixins/frost-viz-format'
 import { format } from 'd3-format'
 
 const NumericFormatterBase = Ember.Mixin.create(FormatterBase, {

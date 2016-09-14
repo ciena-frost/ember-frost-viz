@@ -6,7 +6,7 @@ import {
 } from 'mocha';
 import {
   frostVizDimensionTime
-} from 'ember-frost-viz/helpers/frost-viz/dimension/time';
+} from 'ciena-frost-viz/helpers/frost-viz/dimension/time';
 
 describe('FrostVizDimensionTimeHelper', function() {
   // Replace this with your real tests.

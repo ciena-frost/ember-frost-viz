@@ -1,1 +1,1 @@
-export { default, frostVizFormatDefault } from 'ember-frost-viz/helpers/frost-viz/format/default';
+export { default, frostVizFormatDefault } from 'ciena-frost-viz/helpers/frost-viz/format/default';

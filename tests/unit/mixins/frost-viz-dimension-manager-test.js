@@ -5,7 +5,7 @@ import {
   it
 } from 'mocha';
 import Ember from 'ember';
-import FrostVizDimensionManagerMixin from 'ember-frost-viz/mixins/frost-viz-dimension-manager';
+import FrostVizDimensionManagerMixin from 'ciena-frost-viz/mixins/frost-viz-dimension-manager';
 
 describe('FrostVizDimensionManagerMixin', function() {
   // Replace this with your real tests.

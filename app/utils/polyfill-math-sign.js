@@ -1,1 +1,1 @@
-export { default } from 'ember-frost-viz/utils/polyfill-math-sign';
+export { default } from 'ciena-frost-viz/utils/polyfill-math-sign';

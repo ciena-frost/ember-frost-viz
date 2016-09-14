@@ -1,6 +1,6 @@
 import Ember from 'ember'
 import layout from '../../../templates/components/frost-viz/plot/scatter'
-import ElementBuilder from 'ember-frost-viz/mixins/frost-viz-element-builder'
+import ElementBuilder from 'ciena-frost-viz/mixins/frost-viz-element-builder'
 
 const Scatter = Ember.Component.extend(ElementBuilder, {
   layout,

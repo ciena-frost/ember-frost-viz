@@ -1,4 +1,4 @@
-# Ember-frost-viz
+# ciena-frost-viz
 
 Build visualizations using prefab graph templates or a graphing grammar composed of Ember components.
 
