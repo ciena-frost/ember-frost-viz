@@ -1,5 +1,5 @@
 import Ember from 'ember'
-import SetOperations from 'ember-frost-viz/utils/frost-viz-set-operations'
+import SetOperations from 'ciena-frost-viz/utils/frost-viz-set-operations'
 
 // Wanted to be SVGTransforable but this is a name reserved by SVG 1.1.
 /**

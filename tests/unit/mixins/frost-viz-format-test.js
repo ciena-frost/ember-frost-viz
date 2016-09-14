@@ -5,7 +5,7 @@ import {
   it
 } from 'mocha';
 import Ember from 'ember';
-import FrostVizFormatMixin from 'ember-frost-viz/mixins/frost-viz-format';
+import FrostVizFormatMixin from 'ciena-frost-viz/mixins/frost-viz-format';
 
 describe('FrostVizFormatMixin', function() {
   // Replace this with your real tests.

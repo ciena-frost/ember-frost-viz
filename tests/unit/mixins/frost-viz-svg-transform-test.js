@@ -5,7 +5,7 @@ import {
   it
 } from 'mocha';
 import Ember from 'ember';
-import FrostVizSvgTransformMixin from 'ember-frost-viz/mixins/frost-viz-svg-transform';
+import FrostVizSvgTransformMixin from 'ciena-frost-viz/mixins/frost-viz-svg-transform';
 
 describe('FrostVizSvgTransformMixin', function() {
   // Replace this with your real tests.

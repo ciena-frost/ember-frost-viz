@@ -1,1 +1,1 @@
-export { default } from 'ember-frost-viz/components/frost-viz/transform/cartesian';
+export { default } from 'ciena-frost-viz/components/frost-viz/transform/cartesian';

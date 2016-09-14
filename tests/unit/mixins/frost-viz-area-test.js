@@ -5,7 +5,7 @@ import {
   it
 } from 'mocha';
 import Ember from 'ember';
-import FrostVizAreaMixin from 'ember-frost-viz/mixins/frost-viz-area';
+import FrostVizAreaMixin from 'ciena-frost-viz/mixins/frost-viz-area';
 
 describe('FrostVizAreaMixin', function() {
   // Replace this with your real tests.

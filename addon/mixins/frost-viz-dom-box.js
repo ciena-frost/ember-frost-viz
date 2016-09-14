@@ -1,6 +1,6 @@
 import Ember from 'ember'
 const {camelize} = Ember.String
-import { mapObj } from 'ember-frost-viz/utils/frost-viz-data-transform'
+import { mapObj } from 'ciena-frost-viz/utils/frost-viz-data-transform'
 
 const CSS_INT_PROPERTIES = [
   'width',
@@ -17,7 +17,7 @@ const CSS_STRING_PROPERTIES = [
 
 export default Ember.Mixin.create({
   // TODO: convert to propTypes
-  // @see ember-frost-viz/mixins/frost-viz-dimension-manager
+  // @see ciena-frost-viz/mixins/frost-viz-dimension-manager
 
   init () {
     this.set('box', Ember.Object.create())

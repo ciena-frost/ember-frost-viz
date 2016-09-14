@@ -1,7 +1,7 @@
 import Ember from 'ember'
-import SVGAffineTransform from 'ember-frost-viz/mixins/frost-viz-svg-transform-provider'
-import SVGClipPathProvider from 'ember-frost-viz/mixins/frost-viz-svg-clip-path-provider'
-import Area from 'ember-frost-viz/mixins/frost-viz-area'
+import SVGAffineTransform from 'ciena-frost-viz/mixins/frost-viz-svg-transform-provider'
+import SVGClipPathProvider from 'ciena-frost-viz/mixins/frost-viz-svg-clip-path-provider'
+import Area from 'ciena-frost-viz/mixins/frost-viz-area'
 
 const NULL_DIMENSION = {domain: [0, 1], range: [0, 1], evaluateElement: () => 0}
 const NULL_TRANSFORM = (value) => value

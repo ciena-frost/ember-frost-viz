@@ -1,1 +1,1 @@
-export { default } from 'ember-frost-viz/components/frost-viz/chart';
+export { default } from 'ciena-frost-viz/components/frost-viz/chart';

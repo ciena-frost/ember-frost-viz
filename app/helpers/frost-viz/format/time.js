@@ -1,1 +1,1 @@
-export { default, frostVizFormatTime } from 'ember-frost-viz/helpers/frost-viz/format/time';
+export { default, frostVizFormatTime } from 'ciena-frost-viz/helpers/frost-viz/format/time';

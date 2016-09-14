@@ -1,10 +1,10 @@
 import Ember from 'ember';
 import layout from '../../templates/components/frost-viz/scale';
-import DOMBox from 'ember-frost-viz/mixins/frost-viz-dom-box'
-import Area from 'ember-frost-viz/mixins/frost-viz-area'
-import DefaultFormatter from 'ember-frost-viz/helpers/frost-viz/format/default'
-import Rectangle from 'ember-frost-viz/utils/frost-viz-rectangle'
-import SVGAffineTransformable from 'ember-frost-viz/mixins/frost-viz-svg-transform-provider'
+import DOMBox from 'ciena-frost-viz/mixins/frost-viz-dom-box'
+import Area from 'ciena-frost-viz/mixins/frost-viz-area'
+import DefaultFormatter from 'ciena-frost-viz/helpers/frost-viz/format/default'
+import Rectangle from 'ciena-frost-viz/utils/frost-viz-rectangle'
+import SVGAffineTransformable from 'ciena-frost-viz/mixins/frost-viz-svg-transform-provider'
 import PropTypes from 'ember-prop-types'
 
 const DEFAULT_LABEL_FORMAT = DefaultFormatter.create().compute()

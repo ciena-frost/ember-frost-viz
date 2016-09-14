@@ -5,7 +5,7 @@ import {
   it
 } from 'mocha';
 import Ember from 'ember';
-import FrostVizSvgClipPathProviderMixin from 'ember-frost-viz/mixins/frost-viz-svg-clip-path-provider';
+import FrostVizSvgClipPathProviderMixin from 'ciena-frost-viz/mixins/frost-viz-svg-clip-path-provider';
 
 describe('FrostVizSvgClipPathProviderMixin', function() {
   // Replace this with your real tests.

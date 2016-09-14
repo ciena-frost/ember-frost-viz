@@ -4,7 +4,7 @@ import {
   describe,
   it
 } from 'mocha';
-import frostVizRectangle from 'ember-frost-viz/utils/frost-viz-rectangle';
+import frostVizRectangle from 'ciena-frost-viz/utils/frost-viz-rectangle';
 
 describe('frostVizRectangle', function() {
   // Replace this with your real tests.
