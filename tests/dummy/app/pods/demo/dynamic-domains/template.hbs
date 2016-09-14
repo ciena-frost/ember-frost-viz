@@ -1,0 +1,91 @@
+<div class="line left">
+
+  <h1>Dynamic Domains</h1>
+
+  <p>
+    This chart demonstrates the utility of dynamic domains in combination with dynamic data.
+  </p>
+
+  <p>
+    The source data is updated in sliding window fashion, with the oldest element removed and a new element added on
+    every update. Note that the x-scale automatically adjusts.
+  </p>
+
+  <p>
+    The dependent variable changes randomly over time, so the chart could overrun any fixed domain for the dependent axis.
+    Instead, the dynamic domain for y means that the scale is recomputed each time, such that the minimum and maximum
+    accommodate all values.
+  </p>
+
+  <h2>TODO</h2>
+  <p>
+    Tweakable dynamic domains. domain=(function over elements) is implemented but not tested or documented. Maybe
+    explicit domain='auto', or keywords to select certain behaviors like pad range, or limit scaling.
+  </p>
+
+  <div class="element-count">
+    Plotting {{model.length}} elements
+  </div>
+
+  <!-- BEGIN-SNIPPET demo-line -->
+
+  <!-- Chart element. -->
+  {{#frost-viz/chart model
+    as |chart|
+  }}
+
+    <!-- Chart has a cartesian transform. (x right, y up).
+    The transform translates data attributes to coordinates via the dimensions. Any dimensions that would be overwritten
+    (in this case, "x" and "y") are saved to an "overridden" attribute (e.g. if the source data had "x" or "y"
+    attributes). -->
+    {{#frost-viz/transform/cartesian chart
+      dimensions= (hash
+        x=(frost-viz/dimension/time   chart 'time')
+        y=(frost-viz/dimension/linear chart 'value')
+      )
+      as |transform dimensions|
+    }}
+
+      <!-- Add scale components. These report their styled area (defined here in CSS)
+      and the rest of the chart responsively resizes to their dimensions. -->
+      {{frost-viz/scale transform dimension=transform.dimensions.x align="bottom" ticks=10 labelFormat=(frost-viz/format/time '%H:%M')}}
+      {{frost-viz/scale transform dimension=transform.dimensions.y align="left"   ticks=10 labelFormat=(frost-viz/format/numeric)}}
+
+      <!-- Line plot component. Similar to a scatter plot, but yields y(x) and y(x+1) together. -->
+      {{#frost-viz/plot/line transform
+        as |begin end data|
+      }}
+
+        <!-- Line segment component. Can optionally yield begin and end points to
+        allow vertex styling, as shown here. -->
+        {{#frost-viz/plot/element/line-segment begin end
+          as |begin end|
+        }}
+          <!-- Style the begin and end points of each line segment.
+          (Usually only necessary to style one or the other.) -->
+          {{frost-viz/plot/element/symbol/circle begin
+            cx=     begin.x
+            cy=     begin.y
+            r=      2
+            fill=   'green'
+          }}
+          {{frost-viz/plot/element/symbol/circle end
+            cx=     end.x
+            cy=     end.y
+            r=      2
+            fill=   'green'
+          }}
+        {{/frost-viz/plot/element/line-segment}}
+
+      {{/frost-viz/plot/line}}
+
+    {{/frost-viz/transform/cartesian}}
+
+  {{/frost-viz/chart}}
+  <!-- END-SNIPPET -->
+
+  <div class="source">
+    {{code-snippet name="demo-line.hbs"}}
+  </div>
+
+</div>

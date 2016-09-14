@@ -1,0 +1,187 @@
+<div class="frost-viz-reference">
+  <h1>Reference Guide</h1>
+
+  <p>
+    The visualization library consists of the following:
+  </p>
+
+  <h2>Component Types</h2>
+
+  <h3>Chart</h3>
+  <p>
+    The chart is the outer container, interfacing directly with the model and responding to page layout.
+  </p>
+  <p>
+    A visualization contains one <b>chart</b> component that:
+  </p>
+  <ul>
+    <li>accepts the data to be plotted</li>
+    <li>provides a styleable root element and responds to layout changes</li>
+    <li>manages the response of all components and helpers to changing data</li>
+    <li>yields a <em>chart scope</em></li>
+  </ul>
+
+  <h3>Transform</h3>
+  <p>
+    The transform is a mapping of the most useful coordinate system for the data into the Cartesian space used by a plot.
+    Example transforms include:
+  </p>
+  <ul>
+    <li>Cartesian, e.g. straightforward mapping of attributes to x/y</li>
+    <li>Cartographical transforms, e.g. a Mercator projection of lat/long to x/y</li>
+    <li>Polar transform, e.g. r/&theta; to x/y for radar plots or pie charts</li>
+  </ul>
+  <p>
+    A chart contains one or more overlaid <b>transform</b> components that:
+  </p>
+  <ul>
+    <li>require a <em>chart scope</em></li>
+    <li>accept <b>dimensions</b> to provide inputs in its own coordinate space</li>
+    <li>determine the plot area, accounting for any hosted <b>scale</b> components</li>
+    <li>map their coordinate space to a standardized reference space (Cartesian coordinates)</li>
+    <li>yield a <em>transform scope</em></li>
+  </ul>
+
+  <h3>Scale</h3>
+  <p>
+    The scale tells the chart viewer what significance to read from the position of a component. A scale can
+    be aligned to the edge of a chart, in which case it affects the final transform, reducing its size. Careful use of
+    scales with different dimensions and alignment can signify overlaid coordinate spaces.
+  </p>
+  <p>
+    A transform component contains zero or more <b>scale</b> components that:
+  </p>
+  <ul>
+    <li>require a <em>transform scope</em> and a reference to a <b>dimension</b></li>
+    <li>align themselves to their parent component, cooperating with other aligned components</li>
+    <li>display the domain for its assigned dimension using a <b>format</b></li>
+    <li>draw tick marks</li>
+    <li>draw grid lines within the plot area</li>
+    <li>yield no scope</li>
+  </ul>
+
+  <h3>Plot</h3>
+  <p>
+    A plot is a mapping of data to elements. Examples include:
+  </p>
+  <ul>
+    <li>Scatter plots, in which the plot yields one display element for every data element</li>
+    <li>Line graphs, in which the plot yields one line segment element for every pair of adjacent data elements</li>
+    <li>Pie plots, in which the plot yields one pie slice element for each data element</li>
+  </ul>
+  <p>
+    A transform component contains one or more <b>plot</b> components that:
+  </p>
+  <ul>
+    <li>require a <em>transform scope</em></li>
+    <li>position data elements within the plot area</li>
+    <li>clip and discard any part of any element that would be drawn outside the plot area</li>
+    <li>yield an <em>element scope</em> per element to be displayed</li>
+  </ul>
+
+  <h3>Element</h3>
+  <p>
+    An element is the visual representation of one or more data points, with some properties (especially position and
+    shape) determined by the enclosing plot.
+  </p>
+  <p>
+    A plot contains zero or more <b>element</b> components that:
+  </p>
+  <ul>
+    <li>require an <em>element scope</em></li>
+    <li>accept optional <b>dimensions</b> to provide additional inputs for display</li>
+    <li>produce visual elements with the desired location and style properties</li>
+    <li>optionally yield one or more <em>element scope</em>s, if parts of the element can be represented as sub-elements</li>
+  </ul>
+  <p>
+    Since a line segment element comprises two data points, it yields each point as an element scope, allowing the plot
+    designer to add symbols to every line vertex.
+  </p>
+
+  <h2>Helper Types</h2>
+  <p>
+    A plot processes data with the assistance of helpers, which define transformations on incoming or outgoing data.
+  </p>
+
+  <h3>Dimension</h3>
+  <p>
+    A dimension specifies the <b>selector</b>, the <b>parsing format</b>, the <b>mapping function</b>, the <b>domain</b> and
+    the <b>range</b> for one quantity in the incoming data.
+  </p>
+
+  <h4>Selector</h4>
+  <p>
+    A data element may contain many attributes, or it may require extra manipulation to return a value. Typical
+    selectors are string expressions, e.g. 'width', '0.max', that specify a path to a value in each element. For special
+    cases, a designer-defined function can be called on each element to return the dimension's input value.
+  </p>
+
+  <h4>Parsing format</h4>
+  <p>
+    By default, <b>ember-frost-viz</b> attempts to interpret incoming values in a way that is suitable for a given
+    mapping funcion. Certain values may require extra help for processing. A parsing format could, for example specify
+    how to convert a string to a date.
+  </p>
+
+  <h4>Mapping Function</h4>
+  <p>
+    The mapping function maps each value within the domain of the data, to a value in the range of the output. Here are
+    some example mappings with their domain and range:
+  </p>
+  <ul>
+    <li>a mapping from a time between now and midnight to a value between zero and one</li>
+    <li>a mapping from a value between 1 and 3 to a color along the gradient
+      [<span style="color:red;">red</span>,
+      <span style="color:green;">green</span>,
+      <span style="color:blue;">blue</span>]
+    </li>
+  </ul>
+  <p>
+    Many dimensions are linear; that is, an equal change in input should result in an equal change in output. The
+    <b>linear</b> dimension type provides this functionality. Other types include <b>log</b> for logarithmic change in
+    output, or <b>date</b> when the separation between values relies understanding human calendars.
+  </p>
+
+  <h4>Domain</h4>
+  <p>
+    This is the minimum and maximum values (after selection) that are to be mapped by the mapping function. Values
+    outside this range may be clamped, or may be represented by a point that falls outside the plot area and is not
+    visible.
+  </p>
+  <p>
+    Note that some mapping functions may restrict or modify a specified domain if it doesn't make sense. For example,
+  </p>
+  <ul>
+    <li>the standard date mapper does not account for dates crossing calendar transitions (e.g. Julian to Gregorian)</li>
+    <li>
+      the log mapper adjusts domains that start or end on zero so that they actually start or end on a very small value,
+      because <span style="font-face:courier;">log(0)=&infin;</span> which cannot be compared with any specified range.
+    </li>
+  </ul>
+  <p>
+    The domain of a dimension can be left unspecified. In this case, on any data update, the domain of the data set is
+    recalculated. This is a convenient feature in dynamic data sets, but has a performance impact that should be
+    considered before use.
+  </p>
+
+  <h4>Range</h4>
+  <p>
+    This is the value that should be produced by the mapping function. It is expressed as two values, one of which
+    will be produced for the minimum value in the domain, and one of which will result from the max. The standard
+    mapping functions (due to their <b>d3</b> implementation) will interpolate any of the following:
+  </p>
+  <ul>
+    <li>numbers</li>
+    <li>booleans (as identity)</li>
+    <li>colors (any string parsable as a CSS3 color)</li>
+    <li>dates</li>
+    <li>strings (where numbers embedded in similar positions in the range extrema are interpolated)</li>
+    <li>objects (where each matching attribute is individually interpolated as above)</li>
+  </ul>
+
+  <h3>Format</h3>
+  <p>
+    A format helper modifies a value for display wherever it is used. Format helpers are used in scales, and can also
+    be part of custom elements or interaction points.
+  </p>
+</div>

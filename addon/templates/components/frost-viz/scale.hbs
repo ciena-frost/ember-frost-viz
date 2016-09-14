@@ -1,0 +1,7 @@
+<rect class="frost-viz-scale-rect" x={{rectArea.x}} y={{rectArea.y}} />
+{{#each tickElements as |tick|}}
+  <g class="frost-viz-scale-tick">
+    <line x1={{tick.line.x1}} y1={{tick.line.y1}} x2={{tick.line.x2}} y2={{tick.line.y2}} />
+    <text x={{tick.label.position.x}} y={{tick.label.position.y}}>{{tick.label.caption}}</text>
+  </g>
+{{/each}}

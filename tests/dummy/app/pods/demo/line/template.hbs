@@ -1,0 +1,92 @@
+<div class="line left">
+
+  <h1>Line Graph</h1>
+
+  <p>
+    A line graph shows the variation of a quantity relative to the variation of another. Generally, the x-axis is
+    selected such that its value does not depend on anything, e.g. time. This is called the <em>independent axis</em>.
+  </p>
+
+  <p>
+    The y-axis is called the <em>dependent axis</em>, and it should display a quantity that is dependent on the selected
+    independent variable, e.g. temperature over time.
+  </p>
+
+  <p>
+    Multiple variables can be displayed simultaneously for comparison, even if their scales are independent, e.g.
+    temperature over time, precipitation over time. In this case, a scale for one variable is often aligned to the left,
+    with another aligned to the right.
+  </p>
+
+  <h2>TODO</h2>
+
+  <p>
+    Build/test a graph with multiple independent variables as
+  </p>
+
+  <div class="element-count">
+    Plotting {{model.length}} elements
+  </div>
+
+  <!-- BEGIN-SNIPPET demo-line -->
+
+  <!-- Chart element. -->
+  {{#frost-viz/chart model
+    as |chart|
+  }}
+
+    <!-- Chart has a cartesian transform. (x right, y up).
+    The transform translates data attributes to coordinates via the dimensions. Any dimensions that would be overwritten
+    (in this case, "x" and "y") are saved to an "overridden" attribute (e.g. if the source data had "x" or "y"
+    attributes). -->
+    {{#frost-viz/transform/cartesian chart
+      dimensions= (hash
+        x=(frost-viz/dimension/time   chart 'time')
+        y=(frost-viz/dimension/linear chart 'value')
+      )
+      as |transform dimensions|
+    }}
+
+      <!-- Add scale components. These report their styled area (defined here in CSS)
+      and the rest of the chart responsively resizes to their dimensions. -->
+      {{frost-viz/scale transform dimension=transform.dimensions.x align="bottom" ticks=10 labelFormat=(frost-viz/format/time '%H:%M')}}
+      {{frost-viz/scale transform dimension=transform.dimensions.y align="left"   ticks=10 labelFormat=(frost-viz/format/numeric)}}
+
+      <!-- Line plot component. Similar to a scatter plot, but yields y(x) and y(x+1) together. -->
+      {{#frost-viz/plot/line transform
+        as |begin end data|
+      }}
+
+        <!-- Line segment component. Can optionally yield begin and end points to
+        allow vertex styling, as shown here. -->
+        {{#frost-viz/plot/element/line-segment begin end
+          as |begin end|
+        }}
+          <!-- Style the begin and end points of each line segment.
+          (Usually only necessary to style one or the other.) -->
+          {{frost-viz/plot/element/symbol/circle begin
+            cx=     begin.x
+            cy=     begin.y
+            r=      2
+            fill=   'green'
+          }}
+          {{frost-viz/plot/element/symbol/circle end
+            cx=     end.x
+            cy=     end.y
+            r=      2
+            fill=   'green'
+          }}
+        {{/frost-viz/plot/element/line-segment}}
+
+      {{/frost-viz/plot/line}}
+
+    {{/frost-viz/transform/cartesian}}
+
+  {{/frost-viz/chart}}
+  <!-- END-SNIPPET -->
+
+  <div class="source">
+    {{code-snippet name="demo-line.hbs"}}
+  </div>
+
+</div>

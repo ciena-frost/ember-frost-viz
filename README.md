@@ -1,5 +1,7 @@
 # Ember-frost-viz
 
+Build visualizations using prefab graph templates or a graphing grammar composed of Ember components.
+
 This README outlines the details of collaborating on this Ember addon.
 
 ## Installation

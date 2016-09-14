@@ -1,0 +1,12 @@
+<defs>
+  <clipPath id="{{clipPathId}}">
+    <rect width={{width}} height={{height}} />
+  </clipPath>
+</defs>
+
+<rect width={{width}} height={{height}} />
+<g style={{clipPathStyle}}>
+  {{#each elements as |elt|}}
+    {{yield elt data}}
+  {{/each}}
+</g>
