@@ -10,6 +10,7 @@ Router.map(function () {
     this.route('overview', { path: '/' })
     this.route('scatter')
     this.route('line')
+    this.route('bar')
     this.route('interaction')
     this.route('dynamic-domains')
     this.route('reference');
