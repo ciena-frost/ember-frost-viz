@@ -1,0 +1,8 @@
+<g class="frost-viz-scale-tick">
+  <line x1={{tick.line.x1}} y1={{tick.line.y1}} x2={{tick.line.x2}} y2={{tick.line.y2}} />
+  {{#if hasBlock}}
+    {{yield}}
+  {{else}}
+    {{frost-viz/scale/tick/label label}}
+  {{/if}}
+</g>
