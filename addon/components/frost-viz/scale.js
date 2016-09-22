@@ -1,5 +1,5 @@
-import Ember from 'ember';
-import layout from '../../templates/components/frost-viz/scale';
+import Ember from 'ember'
+import layout from '../../templates/components/frost-viz/scale'
 import DOMBox from 'ciena-frost-viz/mixins/frost-viz-dom-box'
 import Area from 'ciena-frost-viz/mixins/frost-viz-area'
 import DefaultFormatter from 'ciena-frost-viz/helpers/frost-viz/format/default'

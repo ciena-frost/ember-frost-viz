@@ -1,6 +1,13 @@
-import Ember from 'ember';
-import layout from '../../../../templates/components/frost-viz/scale/tick/label';
+import Ember from 'ember'
+import layout from '../../../../templates/components/frost-viz/scale/tick/label'
 
-export default Ember.Component.extend({
-  layout
-});
+const LabelComponent = Ember.Component.extend({
+  layout,
+  tagName: 'g'
+})
+
+LabelComponent.reopenClass({
+  positionalParams: ['label']
+})
+
+export default LabelComponent
