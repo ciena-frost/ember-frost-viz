@@ -2,7 +2,7 @@ import Ember from 'ember'
 import { mapObj } from 'ciena-frost-viz/utils/frost-viz-data-transform'
 
 export default Ember.Mixin.create({
-  actions: {
+  callbacks: {
     updateMargins (key, margins) {
       // console.log('Updating margins', key, margins)
       let marginsByAlignment = this.get('marginsByAlignment')

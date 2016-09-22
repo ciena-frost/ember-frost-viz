@@ -3,11 +3,10 @@ import layout from '../../templates/components/frost-viz/chart'
 import { PropTypes } from 'ember-prop-types'
 import DOMBox from 'ciena-frost-viz/mixins/frost-viz-dom-box'
 import Area from 'ciena-frost-viz/mixins/frost-viz-area'
-import Rectangle from 'ciena-frost-viz/utils/frost-viz-rectangle'
-import { bindFunctionMap } from 'ciena-frost-viz/utils/frost-viz-data-transform'
 import DimensionManager from 'ciena-frost-viz/mixins/frost-viz-dimension-manager'
+import ScopeProvider from 'ciena-frost-viz/mixins/frost-viz-scope-provider'
 
-const Chart = Ember.Component.extend(DOMBox, Area, DimensionManager, {
+const Chart = Ember.Component.extend(DOMBox, Area, DimensionManager, ScopeProvider, {
   layout,
   tagName: 'svg',
   classNames: ['frost-viz-chart'],
@@ -30,7 +29,7 @@ const Chart = Ember.Component.extend(DOMBox, Area, DimensionManager, {
   height: Ember.computed.oneWay('box.height'),
   // No need to set area -- the innerArea.parent of this will be undefined.
 
-  actions: {
+  callbacks: {
     // TODO: more fine grained interaction types here
     setSelection (id, element) {
       this.set('selectedElement', element)
@@ -55,14 +54,9 @@ const Chart = Ember.Component.extend(DOMBox, Area, DimensionManager, {
     }
   }),
 
-  chartScope: Ember.computed('data', 'data.[]', 'innerArea', 'interaction', function () {
-    const data = this.get('data')
-    const chartArea = Rectangle.from(this.get('innerArea'))
+  childScope: Ember.computed('childScopeBase', 'interaction', function () {
     const interaction = this.get('interaction')
-    const actions = bindFunctionMap(this.get('actions'), this) // pass all actions as bound functions
-    return {
-      data, chartArea, interaction, actions
-    }
+    return Object.assign({}, this.get('childScopeBase'), { interaction })
   })
 
 })

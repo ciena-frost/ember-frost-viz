@@ -15,7 +15,7 @@ const Line = Ember.Component.extend(ElementBuilder, {
 })
 
 Line.reopenClass({
-  positionalParams: ['transformScope']
+  positionalParams: ['scope']
 })
 
 export default Line

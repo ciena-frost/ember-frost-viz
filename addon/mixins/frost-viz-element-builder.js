@@ -10,14 +10,14 @@ const DEFAULT_AREA = {width: 100, height: 100}
 export default Ember.Mixin.create(Area, SVGAffineTransform, SVGClipPathProvider, {
   tagName: 'g',
   classNames: ['frost-viz-plot'],
-  area: Ember.computed.alias('transformScope.transformArea'),
+  area: Ember.computed.alias('scope.area'),
   x: Ember.computed.alias('area.x'),
   y: Ember.computed.alias('area.y'),
 
   width: Ember.computed.alias('area.width'),
   height: Ember.computed.alias('area.height'),
-  data: Ember.computed.alias('transformScope.data'),
-  dimensions: Ember.computed.alias('transformScope.dimensions'),
+  data: Ember.computed.alias('scope.data'),
+  dimensions: Ember.computed.alias('scope.dimensions'),
 
   renderReady: false,
 
@@ -59,8 +59,8 @@ export default Ember.Mixin.create(Area, SVGAffineTransform, SVGClipPathProvider,
     return normalizedDimensions
   }),
 
-  elementBuilder: Ember.computed('transformScope.actions', 'dimensions', 'dimensionOverrides', function () {
-    const actions = this.get('transformScope.actions')
+  elementBuilder: Ember.computed('scope.actions', 'dimensions', 'dimensionOverrides', function () {
+    const callbacks = this.get('scope.callbacks')
     const dimensions = Object.assign({}, this.get('dimensions'), this.get('dimensionOverrides'))
     const dimensionKeys = Object.keys(dimensions)
     return function (element) {
@@ -72,7 +72,7 @@ export default Ember.Mixin.create(Area, SVGAffineTransform, SVGClipPathProvider,
           overridden[dimensionKey] = element[dimensionKey]
         }
       }
-      const result = Object.assign({ actions }, element, { overridden }, transformed)
+      const result = Object.assign({ callbacks }, element, { overridden }, transformed)
       // console.log('element', result)
       return result
     }

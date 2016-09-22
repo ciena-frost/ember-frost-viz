@@ -17,7 +17,7 @@ export default Ember.Mixin.create({
     this.set('_dynamicDomainDimensions', Ember.A([]))
   },
 
-  actions: {
+  callbacks: {
     addDimension (dimension) {
       this.get('_dimensions').addObject(dimension)
     }

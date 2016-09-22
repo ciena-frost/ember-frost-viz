@@ -63,7 +63,7 @@ export const Rectangle = Ember.Object.extend(RectangleDefaults, {
     return Rectangle.contract(this, margins)
   },
 
-  moveTo(x, y) {
+  moveTo (x, y) {
     const result = Rectangle.from(this)
     result.set('x', x)
     result.set('y', y)
