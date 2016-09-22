@@ -1,0 +1,56 @@
+<div class="bar left">
+
+  <h1>Bar Plot</h1>
+
+  <p>
+  A bar chart or bar graph is a chart that presents grouped data with rectangular bars with lengths proportional to the values that they represent.
+  </p>
+
+  <div class="element-count">
+    Plotting {{model.length}} elements
+  </div>
+
+   <!-- BEGIN-SNIPPET demo-bar -->
+
+  <!-- Chart element. -->
+  {{#frost-viz/chart model
+    as |chart|
+  }}
+
+    <!-- Chart has a cartesian transform. (x right, y up).
+    The transform translates data attributes to coordinates via the dimensions. Any dimensions that would be overwritten
+    (in this case, "x" and "y") are saved to an "overridden" attribute (e.g. if the source data had "x" or "y"
+    attributes). -->
+    {{#frost-viz/transform/cartesian chart
+      dimensions= (hash
+        x=(frost-viz/dimension/time   chart 'time' domain=(array 'Fri Jan 31 1980 23:59:00' 'Fri Feb 01 1980 00:21:09'))
+        y=(frost-viz/dimension/linear chart 'value')
+      )
+      as |transform dimensions|
+    }}
+
+      <!-- Add scale components. These report their styled area (defined here in CSS)
+      and the rest of the chart responsively resizes to their dimensions. -->
+      {{frost-viz/scale transform dimension=transform.dimensions.x align="bottom" ticks=10 labelFormat=(frost-viz/format/time '%H:%M')}}
+      {{frost-viz/scale transform dimension=transform.dimensions.y align="left"   ticks=10 labelFormat=(frost-viz/format/numeric)}}
+
+      <!-- Bar plotter -->
+      {{#frost-viz/plot/bar transform align="bottom"
+        as |bar data|
+      }}
+
+        <rect class="frost-viz-plot-bar-element" x={{bar.x}} y={{bar.y}} width={{bar.width}} height={{bar.height}} />
+
+      {{/frost-viz/plot/bar}}
+
+
+    {{/frost-viz/transform/cartesian}}
+
+  {{/frost-viz/chart}}
+  <!-- END-SNIPPET -->
+
+  <div class="source">
+    {{code-snippet name="demo-scatter.hbs"}}
+  </div>
+
+</div>
