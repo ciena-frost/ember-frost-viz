@@ -70,8 +70,8 @@ export default Ember.Mixin.create({
 
   /**
    * Computes the dimension mapping function.
-   * @param  {array} params [context obj, {string | function} Property selector from this element]
-   *                        The context object provides an action for registering this dimension, so that its domain
+   * @param  {array} params [scope obj, {string | function} Property selector from this element]
+   *                        The scope object provides an action for registering this dimension, so that its domain
    *                        can be automatically updated on changes to data.
    *                        The selector object specifies a string (property name) or a function(element).
    *                        If a string is provided, the data for this dimension is expected in element[property name].
@@ -92,10 +92,10 @@ export default Ember.Mixin.create({
   compute (params, hash) {
     // Unpack arguments
     // console.log('Creating dimension', params)
-    const context = params.shift()
-    Ember.assert('Context object not passed or not valid', Ember.typeOf(context) === 'object')
+    const scope = params.shift()
+    Ember.assert('Scope object not passed or not valid', Ember.typeOf(scope) === 'object')
     const dimension = this.buildDimension(params, hash)
-    if (context && context.actions && context.actions.addDimension) context.actions.addDimension(dimension)
+    if (scope && scope.callbacks && scope.callbacks.addDimension) scope.callbacks.addDimension(dimension)
     return dimension
   },
 

@@ -8,7 +8,7 @@ const Scatter = Ember.Component.extend(ElementBuilder, {
 })
 
 Scatter.reopenClass({
-  positionalParams: ['transformScope']
+  positionalParams: ['scope']
 })
 
 export default Scatter

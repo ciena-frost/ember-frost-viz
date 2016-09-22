@@ -23,7 +23,7 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
     // dimension: PropTypes.object.isRequired,
     // labelFormat: PropTypes.func.isRequired,
     tagName: PropTypes.string,
-    transformScope: PropTypes.object
+    scope: PropTypes.object
   },
 
   getDefaultProps () {
@@ -32,23 +32,23 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
       boxObserveElement: '.frost-viz-scale-rect',
       labelFormat: DEFAULT_LABEL_FORMAT,
       tagName: 'g',
-      transformScope: {
-        transformArea: Rectangle.create({width: 100, height: 100}),
+      scope: {
+        area: Rectangle.create({width: 100, height: 100}),
         parent: Rectangle.create({width: 100, height: 100})
       }
     }
   },
 
-  transformArea: Ember.computed.oneWay('transformScope.transformArea'),
-  parentArea: Ember.computed.oneWay('transformArea.parent'),
+  transformArea: Ember.computed.oneWay('scope.area'),
+  parentArea: Ember.computed.oneWay('scope.area.parent'),
 
-  x: Ember.computed('align', 'box.width', 'parentArea.width', function () {
+  x: Ember.computed('align', 'box.width', 'transformArea.width', function () {
     return this.get('align') === 'right'
       ? this.getWithDefault('transformArea.left', 0)
       : 0
   }),
 
-  y: Ember.computed('align', 'box.height', 'parentArea.height', function () {
+  y: Ember.computed('align', 'box.height', 'transformArea.height', function () {
     return this.get('align') === 'bottom'
       ? this.getWithDefault('transformArea.top', 0)
       : 0
@@ -74,10 +74,10 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
   }),
 
   tickElements: Ember.computed('dimension', 'dimension.domain', 'dimension.domain.[]',
-    'align', 'area', 'transformScope.transformArea', function () {
+    'align', 'area', 'transformArea', function () {
       const align = this.get('align')
       const dimension = this.get('dimension')
-      const transformArea = Rectangle.from(this.get('transformScope.transformArea'))
+      const transformArea = Rectangle.from(this.get('transformArea'))
       const parentArea = Rectangle.from(this.get('parentArea'))
       const box = Rectangle.from(this.get('box'))
       if (!(align && TOP_BOTTOM_LEFT_RIGHT.contains(align) && Ember.get(box, 'width') && Ember.get(box, 'height'))) {
@@ -137,7 +137,7 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
       const tickCount = this.getWithDefault('tickCount', 10)
       const tickData = dimension.ticks(tickCount)
       const labelFormat = this.get('labelFormat')
-    // console.log('creating ticks x', tickCount, tickData)
+      // console.log('creating ticks x', tickCount, tickData)
       const ticks = tickData.map((v) => {
         const val = dimension.evaluateValue(v)
         return Object.create({
@@ -153,8 +153,11 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
 
   pushMargins: Ember.observer('align', 'parentArea.width', 'parentArea.height', function () {
     const align = this.get('align')
-    const propagateMargin = this.get('transformScope.actions.updateMargins')
-    if (!(align && propagateMargin)) return
+    const propagateMargin = this.get('scope.callbacks.updateMargins')
+    if (!(align && propagateMargin)) {
+      console.log('not pushing margins: align', align, 'callback', propagateMargin)
+      return
+    }
     const key = this.get('key') || align
     const reportedMargin = this.get('reportedMargin') || {}
     const margin = { top: 0, right: 0, bottom: 0, left: 0 }
@@ -165,6 +168,7 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
         margin.left === reportedMargin.left &&
         margin.right === reportedMargin.right) return
     this.set('reportedMargin', margin)
+    console.log('pushing margin')
     propagateMargin(key, margin)
   }),
 
@@ -183,7 +187,7 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
 })
 
 Scale.reopenClass({
-  positionalParams: ['transformScope']
+  positionalParams: ['scope']
 })
 
 export default Scale
