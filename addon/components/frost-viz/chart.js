@@ -10,6 +10,7 @@ const Chart = Ember.Component.extend(DOMBox, Area, DimensionManager, ScopeProvid
   layout,
   tagName: 'svg',
   classNames: ['frost-viz-chart'],
+  attributeBindings: ['width', 'height'],
 
   propTypes: {
     data: PropTypes.array.isRequired,
