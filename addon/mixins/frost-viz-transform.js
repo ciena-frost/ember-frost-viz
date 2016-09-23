@@ -27,8 +27,8 @@ export default Ember.Mixin.create(Area, ScopeProvider, {
 
   childScope: Ember.computed('dimensions', 'childScopeBase', function () {
     const dimensions = Object.assign({}, this.get('scope.dimensions'), this.get('dimensions'))
-    const result = TransformScope.create(Object.assign({}, this.get('childScopeBase'), { dimensions }))
-    console.log('transform scope:', result)
+    const result = TransformScope.create(this.get('childScopeBase'), { dimensions })
+    // console.log('transform scope:', result)
     return result
   })
 
