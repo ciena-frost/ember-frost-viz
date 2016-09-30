@@ -71,7 +71,6 @@ const PointGenerator = Ember.Object.extend(PropTypeMixin, {
       this.addSample(currentTime)
     }
     currentTime.setTime(currentTime.getTime() + this.get('intervalSpacing'))
-    // console.log('currentTime', currentTime)
     return this.get('data')
   },
   addIntervals (count) {

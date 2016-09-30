@@ -59,7 +59,8 @@ const Chart = Ember.Component.extend(DOMBox, Area, DimensionManager, ScopeProvid
 
   childScope: Ember.computed('childScopeBase', 'interaction', function () {
     const interaction = this.get('interaction')
-    return ChartScope.create(this.get('childScopeBase'), { interaction })
+    const dimensions = this.get('dimensions')
+    return ChartScope.create(this.get('childScopeBase'), { interaction, dimensions })
   })
 
 })

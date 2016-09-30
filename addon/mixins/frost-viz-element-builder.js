@@ -24,14 +24,16 @@ export default Ember.Mixin.create(Area, SVGAffineTransform, SVGClipPathProvider,
   selectedBindings: Ember.computed('dataBindings', 'scope.dataBindings', function () {
     const explicitBindings = this.get('dataBindings')
     const scopeBindings = this.get('scope.dataBindings')
-    console.log('binding options: explicit', explicitBindings, 'inherited', scopeBindings)
-    return explicitBindings || scopeBindings
+    const result = Object.assign({}, scopeBindings, explicitBindings)
+    return result
   }),
 
   dimensions: Ember.computed('selectedBindings', function () {
     const selectedBindings = this.get('selectedBindings')
-    return mapObj(selectedBindings, (_, val) => {
-      return (Array.isArray(val)) ? val.map(b => b.get('dimension')) : [ val.get('dimension') ]
+    return mapObj(selectedBindings, (key, val) => {
+      Ember.assert(`Parent scope defines multiple dataBindings for key ${key}, must specify a single binding`,
+        !Array.isArray(val))
+      return val.get('dimension')
     })
   }),
 
@@ -51,19 +53,16 @@ export default Ember.Mixin.create(Area, SVGAffineTransform, SVGClipPathProvider,
 
     const area = this.get('area')
     const selectedBindings = this.get('selectedBindings') || {}
-    console.log('element builder scope', this.get('scope'))
     const transforms = this.get('coordinateTransforms')(area)
     const keys = Object.keys(transforms)
     const normalizedDimensions = {}
     for (let key of keys) {
       const binding = Ember.get(selectedBindings, key) || NULL_BINDING
       const dimension = Ember.get(binding, 'dimension')
-      console.log('dimension', binding)
       const transform = Ember.get(transforms, key) || NULL_TRANSFORM
       const normalize = buildNormalizer(dimension)
       normalizedDimensions[key] = (element) => transform(normalize(dimension.evaluateElement(element, binding)))
     }
-    // console.log('normalizedDimensions', normalizedDimensions)
     return normalizedDimensions
   }),
 
@@ -81,7 +80,6 @@ export default Ember.Mixin.create(Area, SVGAffineTransform, SVGClipPathProvider,
         }
       }
       const result = Object.assign({ callbacks }, element, { overridden }, transformed)
-      // console.log('element', result)
       return result
     }
   }),
@@ -90,7 +88,6 @@ export default Ember.Mixin.create(Area, SVGAffineTransform, SVGClipPathProvider,
     const elementBuilder = this.get('elementBuilder')
     const data = this.get('data') || Ember.A([])
     const result = data.map(elementBuilder)
-    // console.log('elements updated', data.length /*, data, result */)
     return result
   })
 })

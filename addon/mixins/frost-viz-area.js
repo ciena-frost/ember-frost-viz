@@ -4,7 +4,6 @@ import { mapObj } from 'ciena-frost-viz/utils/frost-viz-data-transform'
 export default Ember.Mixin.create({
   callbacks: {
     updatePadding (key, padding) {
-      console.log('Updating padding', key, padding)
       let paddingByAlignment = this.get('paddingByAlignment')
       if (!paddingByAlignment) {
         paddingByAlignment = this.set('paddingByAlignment', {})
@@ -25,7 +24,6 @@ export default Ember.Mixin.create({
     for (let key in maxima) {
       Ember.set(padding, key, maxima[key])
     }
-    console.log('Setting unified plot padding', padding)
     this.set('padding', padding)
   },
 
@@ -43,7 +41,6 @@ export default Ember.Mixin.create({
       height: Math.max(height - top - bottom, 0),
       parent: this.get('area')
     }
-    console.log('new innerArea', innerArea)
     return innerArea
   })
 
