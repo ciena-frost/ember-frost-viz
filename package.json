@@ -1,6 +1,6 @@
 {
   "name": "ciena-frost-viz",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Ember Frost visualization.",
   "directories": {
     "doc": "doc",
