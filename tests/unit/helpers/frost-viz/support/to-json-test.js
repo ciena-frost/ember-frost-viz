@@ -1,17 +1,17 @@
 /* jshint expr:true */
-import { expect } from 'chai';
+import { expect } from 'chai'
 import {
   describe,
   it
-} from 'mocha';
+} from 'mocha'
 import {
   frostVizSupportToJson
-} from 'ciena-frost-viz/helpers/frost-viz/support/to-json';
+} from 'ciena-frost-viz/helpers/frost-viz/support/to-json'
 
-describe('FrostVizSupportToJsonHelper', function() {
+describe('FrostVizSupportToJsonHelper', function () {
   // Replace this with your real tests.
-  it('works', function() {
-    let result = frostVizSupportToJson(42);
-    expect(result).to.be.ok;
-  });
-});
+  it('works', function () {
+    let result = frostVizSupportToJson(42)
+    expect(result).to.be.ok
+  })
+})

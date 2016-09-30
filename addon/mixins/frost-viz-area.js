@@ -3,39 +3,39 @@ import { mapObj } from 'ciena-frost-viz/utils/frost-viz-data-transform'
 
 export default Ember.Mixin.create({
   callbacks: {
-    updateMargins (key, margins) {
-      // console.log('Updating margins', key, margins)
-      let marginsByAlignment = this.get('marginsByAlignment')
-      if (!marginsByAlignment) {
-        marginsByAlignment = this.set('marginsByAlignment', {})
+    updatePadding (key, padding) {
+      console.log('Updating padding', key, padding)
+      let paddingByAlignment = this.get('paddingByAlignment')
+      if (!paddingByAlignment) {
+        paddingByAlignment = this.set('paddingByAlignment', {})
       }
-      Ember.set(marginsByAlignment, key, margins)
-      Ember.run.once(this, this.recalculateInnerArea)
+      Ember.set(paddingByAlignment, key, padding)
+      Ember.run.once(this, this.recalculatePadding)
     }
   },
 
-  recalculateInnerArea () {
-    const margin = this.getWithDefault('margin', {})
+  recalculatePadding () {
+    const padding = this.getWithDefault('padding', {})
     const maxima = {top: 0, right: 0, left: 0, bottom: 0}
-    mapObj(this.get('marginsByAlignment'), function (key, value) {
+    mapObj(this.get('paddingByAlignment'), (key, value) => {
       for (let key in value) {
         maxima[key] = Math.max(maxima[key], value[key] || 0)
       }
     })
     for (let key in maxima) {
-      Ember.set(margin, key, maxima[key])
+      Ember.set(padding, key, maxima[key])
     }
-    // console.log('Setting unified plot margins', margin)
-    this.set('margin', margin)
+    console.log('Setting unified plot padding', padding)
+    this.set('padding', padding)
   },
 
-  innerArea: Ember.computed('width', 'height', 'margin.{left,right,top,bottom}', function () {
+  innerArea: Ember.computed('width', 'height', 'padding.{left,right,top,bottom}', function () {
     const width = this.get('width') || 0
     const height = this.get('height') || 0
-    const left = this.get('margin.left') || 0
-    const right = this.get('margin.right') || 0
-    const top = this.get('margin.top') || 0
-    const bottom = this.get('margin.bottom') || 0
+    const left = this.get('padding.left') || 0
+    const right = this.get('padding.right') || 0
+    const top = this.get('padding.top') || 0
+    const bottom = this.get('padding.bottom') || 0
     const innerArea = {
       x: left,
       y: top,

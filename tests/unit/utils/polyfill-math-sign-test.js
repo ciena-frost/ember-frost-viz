@@ -1,15 +1,15 @@
 /* jshint expr:true */
-import { expect } from 'chai';
+import { expect } from 'chai'
 import {
   describe,
   it
-} from 'mocha';
-import polyfillMathSign from 'ciena-frost-viz/utils/polyfill-math-sign';
+} from 'mocha'
+import polyfillMathSign from 'ciena-frost-viz/utils/polyfill-math-sign'
 
-describe('polyfillMathSign', function() {
+describe('polyfillMathSign', function () {
   // Replace this with your real tests.
-  it('works', function() {
-    let result = polyfillMathSign();
-    expect(result).to.be.ok;
-  });
-});
+  it('works', function () {
+    let result = polyfillMathSign()
+    expect(result).to.be.ok
+  })
+})

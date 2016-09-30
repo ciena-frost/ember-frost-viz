@@ -1,17 +1,17 @@
 /* jshint expr:true */
-import { expect } from 'chai';
+import { expect } from 'chai'
 import {
   describe,
   it
-} from 'mocha';
+} from 'mocha'
 import {
   frostVizFormatTime
-} from 'ciena-frost-viz/helpers/frost-viz/format/time';
+} from 'ciena-frost-viz/helpers/frost-viz/format/time'
 
-describe('FrostVizFormatTimeHelper', function() {
+describe('FrostVizFormatTimeHelper', function () {
   // Replace this with your real tests.
-  it('works', function() {
-    let result = frostVizFormatTime(42);
-    expect(result).to.be.ok;
-  });
-});
+  it('works', function () {
+    let result = frostVizFormatTime(42)
+    expect(result).to.be.ok
+  })
+})

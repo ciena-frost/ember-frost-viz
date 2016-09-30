@@ -17,7 +17,6 @@ const TransformScope = Ember.Object.extend(PropTypesMixin, {
 export default Ember.Mixin.create(Area, ScopeProvider, {
   tagName: 'g',
   classNames: ['frost-viz-transform'],
-  dimensions: null,
 
   // The width and height derive from the scope area unless overridden
   area: Ember.computed.oneWay('scope.area'),
@@ -25,9 +24,10 @@ export default Ember.Mixin.create(Area, ScopeProvider, {
   width: Ember.computed.oneWay('area.width'),
   height: Ember.computed.oneWay('area.height'),
 
-  childScope: Ember.computed('dimensions', 'childScopeBase', function () {
-    const dimensions = Object.assign({}, this.get('scope.dimensions'), this.get('dimensions'))
-    const result = TransformScope.create(this.get('childScopeBase'), { dimensions })
+  childScope: Ember.computed('dataBindings', 'childScopeBase', 'coordinateTransforms', function () {
+    const dataBindings = Object.assign({}, this.get('scope.dataBindings'), this.get('dataBindings'))
+    const coordinateTransforms = this.get('coordinateTransforms')
+    const result = TransformScope.create(this.get('childScopeBase'), { dataBindings, coordinateTransforms })
     // console.log('transform scope:', result)
     return result
   })

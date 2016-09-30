@@ -21,6 +21,17 @@ import Ember from 'ember'
 const fUndef = () => undefined
 
 const Dimension = Ember.Object.extend({
+  init () {
+    this._super(...arguments)
+    this.set('dataBindings', Ember.A([]))
+  },
+
+  inclusiveDomain (domains) {
+    // Set the inclusive domain to the first low-high pair
+    const seed = domains[0]
+    // Expand for any other low-high pair that extends the range
+    return domains.slice(1).reduce((prev, curr) => [ Math.min(prev[0], curr[0]), Math.max(prev[1], curr[1]) ], seed)
+  },
   scope: null,
   domain: null,
   range: null,
@@ -70,16 +81,6 @@ export default Ember.Mixin.create({
     ]
   },
 
-  createSelector (selectorProperty) {
-    if (typeof selectorProperty === 'function') {
-      return selectorProperty
-    }
-    if (typeof selectorProperty === 'string') {
-      return (v) => Ember.get(v, selectorProperty)
-    }
-    return (v) => v
-  },
-
   /**
    * Computes the dimension mapping function.
    * @param  {array} params [scope obj, {string | function} Property selector from this element]
@@ -106,19 +107,20 @@ export default Ember.Mixin.create({
     Ember.assert('Scope object not passed or not valid', Ember.typeOf(scope) === 'instance')
     const selectorIn = params.shift()
     const dimension = this.buildDimension(scope, selectorIn, hash)
-    if (scope && scope.callbacks && scope.callbacks.addDimension) scope.callbacks.addDimension(dimension)
+    if (scope && scope.callbacks && scope.callbacks.addDimension) {
+      scope.callbacks.addDimension(dimension)
+    }
     return dimension
   },
 
   buildDimension (scope, selectorIn, hash) {
     // Build selector
-    const selector = this.createSelector(selectorIn)
     // Pull defaults from this, override by hash properties
     const { parser, range, domain } = Object.assign({},
       this.getProperties('parser', 'range', 'domain'),
       hash)
 
-    const elementFunc = (element) => parser(selector(element))
+    // const elementFunc = (element, binding) => parser(binding.selector(element))
 
     // This should return a function that maps parsed values from domain to range.
     const rawMapperBuilder = this.get('mapperBuilder').bind(this)
@@ -134,7 +136,7 @@ export default Ember.Mixin.create({
 
     const elementEvaluatorBuilder = function (dom, rng) {
       const valueEvaluator = valueEvaluatorBuilder(dom, rng)
-      return (element) => valueEvaluator(selector(element))
+      return (element, binding) => valueEvaluator(binding.selector(element))
     }
 
     const result = Dimension.create({scope, range})
@@ -156,19 +158,34 @@ export default Ember.Mixin.create({
       // for the standard functions.
       // The domain builder operates on an array of parsed, selected values.
       const domainFunc = typeof domain === 'function' ? domain : this.get('domainBuilder')
-      const domainBuilder = (data) => data && data.length ? domainFunc(data.map(elementFunc)) : fUndef
       // Return a dimension that redefines its mappers and tick functions when its domain changes.
       result.setProperties({
         range,
+        dataBindings: Ember.A([]),
+
+        domainBuilder (data) {
+          const dataBindings = this.get('dataBindings')
+          Ember.assert('Data not provided', data && data.length)
+          Ember.assert('dataBindings not provided', dataBindings && dataBindings.length)
+          if (!(data && data.length)) return undefined
+          const domains = []
+          for (let binding of dataBindings) {
+            const elementFunc = (element) => parser(binding.selector(element))
+            domains.push(domainFunc(data.map(elementFunc)))
+          }
+          console.log('bound domains for dimension', domains)
+          return result.inclusiveDomain(domains)
+        },
+
         computeDomain (data) {
-          if (data === undefined) throw new Error('Domain not set and data not provided')
-          const domain = domainBuilder(data)
+          const domain = this.domainBuilder(data)
           this.setProperties({
             domain,
             evaluateValue: valueEvaluatorBuilder(domain, range),
             evaluateElement: elementEvaluatorBuilder(domain, range),
             ticks: tickBuilder(domain, range)
           })
+          console.log('domain updated', this)
         }
       })
     }

@@ -1,8 +1,8 @@
-import Ember from 'ember';
+import Ember from 'ember'
 
 export default Ember.Route.extend({
   dataGenerator: Ember.inject.service(),
-  model() {
+  model () {
     return this.get('dataGenerator').createScatter(1).addIntervals(15)
   }
-});
+})

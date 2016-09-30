@@ -1,17 +1,17 @@
 /* jshint expr:true */
-import { expect } from 'chai';
+import { expect } from 'chai'
 import {
   describe,
   it
-} from 'mocha';
-import Ember from 'ember';
-import FrostVizAreaMixin from 'ciena-frost-viz/mixins/frost-viz-area';
+} from 'mocha'
+import Ember from 'ember'
+import FrostVizAreaMixin from 'ciena-frost-viz/mixins/frost-viz-area'
 
-describe('FrostVizAreaMixin', function() {
+describe('FrostVizAreaMixin', function () {
   // Replace this with your real tests.
-  it('works', function() {
-    let FrostVizAreaObject = Ember.Object.extend(FrostVizAreaMixin);
-    let subject = FrostVizAreaObject.create();
-    expect(subject).to.be.ok;
-  });
-});
+  it('works', function () {
+    let FrostVizAreaObject = Ember.Object.extend(FrostVizAreaMixin)
+    let subject = FrostVizAreaObject.create()
+    expect(subject).to.be.ok
+  })
+})

@@ -9,36 +9,33 @@ const Bar = Ember.Component.extend(ElementBuilder, {
 
   plotBars: undefined,
 
-  align: "bottom",
+  align: 'bottom',
 
   mapFunctions: Ember.Object.create({
-    "left": function(area) {
-      return function(el) {
+    left: function (area) {
+      return function (el) {
         return Object.assign(el, {x: 0, y: el.y - 10, width: el.x, height: 20})
       }
     },
-    "bottom": function(area) {
-      const bottom = area.get('bottom');
-      return function(el) {
-        return Object.assign(el, {x: el.x-10, y: el.y, width: 20, height: bottom - el.y})
+    bottom: function (area) {
+      const bottom = area.get('bottom')
+      return function (el) {
+        return Object.assign(el, {x: el.x - 10, y: el.y, width: 20, height: bottom - el.y})
       }
     }
   }),
 
   bars: Ember.computed('elements', 'align', function () {
-    const transformArea = Rectangle.from(this.get('transformScope.transformArea'));
+    const transformArea = Rectangle.from(this.get('scope.area'))
     const align = this.get('align')
     const mapFunctions = this.get('mapFunctions')
-    const alignFunction = mapFunctions.get(align)(transformArea);
+    const alignFunction = mapFunctions.get(align)(transformArea)
     return this.get('elements').map(alignFunction)
   })
 })
 
 Bar.reopenClass({
-  positionalParams: ['transformScope']
+  positionalParams: ['scope']
 })
 
-
-
 export default Bar
-

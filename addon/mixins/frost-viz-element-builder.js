@@ -2,10 +2,10 @@ import Ember from 'ember'
 import SVGAffineTransform from 'ciena-frost-viz/mixins/frost-viz-svg-transform-provider'
 import SVGClipPathProvider from 'ciena-frost-viz/mixins/frost-viz-svg-clip-path-provider'
 import Area from 'ciena-frost-viz/mixins/frost-viz-area'
+import {mapObj} from 'ciena-frost-viz/utils/frost-viz-data-transform'
 
-const NULL_DIMENSION = {domain: [0, 1], range: [0, 1], evaluateElement: () => 0}
+const NULL_BINDING = {evaluateElement: () => 0, dimension: {domain: [0, 1], range: [0, 1], evaluateValue: () => 0}}
 const NULL_TRANSFORM = (value) => value
-const DEFAULT_AREA = {width: 100, height: 100}
 
 export default Ember.Mixin.create(Area, SVGAffineTransform, SVGClipPathProvider, {
   tagName: 'g',
@@ -17,7 +17,23 @@ export default Ember.Mixin.create(Area, SVGAffineTransform, SVGClipPathProvider,
   width: Ember.computed.alias('area.width'),
   height: Ember.computed.alias('area.height'),
   data: Ember.computed.alias('scope.data'),
-  dimensions: Ember.computed.alias('scope.dimensions'),
+  coordinateTransforms: Ember.computed.alias('scope.coordinateTransforms'),
+
+  dataBindings: null,
+
+  selectedBindings: Ember.computed('dataBindings', 'scope.dataBindings', function () {
+    const explicitBindings = this.get('dataBindings')
+    const scopeBindings = this.get('scope.dataBindings')
+    console.log('binding options: explicit', explicitBindings, 'inherited', scopeBindings)
+    return explicitBindings || scopeBindings
+  }),
+
+  dimensions: Ember.computed('selectedBindings', function () {
+    const selectedBindings = this.get('selectedBindings')
+    return mapObj(selectedBindings, (_, val) => {
+      return (Array.isArray(val)) ? val.map(b => b.get('dimension')) : [ val.get('dimension') ]
+    })
+  }),
 
   renderReady: false,
 
@@ -27,33 +43,25 @@ export default Ember.Mixin.create(Area, SVGAffineTransform, SVGClipPathProvider,
     })
   },
 
-  /**
-   * Default transforms for cartesian (y-up).
-   */
-  coordinateTransforms: Ember.computed('area', function () {
-    const area = this.get('area') || DEFAULT_AREA
-    return {
-      x: (value) => area.width * value,
-      y: (value) => area.height * (1.0 - value)
-    }
-  }),
-
-  dimensionOverrides: Ember.computed('dimensions', 'coordinateTransforms', function () {
+  dimensionOverrides: Ember.computed('area', 'selectedBindings', 'coordinateTransforms', function () {
     const buildNormalizer = function (dimension) {
       const range = Ember.get(dimension, 'range')
       return (v) => (v - range[0]) / (range[1] - range[0])
     }
 
-    const dimensions = this.get('dimensions') || {}
-    const transforms = this.get('coordinateTransforms')
+    const area = this.get('area')
+    const selectedBindings = this.get('selectedBindings') || {}
+    console.log('element builder scope', this.get('scope'))
+    const transforms = this.get('coordinateTransforms')(area)
     const keys = Object.keys(transforms)
     const normalizedDimensions = {}
     for (let key of keys) {
-      const dimension = Ember.get(dimensions, key) || NULL_DIMENSION
-      console.log('dimension', dimension)
+      const binding = Ember.get(selectedBindings, key) || NULL_BINDING
+      const dimension = Ember.get(binding, 'dimension')
+      console.log('dimension', binding)
       const transform = Ember.get(transforms, key) || NULL_TRANSFORM
       const normalize = buildNormalizer(dimension)
-      normalizedDimensions[key] = (element) => transform(normalize(dimension.evaluateElement(element)))
+      normalizedDimensions[key] = (element) => transform(normalize(dimension.evaluateElement(element, binding)))
     }
     // console.log('normalizedDimensions', normalizedDimensions)
     return normalizedDimensions

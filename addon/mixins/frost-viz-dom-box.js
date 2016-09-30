@@ -5,10 +5,11 @@ import { mapObj } from 'ciena-frost-viz/utils/frost-viz-data-transform'
 const CSS_INT_PROPERTIES = [
   'width',
   'height',
-  'margin-top',
-  'margin-bottom',
-  'margin-left',
-  'margin-right'
+  'padding',
+  'padding-top',
+  'padding-bottom',
+  'padding-left',
+  'padding-right'
 ]
 
 const CSS_STRING_PROPERTIES = [
@@ -16,8 +17,8 @@ const CSS_STRING_PROPERTIES = [
 ]
 
 export default Ember.Mixin.create({
-  // TODO: convert to propTypes
-  // @see ciena-frost-viz/mixins/frost-viz-dimension-manager
+
+  hasLayout: Ember.computed.notEmpty('box'),
 
   init () {
     this.set('box', Ember.Object.create())
@@ -31,16 +32,13 @@ export default Ember.Mixin.create({
     })
   },
 
-  observeBox: null,
-  hasLayout: Ember.computed.notEmpty('box'),
-
   getBoxProperties (target) {
     const element = target || this.$()
     const styleProperties = element.css(CSS_STRING_PROPERTIES)
     mapObj(element.css(CSS_INT_PROPERTIES), (key, value) => Ember.set(styleProperties, camelize(key), parseInt(value)))
     const rawElement = element[0]
     const observedProperties = rawElement.getBBox ? rawElement.getBBox() : element.position()
-    return Object.assign({},
+    return Object.assign(
       styleProperties,
 
       // The CSS properties are style intent. Use them if they returned something meaningful.

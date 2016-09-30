@@ -2,7 +2,7 @@ import Ember from 'ember'
 
 const fUndef = () => undefined
 
-const Binding = Ember.Object.extend({
+const DataBinding = Ember.Object.extend({
   dimension: null,
   property: null,
   selector: fUndef,
@@ -24,17 +24,19 @@ export default Ember.Mixin.create({
     const dimension = params.shift()
     Ember.assert('Dimension object not passed or not valid', Ember.typeOf(dimension) === 'instance')
     const selectorIn = params.shift()
-    const binding = this.buildBinding(dimension, selectorIn, hash)
+    const binding = this.dataBindingBuilder(dimension, selectorIn, hash)
     const scope = dimension.scope
-    if (scope && scope.callbacks && scope.callbacks.addBinding) scope.callbacks.addBinding(binding)
+    if (scope && scope.callbacks && scope.callbacks.addDataBinding) {
+      scope.callbacks.addDataBinding(binding)
+    }
     return binding
   },
 
-  buildBinding (dimension, selectorIn, hash) {
+  dataBindingBuilder (dimension, selectorIn, hash) {
     const property = typeof selectorIn === 'string' ? selectorIn : undefined
     const selector = this.createSelector(selectorIn)
     const selectValue = (element) => selector(element)
-    return Binding.create({ dimension, property, selector, selectValue })
+    return DataBinding.create({ dimension, property, selector, selectValue })
   }
 
 })

@@ -1,17 +1,17 @@
 /* jshint expr:true */
-import { expect } from 'chai';
+import { expect } from 'chai'
 import {
   describe,
   it
-} from 'mocha';
-import Ember from 'ember';
-import FrostVizElementBuilderMixin from 'ciena-frost-viz/mixins/frost-viz-element-builder';
+} from 'mocha'
+import Ember from 'ember'
+import FrostVizElementBuilderMixin from 'ciena-frost-viz/mixins/frost-viz-element-builder'
 
-describe('FrostVizElementBuilderMixin', function() {
+describe('FrostVizElementBuilderMixin', function () {
   // Replace this with your real tests.
-  it('works', function() {
-    let FrostVizElementBuilderObject = Ember.Object.extend(FrostVizElementBuilderMixin);
-    let subject = FrostVizElementBuilderObject.create();
-    expect(subject).to.be.ok;
-  });
-});
+  it('works', function () {
+    let FrostVizElementBuilderObject = Ember.Object.extend(FrostVizElementBuilderMixin)
+    let subject = FrostVizElementBuilderObject.create()
+    expect(subject).to.be.ok
+  })
+})
