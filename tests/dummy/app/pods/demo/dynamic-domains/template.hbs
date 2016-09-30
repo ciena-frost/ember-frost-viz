@@ -31,56 +31,69 @@
 
   <!-- Chart element. -->
   {{#frost-viz/chart model
-    as |chart|
-  }}
+    as |chart|}}
 
-    <!-- Chart has a cartesian transform. (x right, y up).
-    The transform translates data attributes to coordinates via the dimensions. Any dimensions that would be overwritten
-    (in this case, "x" and "y") are saved to an "overridden" attribute (e.g. if the source data had "x" or "y"
-    attributes). -->
-    {{#frost-viz/transform/cartesian chart
-      dataBindings=(hash
-        x=(frost-viz/binding (frost-viz/dimension/time chart) '0.time')
-        y=(array (frost-viz/binding (frost-viz/dimension/linear chart) '0.value'))
-      )
-      as |transform dataBindings|
-    }}
+    {{#frost-viz/context chart
+      (hash dimensions=(hash y=(frost-viz/dimension/linear chart)))
+      as |scope|}}
 
-      <!-- Add scale components. These report their styled area (defined here in CSS)
-      and the rest of the chart responsively resizes to their dimensions. -->
-      {{frost-viz/scale transform dataBindings.x align="bottom" ticks=10 labelFormat=(frost-viz/format/time '%H:%M')}}
-      {{frost-viz/scale transform dataBindings.y.[0] align="left"   ticks=10 labelFormat=(frost-viz/format/numeric)}}
-
-      <!-- Line plot component. Similar to a scatter plot, but yields y(x) and y(x+1) together. -->
-      {{#frost-viz/plot/line transform
-        dataBindings=(hash y=dataBindings.y.[0])
-        as |begin end data|
+      <!-- Chart has a cartesian transform. (x right, y up).
+      The transform translates data attributes to coordinates via the dimensions. Any dimensions that would be overwritten
+      (in this case, "x" and "y") are saved to an "overridden" attribute (e.g. if the source data had "x" or "y"
+      attributes). -->
+      {{#frost-viz/transform/cartesian scope
+        dataBindings=(hash
+          x=(frost-viz/binding (frost-viz/dimension/time scope) '0.time')
+          y=(array
+            (frost-viz/binding scope.dimensions.y '0.value')
+            (frost-viz/binding scope.dimensions.y '1.value')
+          )
+        )
+        as |transform dataBindings|
       }}
 
-        <!-- Line segment component. Can optionally yield begin and end points to
-        allow vertex styling, as shown here. -->
-        {{#frost-viz/plot/element/line-segment begin end
-          as |begin end|
+        <!-- Add scale components. These report their styled area (defined here in CSS)
+        and the rest of the chart responsively resizes to their dimensions. -->
+        {{frost-viz/scale transform dataBindings.x align="bottom" ticks=10 labelFormat=(frost-viz/format/time '%H:%M')}}
+        {{frost-viz/scale transform dataBindings.y.[0] align="left" ticks=10 labelFormat=(frost-viz/format/numeric)}}
+        {{frost-viz/scale transform dataBindings.y.[1] align="right" ticks=10 labelFormat=(frost-viz/format/numeric)}}
+
+        <!-- Line plot component. Similar to a scatter plot, but yields y(x) and y(x+1) together. -->
+        {{#frost-viz/plot/line transform
+          dataBindings=(hash y=dataBindings.y.[0])
+          as |begin end data|
         }}
-          <!-- Style the begin and end points of each line segment.
-          (Usually only necessary to style one or the other.) -->
-          {{frost-viz/plot/element/symbol/circle begin
-            cx=     begin.x
-            cy=     begin.y
-            r=      2
-            fill=   'green'
+          {{#frost-viz/plot/element/line-segment begin end
+            as |begin end|
           }}
-          {{frost-viz/plot/element/symbol/circle end
-            cx=     end.x
-            cy=     end.y
-            r=      2
-            fill=   'green'
+            {{frost-viz/plot/element/symbol/circle end
+              cx=     end.x
+              cy=     end.y
+              r=      2
+              fill=   'green'
+            }}
+          {{/frost-viz/plot/element/line-segment}}
+        {{/frost-viz/plot/line}}
+
+        {{#frost-viz/plot/line transform
+          dataBindings=(hash y=dataBindings.y.[1])
+          as |begin end data|
+        }}
+          {{#frost-viz/plot/element/line-segment begin end
+            as |begin end|
           }}
-        {{/frost-viz/plot/element/line-segment}}
+            {{frost-viz/plot/element/symbol/circle end
+              cx=     end.x
+              cy=     end.y
+              r=      2
+              fill=   'red'
+            }}
+          {{/frost-viz/plot/element/line-segment}}
+        {{/frost-viz/plot/line}}
 
-      {{/frost-viz/plot/line}}
+      {{/frost-viz/transform/cartesian}}
 
-    {{/frost-viz/transform/cartesian}}
+    {{/frost-viz/context}}
 
   {{/frost-viz/chart}}
   <!-- END-SNIPPET -->

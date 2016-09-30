@@ -24,7 +24,7 @@ export default Ember.Mixin.create(Area, ScopeProvider, {
   width: Ember.computed.oneWay('area.width'),
   height: Ember.computed.oneWay('area.height'),
 
-  childScope: Ember.computed('dataBindings', 'childScopeBase', 'coordinateTransforms', function () {
+  childScope: Ember.computed('childScopeBase', 'dataBindings', 'coordinateTransforms', function () {
     const dataBindings = Object.assign({}, this.get('scope.dataBindings'), this.get('dataBindings'))
     const coordinateTransforms = this.get('coordinateTransforms')
     const result = TransformScope.create(this.get('childScopeBase'), { dataBindings, coordinateTransforms })

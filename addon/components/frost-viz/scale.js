@@ -65,10 +65,10 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
     if (TOP_BOTTOM_LEFT_RIGHT.contains(align)) {
       rectArea = rectArea.moveTo(0, 0)
       if (align === 'right') {
-        rectArea = rectArea.translate(0, transformArea.get('width'))
+        rectArea = rectArea.translate(transformArea.get('left') + transformArea.get('width'), 0)
       }
       if (align === 'bottom') {
-        rectArea = rectArea.translate(0, transformArea.get('height'))
+        rectArea = rectArea.translate(0, transformArea.get('top') + transformArea.get('height'))
       }
     }
     return rectArea
@@ -153,7 +153,7 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
     } else {
       labelsArea.set('width', box.get('width'))
       if (align === 'right') {
-        labelsArea.set('right', parentArea.get('width') - box.get('width'))
+        labelsArea.set('left', parentArea.get('width') - box.get('width'))
       }
     }
 

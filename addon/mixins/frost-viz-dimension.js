@@ -173,7 +173,7 @@ export default Ember.Mixin.create({
             const elementFunc = (element) => parser(binding.selector(element))
             domains.push(domainFunc(data.map(elementFunc)))
           }
-          console.log('bound domains for dimension', domains)
+          // console.log('bound domains for dimension', domains)
           return result.inclusiveDomain(domains)
         },
 
@@ -185,7 +185,7 @@ export default Ember.Mixin.create({
             evaluateElement: elementEvaluatorBuilder(domain, range),
             ticks: tickBuilder(domain, range)
           })
-          console.log('domain updated', this)
+          // console.log('domain updated', this)
         }
       })
     }

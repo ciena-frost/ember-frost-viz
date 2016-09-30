@@ -23,7 +23,7 @@ export default Ember.Route.extend({
     }
     this.set('modelData', modelData)
     updateData()
-    console.log(modelData)
+    // console.log(modelData)
     return modelData
   }
 })

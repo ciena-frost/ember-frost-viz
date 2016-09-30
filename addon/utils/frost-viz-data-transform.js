@@ -21,7 +21,7 @@ export function mapObj (obj, func) {
  * @return {object}        A map of bound functions
  */
 export function bindFunctionMap (map, target) {
-  return mapObj(map, (key, func) => func.bind(target))
+  return mapObj(map || {}, (key, func) => func.bind(target))
 }
 
 /**
