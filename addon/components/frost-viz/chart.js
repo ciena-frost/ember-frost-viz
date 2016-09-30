@@ -6,6 +6,8 @@ import Area from 'ciena-frost-viz/mixins/frost-viz-area'
 import DimensionManager from 'ciena-frost-viz/mixins/frost-viz-dimension-manager'
 import ScopeProvider from 'ciena-frost-viz/mixins/frost-viz-scope-provider'
 
+const ChartScope = Ember.Object.extend()
+
 const Chart = Ember.Component.extend(DOMBox, Area, DimensionManager, ScopeProvider, {
   layout,
   tagName: 'svg',
@@ -57,7 +59,7 @@ const Chart = Ember.Component.extend(DOMBox, Area, DimensionManager, ScopeProvid
 
   childScope: Ember.computed('childScopeBase', 'interaction', function () {
     const interaction = this.get('interaction')
-    return Object.assign({}, this.get('childScopeBase'), { interaction })
+    return ChartScope.create(this.get('childScopeBase'), { interaction })
   })
 
 })

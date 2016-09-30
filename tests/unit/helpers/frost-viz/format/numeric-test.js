@@ -1,17 +1,17 @@
 /* jshint expr:true */
-import { expect } from 'chai';
+import { expect } from 'chai'
 import {
   describe,
   it
-} from 'mocha';
+} from 'mocha'
 import {
   frostVizFormatNumeric
-} from 'ciena-frost-viz/helpers/frost-viz/format/numeric';
+} from 'ciena-frost-viz/helpers/frost-viz/format/numeric'
 
-describe('FrostVizFormatNumericHelper', function() {
+describe('FrostVizFormatNumericHelper', function () {
   // Replace this with your real tests.
-  it('works', function() {
-    let result = frostVizFormatNumeric(42);
-    expect(result).to.be.ok;
-  });
-});
+  it('works', function () {
+    let result = frostVizFormatNumeric(42)
+    expect(result).to.be.ok
+  })
+})

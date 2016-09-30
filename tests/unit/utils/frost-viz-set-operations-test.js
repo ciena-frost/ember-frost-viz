@@ -1,15 +1,15 @@
 /* jshint expr:true */
-import { expect } from 'chai';
+import { expect } from 'chai'
 import {
   describe,
   it
-} from 'mocha';
-import frostVizSetOperations from 'ciena-frost-viz/utils/frost-viz-set-operations';
+} from 'mocha'
+import frostVizSetOperations from 'ciena-frost-viz/utils/frost-viz-set-operations'
 
-describe('frostVizSetOperations', function() {
+describe('frostVizSetOperations', function () {
   // Replace this with your real tests.
-  it('works', function() {
-    let result = frostVizSetOperations();
-    expect(result).to.be.ok;
-  });
-});
+  it('works', function () {
+    let result = frostVizSetOperations()
+    expect(result).to.be.ok
+  })
+})

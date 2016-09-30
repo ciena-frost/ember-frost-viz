@@ -1,6 +1,6 @@
 {
   "name": "ciena-frost-viz",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Ember Frost visualization.",
   "directories": {
     "doc": "doc",
@@ -11,7 +11,12 @@
     "start": "ember server",
     "test": "ember try:each"
   },
-  "repository": "",
+  "author": "Justin Bowes <viz@justinbowes.com>",
+  "contributors": [
+    "Steven Glanzer <sglanzer@ciena.com>",
+    "Kamal Ezz <kezz@ciena.com>"
+  ],
+  "repository": "https://bitbucket.ciena.com/scm/bp_frost/ciena-frost-viz.git",
   "engines": {
     "node": ">= 0.10.0"
   },

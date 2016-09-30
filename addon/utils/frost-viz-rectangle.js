@@ -1,6 +1,6 @@
 import Ember from 'ember'
 
-export const MarginDefaults = {
+export const PaddingDefaults = {
   left: 0,
   right: 0,
   top: 0,
@@ -55,12 +55,12 @@ export const Rectangle = Ember.Object.extend(RectangleDefaults, {
     return Rectangle.union(this, r2)
   },
 
-  expandBy (margins) {
-    return Rectangle.expand(this, margins)
+  expandBy (padding) {
+    return Rectangle.expand(this, padding)
   },
 
-  contractBy (margins) {
-    return Rectangle.contract(this, margins)
+  contractBy (padding) {
+    return Rectangle.contract(this, padding)
   },
 
   moveTo (x, y) {
@@ -87,14 +87,14 @@ Rectangle.reopenClass({
     return Rectangle.create({x, y, width, height})
   },
 
-  contract (r1, margins) {
-    const { left, right, top, bottom } = Object.assign({}, MarginDefaults, margins)
+  contract (r1, padding) {
+    const { left, right, top, bottom } = Object.assign({}, PaddingDefaults, padding)
     return Rectangle.expand(r1, { left: -left, right: -right, top: -top, bottom: -bottom })
   },
 
-  expand (r1, margins) {
+  expand (r1, padding) {
     const { x, y, width, height } = Object.assign({}, RectangleDefaults, r1)
-    const { left, right, top, bottom } = Object.assign({}, MarginDefaults, margins)
+    const { left, right, top, bottom } = Object.assign({}, PaddingDefaults, padding)
     return Rectangle.create({
       x: x - left,
       y: y - top,

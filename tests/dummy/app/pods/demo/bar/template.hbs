@@ -22,20 +22,20 @@
     (in this case, "x" and "y") are saved to an "overridden" attribute (e.g. if the source data had "x" or "y"
     attributes). -->
     {{#frost-viz/transform/cartesian chart
-      dimensions= (hash
-        x=(frost-viz/dimension/time   chart 'time' domain=(array 'Fri Jan 31 1980 23:59:00' 'Fri Feb 01 1980 00:21:09'))
-        y=(frost-viz/dimension/linear chart 'value')
+      dataBindings=(hash
+        x=(frost-viz/binding (frost-viz/dimension/time chart domain=(array 'Fri Jan 31 1980 23:59:00' 'Fri Feb 01 1980 00:21:09')) 'time')
+        y=(frost-viz/binding (frost-viz/dimension/linear chart) 'value')
       )
-      as |transform dimensions|
+      as |transform dataBindings|
     }}
 
       <!-- Add scale components. These report their styled area (defined here in CSS)
       and the rest of the chart responsively resizes to their dimensions. -->
-      {{frost-viz/scale transform dimension=transform.dimensions.x align="bottom" ticks=10 labelFormat=(frost-viz/format/time '%H:%M')}}
-      {{frost-viz/scale transform dimension=transform.dimensions.y align="left"   ticks=10 labelFormat=(frost-viz/format/numeric)}}
+      {{frost-viz/scale transform dataBindings.x align="bottom" ticks=10 labelFormat=(frost-viz/format/time '%H:%M')}}
+      {{frost-viz/scale transform dataBindings.y align="left"   ticks=10 labelFormat=(frost-viz/format/numeric)}}
 
       <!-- Bar plotter -->
-      {{#frost-viz/plot/bar transform align="bottom"
+      {{#frost-viz/plot/bar transform
         as |bar data|
       }}
 
