@@ -27,13 +27,13 @@
     Plotting {{model.length}} elements
   </div>
 
-  <!-- BEGIN-SNIPPET demo-line -->
+  <!-- BEGIN-SNIPPET demo-dynamic-domain -->
 
   <!-- Chart element. -->
   {{#frost-viz/chart model
     as |chart|}}
 
-    {{#frost-viz/context chart
+    {{#frost-viz/scope chart
       (hash dimensions=(hash y=(frost-viz/dimension/linear chart)))
       as |scope|}}
 
@@ -93,13 +93,13 @@
 
       {{/frost-viz/transform/cartesian}}
 
-    {{/frost-viz/context}}
+    {{/frost-viz/scope}}
 
   {{/frost-viz/chart}}
   <!-- END-SNIPPET -->
 
   <div class="source">
-    {{code-snippet name="demo-line.hbs"}}
+    {{code-snippet name="demo-dynamic-domain.hbs"}}
   </div>
 
 </div>

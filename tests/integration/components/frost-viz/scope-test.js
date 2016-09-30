@@ -7,8 +7,8 @@ import {
 import hbs from 'htmlbars-inline-precompile';
 
 describeComponent(
-  'frost-viz/context',
-  'Integration: FrostVizContextComponent',
+  'frost-viz/scope',
+  'Integration: FrostVizScopeComponent',
   {
     integration: true
   },
@@ -18,12 +18,12 @@ describeComponent(
       // Handle any actions with this.on('myAction', function(val) { ... });
       // Template block usage:
       // this.render(hbs`
-      //   {{#frost-viz/context}}
+      //   {{#frost-viz/scope}}
       //     template content
-      //   {{/frost-viz/context}}
+      //   {{/frost-viz/scope}}
       // `);
 
-      this.render(hbs`{{frost-viz/context}}`);
+      this.render(hbs`{{frost-viz/scope}}`);
       expect(this.$()).to.have.length(1);
     });
   }
