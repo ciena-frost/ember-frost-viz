@@ -12,7 +12,6 @@ export default Ember.Mixin.create({
 
   willDestroy () {
     const stack = this.get('_destroyStack')
-    console.log('running', stack.length, 'tasks on destroy')
     while (stack.length) {
       (stack.pop())()
     }

@@ -18,11 +18,9 @@ export default Ember.Mixin.create({
 
   callbacks: {
     addDataBinding (binding) {
-      // console.log('adding binding', binding)
       const dimension = binding.get('dimension')
       dimension.get('dataBindings').addObject(binding)
       this.get('_dataBindings').addObject(binding)
-      // console.log('binding summary for', binding.property, binding)
     }
   },
 
@@ -33,7 +31,6 @@ export default Ember.Mixin.create({
   }),
 
   dynamicDimensions: Ember.computed('_dataBindings', '_dataBindings.[]', function () {
-    // console.log('recalculating dynamic dimensions')
     const bindings = this.get('_dataBindings')
     const dimensions = Ember.A([])
     bindings.map((b) => dimensions.addObject(b.get('dimension')))
@@ -41,10 +38,8 @@ export default Ember.Mixin.create({
   }),
 
   recomputeDomains: Ember.observer('data.[]', 'dynamicDimensions', 'dynamicDimensions.[]', function () {
-    // console.log('recomputing domains')
     const data = this.get('data')
     const dynamicDimensions = this.get('dynamicDimensions')
-    // console.log('computing domains for dynamic dimensions', dynamicDimensions)
     for (let dim of dynamicDimensions) {
       dim.computeDomain(data)
     }

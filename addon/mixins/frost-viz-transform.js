@@ -28,7 +28,6 @@ export default Ember.Mixin.create(Area, ScopeProvider, {
     const dataBindings = Object.assign({}, this.get('scope.dataBindings'), this.get('dataBindings'))
     const coordinateTransforms = this.get('coordinateTransforms')
     const result = TransformScope.create(this.get('childScopeBase'), { dataBindings, coordinateTransforms })
-    // console.log('transform scope:', result)
     return result
   })
 

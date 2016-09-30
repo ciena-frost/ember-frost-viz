@@ -10,7 +10,6 @@ export default Ember.Route.extend({
     const modelData = Ember.A([])
     const updateData = function () {
       Ember.run.later(function () {
-        console.log('updating data')
         modelData.removeAt(0, 1)
         scatter1.addInterval()
         scatter2.addInterval()
@@ -23,7 +22,6 @@ export default Ember.Route.extend({
     }
     this.set('modelData', modelData)
     updateData()
-    // console.log(modelData)
     return modelData
   }
 })

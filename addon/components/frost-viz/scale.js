@@ -86,7 +86,6 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
     const transformArea = Rectangle.from(this.get('transformArea'))
     const box = Rectangle.from(this.get('box'))
     const result = Rectangle.from(transformArea)
-    // console.log('setting linesArea from innerArea')
     if (TOP_BOTTOM.contains(align)) {
       result.set('height', transformArea.get('height') + box.get('height'))
       result.set('top', (align === 'top' ? parentArea : transformArea).get('top'))
@@ -105,35 +104,21 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
     const align = this.get('align')
     const dimension = this.get('dimension')
     const tickCount = this.getWithDefault('tickCount', 10)
-    const summary = dimension.dataBindings.map(e => e.property).join(',')
     const tickData = dimension.ticks(tickCount)
     if (!tickData) {
-      console.log(`${summary} not ready to generate ticks`)
       return []
     }
 
     const parentArea = Rectangle.from(this.get('parentArea'))
     const box = Rectangle.from(this.get('box'))
     if (!(align && TOP_BOTTOM_LEFT_RIGHT.contains(align))) {
-      console.log(`${summary} has no recognized alignment so no ticks`)
       return []
     }
     if (!(Ember.get(box, 'width') && Ember.get(box, 'height'))) {
-      console.log(`${summary} has zero area so no ticks`)
       return []
     }
 
-      // console.log('scale for', align)
-      // console.log('scale transformArea', transformArea)
-      // console.log('scale box', box)
-      // console.log('scale parentArea', parentArea)
-
     const linesArea = this.get('linesArea')
-
-    // console.log('scale linesArea', linesArea)
-
-    // grid format
-    // TODO: polar axes r, ϴ
     const coords = TOP_BOTTOM.contains(align)
       ? function (area, v) {
         const c = linesArea.get('left') + linesArea.get('width') * v
@@ -157,8 +142,6 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
       }
     }
 
-      // console.log('scale labelsArea', labelsArea)
-
     const lineCoords = (v) => coords(linesArea, v)
     const labelCoords = function (v) {
       const lc = coords(labelsArea, v)
@@ -166,7 +149,6 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
     }
 
     const labelFormat = this.get('labelFormat')
-      // console.log('creating ticks x', tickCount, tickData)
     const ticks = tickData.map((v) => {
       const val = dimension.evaluateValue(v)
       return Object.create({
@@ -174,7 +156,6 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
         label: { position: labelCoords(val), caption: labelFormat(v) }
       })
     })
-    // console.log(`axis ${this.get('key')} ticks`, ticks)
     return ticks
   }),
 
@@ -184,7 +165,6 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
     const align = this.get('align')
     const updatePadding = this.get('scope.callbacks.updatePadding')
     if (!(align && updatePadding)) {
-      console.log('not pushing padding: align', align, 'callback', updatePadding)
       return
     }
     const key = this.get('key') || align
@@ -197,7 +177,6 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
         padding.left === reportedPadding.left &&
         padding.right === reportedPadding.right) return
     this.set('reportedPadding', padding)
-    console.log('pushing padding')
     updatePadding(key, padding)
   }),
 
