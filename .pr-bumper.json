@@ -15,8 +15,8 @@
   "vcs": {
     "domain": "bitbucket.ciena.com",
     "env": {
-      "username": "bptmcity1",
-      "password": "3qwomjXHB+9e4t"
+      "username": "VCS_USERNAME",
+      "password": "VCS_PASSWORD"
     },
     "provider": "bitbucket-server"
   }
