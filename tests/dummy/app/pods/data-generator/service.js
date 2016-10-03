@@ -55,14 +55,14 @@ const PointGenerator = Ember.Object.extend(PropTypeMixin, {
       samplesPerInterval: 1,
       intervalSpacing: 86400,
       currentTime: new Date(1980, 1, 1),
-      sample: Brownian.create({center: 100, acceleration: 3}),
+      sample: Brownian.create({center: 0, acceleration: 3}),
       data: Ember.A([])
     }
   },
   addSample (currentTime) {
     return this.get('data').addObject({
       time: new Date(currentTime || this.get('currentTime')),
-      value: this.get('sample').step()
+      value: this.get('sample').step() % 100
     })
   },
   addInterval () {
