@@ -31,7 +31,6 @@ const Bar = Ember.Component.extend(ElementBuilder, {
       return function (el) {
         const y1 = el.y
         const y2 = clampZero
-        console.log('bar')
         return {x: el.x - 10, y: Math.min(y1, y2), width: 20, height: Math.abs(y1 - y2)}
       }
     }
