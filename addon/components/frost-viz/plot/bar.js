@@ -4,6 +4,7 @@ import ElementBuilder from 'ciena-frost-viz/mixins/frost-viz-element-builder'
 import Rectangle from 'ciena-frost-viz/utils/frost-viz-rectangle'
 
 const VERTICAL_ALIGN = Ember.A(['top', 'bottom'])
+const DEFAULT_BAR_SPACING = 0.33
 
 const clamp = function (val, min, max) {
   return Math.min(max, Math.max(val, min))
@@ -43,6 +44,11 @@ const Bar = Ember.Component.extend(ElementBuilder, {
     return VERTICAL_ALIGN.contains(align) ? 'y' : 'x'
   }),
 
+  alignSpan: Ember.computed('align', function () {
+    const align = this.get('aling')
+    return VERTICAL_ALIGN.contains(align) ? 'height' : 'width'
+  }),
+
   zero: Ember.computed('alignDirection', 'selectedBindings', 'transformsForArea', function () {
     const alignDirection = this.get('alignDirection')
     const selectedBindings = this.get('selectedBindings') || null
@@ -55,12 +61,22 @@ const Bar = Ember.Component.extend(ElementBuilder, {
     return transform(normalize(dimension.evaluateValue(0)))
   }),
 
+  barWidth: Ember.computed('area', 'data.length', 'alignSpan', function () {
+    const alignSpan = this.get('alignSpan')
+    const area = this.get('area')
+    const data = this.get('data')
+    const span = Ember.get(area, alignSpan) || 100
+    const barSpan = span * (1.0 - DEFAULT_BAR_SPACING)
+    const elements = Ember.get(data, 'length') || 1
+    return barSpan / elements
+  }),
+
   bars: Ember.computed('elements', 'alignDirection', 'selectedBindings', 'coordinateTransforms', function () {
     const transformArea = Rectangle.from(this.get('scope.area'))
     const alignDirection = this.get('alignDirection')
     const mapFunctions = this.get('mapFunctions')
     const zero = this.get('zero')
-    const width = this.get('barWidth') || 20
+    const width = this.get('barWidth')
     const alignFunction = mapFunctions.get(alignDirection)(transformArea, zero, width)
     const elements = this.get('elements')
     const elementOverride = this.get('elementOverride')

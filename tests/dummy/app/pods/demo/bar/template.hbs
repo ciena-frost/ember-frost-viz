@@ -31,7 +31,7 @@
 
       <!-- Add scale components. These report their styled area (defined here in CSS)
       and the rest of the chart responsively resizes to their dimensions. -->
-      {{frost-viz/scale transform dataBindings.x align="bottom" ticks=10 labelFormat=(frost-viz/format/time '%H:%M')}}
+      {{frost-viz/scale transform dataBindings.x align="bottom" ticks=model.lengthg labelFormat=(frost-viz/format/time '%H:%M')}}
       {{frost-viz/scale transform dataBindings.y align="left"   ticks=10 labelFormat=(frost-viz/format/numeric)}}
 
       <!-- Bar plotter -->
