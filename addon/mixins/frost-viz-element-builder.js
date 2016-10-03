@@ -24,7 +24,7 @@ export default Ember.Mixin.create(Area, SVGAffineTransform, SVGClipPathProvider,
   selectedBindings: Ember.computed('dataBindings', 'scope.dataBindings', function () {
     const explicitBindings = this.get('dataBindings')
     const scopeBindings = this.get('scope.dataBindings')
-    const result = Object.assign({}, scopeBindings, explicitBindings)
+    const result = Ember.Object.create(scopeBindings, explicitBindings)
     return result
   }),
 
@@ -45,42 +45,62 @@ export default Ember.Mixin.create(Area, SVGAffineTransform, SVGClipPathProvider,
     })
   },
 
-  dimensionOverrides: Ember.computed('area', 'selectedBindings', 'coordinateTransforms', function () {
-    const buildNormalizer = function (dimension) {
-      const range = Ember.get(dimension, 'range')
-      return (v) => (v - range[0]) / (range[1] - range[0])
-    }
+  buildNormalizer (dimension) {
+    const range = Ember.get(dimension, 'range')
+    return (v) => (v - range[0]) / (range[1] - range[0])
+  },
 
+  transformsForArea: Ember.computed('coordinateTransforms', 'area', function () {
     const area = this.get('area')
+    const transforms = this.get('coordinateTransforms')
+    return Ember.Object.create(transforms(area))
+  }),
+
+  dimensionOverrides: Ember.computed('selectedBindings', 'transformsForArea', function () {
     const selectedBindings = this.get('selectedBindings') || {}
-    const transforms = this.get('coordinateTransforms')(area)
-    const keys = Object.keys(transforms)
+    const transformsForArea = this.get('transformsForArea')
+    const keys = Object.keys(transformsForArea)
     const normalizedDimensions = {}
     for (let key of keys) {
       const binding = Ember.get(selectedBindings, key) || NULL_BINDING
       const dimension = Ember.get(binding, 'dimension')
-      const transform = Ember.get(transforms, key) || NULL_TRANSFORM
-      const normalize = buildNormalizer(dimension)
+      const transform = Ember.get(transformsForArea, key) || NULL_TRANSFORM
+      const normalize = this.buildNormalizer(dimension)
       normalizedDimensions[key] = (element) => transform(normalize(dimension.evaluateElement(element, binding)))
     }
     return normalizedDimensions
   }),
 
+  elementOverride (el, ...overrideArray) {
+    const overridden = Ember.get(el, 'overridden') || Ember.Object.create()
+    let didOverride = false
+    for (let overrides of overrideArray) {
+      const keys = Object.keys(overrides)
+      for (let key of keys) {
+        if (el.hasOwnProperty(key)) {
+          Ember.set(overridden, key, Ember.get(el, key))
+          didOverride = true
+        }
+        Ember.set(el, key, Ember.get(overrides, key))
+      }
+    }
+    if (didOverride) {
+      Ember.set(el, 'overridden', overridden)
+    }
+    return el
+  },
+
   elementBuilder: Ember.computed('scope.actions', 'dimensions', 'dimensionOverrides', function () {
     const callbacks = this.get('scope.callbacks')
     const dimensions = Object.assign({}, this.get('dimensions'), this.get('dimensionOverrides'))
     const dimensionKeys = Object.keys(dimensions)
+    const elementOverride = this.get('elementOverride')
     return function (element) {
       const transformed = {}
-      const overridden = {}
       for (const dimensionKey of dimensionKeys) {
         transformed[dimensionKey] = dimensions[dimensionKey](element)
-        if (element.hasOwnProperty(dimensionKey)) {
-          overridden[dimensionKey] = element[dimensionKey]
-        }
       }
-      const result = Object.assign({ callbacks }, element, { overridden }, transformed)
-      return result
+      return elementOverride(element, { callbacks }, transformed)
     }
   }),
 
