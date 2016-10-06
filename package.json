@@ -10,9 +10,7 @@
     "build": "ember build",
     "start": "ember server",
     "test": "ember try:each",
-    "fr-publish": "npm publish .",
-    "check-version-bump": "fr-bump check BP_FROST ciena-frost-viz",
-    "prefr-publish": "fr-bump BP_FROST ciena-frost-viz"
+    "fr-publish": "npm publish ."
   },
   "author": "Justin Bowes <viz@justinbowes.com>",
   "contributors": [
