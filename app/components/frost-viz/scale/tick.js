@@ -1,1 +1,1 @@
-export { default } from 'ciena-frost-viz/components/frost-viz/scale/tick';
+export { default } from 'ciena-frost-viz/components/frost-viz/scale/tick'

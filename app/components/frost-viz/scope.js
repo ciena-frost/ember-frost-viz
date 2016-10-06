@@ -1,1 +1,1 @@
-export { default } from 'ciena-frost-viz/components/frost-viz/scope';
+export { default } from 'ciena-frost-viz/components/frost-viz/scope'
