@@ -62,7 +62,7 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
     const box = this.get('box')
     const transformArea = Rectangle.from(this.get('transformArea'))
     let rectArea = Rectangle.from(box)
-    if (TOP_BOTTOM_LEFT_RIGHT.contains(align)) {
+    if (TOP_BOTTOM_LEFT_RIGHT.includes(align)) {
       rectArea = rectArea.moveTo(0, 0)
       if (align === 'right') {
         rectArea = rectArea.translate(transformArea.get('left') + transformArea.get('width'), 0)
@@ -86,7 +86,7 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
     const transformArea = Rectangle.from(this.get('transformArea'))
     const box = Rectangle.from(this.get('box'))
     const result = Rectangle.from(transformArea)
-    if (TOP_BOTTOM.contains(align)) {
+    if (TOP_BOTTOM.includes(align)) {
       result.set('height', transformArea.get('height') + box.get('height'))
       result.set('top', (align === 'top' ? parentArea : transformArea).get('top'))
     } else {
@@ -108,10 +108,12 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
     if (!tickData) {
       return []
     }
+    const isAligned = TOP_BOTTOM_LEFT_RIGHT.includes(align)
+    const isTopBottom = TOP_BOTTOM.includes(align)
 
     const parentArea = Rectangle.from(this.get('parentArea'))
     const box = Rectangle.from(this.get('box'))
-    if (!(align && TOP_BOTTOM_LEFT_RIGHT.contains(align))) {
+    if (!(align && isAligned)) {
       return []
     }
     if (!(Ember.get(box, 'width') && Ember.get(box, 'height'))) {
@@ -119,7 +121,7 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
     }
 
     const linesArea = this.get('linesArea')
-    const coords = TOP_BOTTOM.contains(align)
+    const coords = isTopBottom
       ? function (area, v) {
         const c = linesArea.get('left') + linesArea.get('width') * v
         return { x1: c, x2: c, y1: area.get('top'), y2: area.get('bottom') }
@@ -130,7 +132,7 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
       }
 
     const labelsArea = Rectangle.from(linesArea)
-    if (TOP_BOTTOM.contains(align)) {
+    if (isTopBottom) {
       labelsArea.set('height', box.get('height'))
       if (align === 'bottom') {
         labelsArea.set('top', parentArea.get('height') - box.get('height'))
@@ -170,7 +172,7 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
     const key = this.get('key') || align
     const reportedPadding = this.get('reportedPadding') || {}
     const padding = { top: 0, right: 0, bottom: 0, left: 0 }
-    const paddingProperty = TOP_BOTTOM.contains(align) ? 'box.height' : 'box.width'
+    const paddingProperty = TOP_BOTTOM.includes(align) ? 'box.height' : 'box.width'
     Ember.set(padding, align, this.getWithDefault(paddingProperty, 0))
     if (padding.top === reportedPadding.top &&
         padding.bottom === reportedPadding.bottom &&
@@ -182,8 +184,8 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
 
   keyFromAlign: Ember.computed('align', function () {
     const align = this.get('align')
-    return TOP_BOTTOM.contains(align) ? 'x'
-         : LEFT_RIGHT.contains(align) ? 'y'
+    return TOP_BOTTOM.includes(align) ? 'x'
+         : LEFT_RIGHT.includes(align) ? 'y'
          : null
   }),
 

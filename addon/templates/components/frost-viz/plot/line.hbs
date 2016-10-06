@@ -7,6 +7,6 @@
 <rect width={{width}} height={{height}} />
 <g style={{clipPathStyle}}>
   {{#each lines as |line|}}
-    {{yield line.[0] line.[1] data}}
+    {{yield line.start line.end data}}
   {{/each}}
 </g>
