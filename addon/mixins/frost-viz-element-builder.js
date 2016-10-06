@@ -31,7 +31,9 @@ export default Ember.Mixin.create(Area, SVGAffineTransform, SVGClipPathProvider,
   dimensions: Ember.computed('selectedBindings', function () {
     const selectedBindings = this.get('selectedBindings')
     return mapObj(selectedBindings, (key, val) => {
-      Ember.assert(`Parent scope defines multiple dataBindings for key ${key}, must specify a single binding`,
+      Ember.assert(
+        'element builder: calculating dimensions: Parent scope defines multiple dataBindings for key ' +
+        key + ' must override with a single binding',
         !Array.isArray(val))
       return val.get('dimension')
     })

@@ -22,7 +22,7 @@ export default Ember.Mixin.create({
 
   compute (params, hash) {
     const dimension = params.shift()
-    Ember.assert('Dimension object not passed or not valid', Ember.typeOf(dimension) === 'instance')
+    Ember.assert('binding: dimension object not passed or not valid', Ember.typeOf(dimension) === 'instance')
     const selectorIn = params.shift()
     const binding = this.dataBindingBuilder(dimension, selectorIn, hash)
     const scope = dimension.scope

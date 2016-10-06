@@ -104,7 +104,7 @@ export default Ember.Mixin.create({
    */
   compute (params, hash) {
     const scope = params.shift()
-    Ember.assert('Scope object not passed or not valid', Ember.typeOf(scope) === 'instance')
+    Ember.assert('dimension: Scope object not passed or not valid', Ember.typeOf(scope) === 'instance')
     const selectorIn = params.shift()
     const dimension = this.buildDimension(scope, selectorIn, hash)
     if (scope && scope.callbacks && scope.callbacks.addDimension) {
@@ -165,8 +165,8 @@ export default Ember.Mixin.create({
 
         domainBuilder (data) {
           const dataBindings = this.get('dataBindings')
-          Ember.assert('Data not provided', data && data.length)
-          Ember.assert('dataBindings not provided', dataBindings && dataBindings.length)
+          Ember.assert('dimension: Building domain: data not provided', data && data.length)
+          Ember.assert('dimension: Building domain: dataBindings not provided', dataBindings && dataBindings.length)
           if (!(data && data.length)) return undefined
           const domains = []
           for (let binding of dataBindings) {

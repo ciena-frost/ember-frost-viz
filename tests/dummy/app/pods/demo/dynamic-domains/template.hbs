@@ -77,7 +77,8 @@
 
         {{#frost-viz/plot/line transform
           dataBindings=(hash y=dataBindings.y.[1])
-          as |begin end data|
+          as |begin e
+          nd data|
         }}
           {{#frost-viz/plot/element/line-segment begin end
             as |begin end|
