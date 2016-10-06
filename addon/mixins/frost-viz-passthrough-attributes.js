@@ -16,7 +16,7 @@ export default Ember.Mixin.create({
   init () {
     this._super(...arguments)
     const attrs = this.attrs
-    const attributeBindings = this.get('attributeBindings')
+    const attributeBindings = this.get('attributeBindings') || this.set('attributeBindings', Ember.A([]))
     const element = this.get('item')
     const attrBlacklist = Object.assign({}, ATTR_BLACKLIST, this.get('attrBlacklist') || {})
     const attrSubstitutions = Object.assign({}, ATTR_SUBSTITUTION_MAP, this.get('attrSubstitutions') || {})

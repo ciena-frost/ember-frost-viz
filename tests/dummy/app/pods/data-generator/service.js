@@ -62,7 +62,7 @@ const PointGenerator = Ember.Object.extend(PropTypeMixin, {
   addSample (currentTime) {
     return this.get('data').addObject({
       time: new Date(currentTime || this.get('currentTime')),
-      value: this.get('sample').step() % 100
+      value: this.get('sample').step()
     })
   },
   addInterval () {

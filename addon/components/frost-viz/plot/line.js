@@ -6,11 +6,13 @@ const Line = Ember.Component.extend(ElementBuilder, {
   layout,
   classNames: ['frost-viz-plot-line'],
 
-  lines: Ember.computed('elements', function () {
+  lines: Ember.computed('data', 'elements', 'elementGenerate', function () {
+    const data = this.get('data')
     const elements = this.get('elements')
+    const elementGenerate = this.get('elementGenerate')
     if (!elements) return Ember.A([])
-    const result = elements.map((val, index, array) => [val, array[index + 1]]).slice(0, -1)
-    return result
+    return elements.map(
+      (el, index, array) => elementGenerate(el, data, {start: el, end: array[index + 1]})).slice(0, -1)
   })
 })
 

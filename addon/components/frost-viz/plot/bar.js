@@ -18,7 +18,7 @@ const Bar = Ember.Component.extend(ElementBuilder, {
 
   align: 'bottom',
 
-  mapFunctions: Ember.Object.create({
+  barFunctions: Ember.Object.create({
     x (area, zero, width) {
       const clampZero = clamp(zero, area.get('left'), area.get('right'))
       const halfWidth = width / 2
@@ -41,12 +41,12 @@ const Bar = Ember.Component.extend(ElementBuilder, {
 
   alignDirection: Ember.computed('align', function () {
     const align = this.get('align')
-    return VERTICAL_ALIGN.contains(align) ? 'y' : 'x'
+    return VERTICAL_ALIGN.includes(align) ? 'y' : 'x'
   }),
 
   alignSpan: Ember.computed('align', function () {
     const align = this.get('aling')
-    return VERTICAL_ALIGN.contains(align) ? 'height' : 'width'
+    return VERTICAL_ALIGN.includes(align) ? 'height' : 'width'
   }),
 
   zero: Ember.computed('alignDirection', 'selectedBindings', 'transformsForArea', function () {
@@ -71,16 +71,18 @@ const Bar = Ember.Component.extend(ElementBuilder, {
     return barSpan / elements
   }),
 
-  bars: Ember.computed('elements', 'alignDirection', 'selectedBindings', 'coordinateTransforms', function () {
-    const transformArea = Rectangle.from(this.get('scope.area'))
+  bars: Ember.computed('data', 'elements', 'alignDirection', 'scope.area', 'barFunctions', 'zero', 'barWidth',
+  'elementGenerate', function () {
+    const data = this.get('data')
+    const elements = this.get('elements')
     const alignDirection = this.get('alignDirection')
-    const mapFunctions = this.get('mapFunctions')
+    const transformArea = Rectangle.from(this.get('scope.area'))
+    const barFunctions = this.get('barFunctions')
     const zero = this.get('zero')
     const width = this.get('barWidth')
-    const alignFunction = mapFunctions.get(alignDirection)(transformArea, zero, width)
-    const elements = this.get('elements')
-    const elementOverride = this.get('elementOverride')
-    return elements.map((el) => elementOverride(el, alignFunction(el)))
+    const barFunction = barFunctions.get(alignDirection)(transformArea, zero, width)
+    const elementGenerate = this.get('elementGenerate')
+    return elements.map((el) => elementGenerate(el, data, barFunction(el)))
   })
 })
 
