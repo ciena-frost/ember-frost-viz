@@ -18,7 +18,7 @@ export function mapObj (obj, func) {
  * all functions are bound to the target.
  * @param  {object} map    The map of functions
  * @param  {object} target The target to which all function values should be mapped
- * @return {object}        A map of bound functions
+ * @returns {object}        A map of bound functions
  */
 export function bindFunctionMap (map, target) {
   return mapObj(map || {}, (key, func) => func.bind(target))

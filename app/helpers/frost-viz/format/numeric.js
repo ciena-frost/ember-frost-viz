@@ -1,1 +1,1 @@
-export { default, frostVizFormatNumeric } from 'ciena-frost-viz/helpers/frost-viz/format/numeric';
+export { default, frostVizFormatNumeric } from 'ciena-frost-viz/helpers/frost-viz/format/numeric'
