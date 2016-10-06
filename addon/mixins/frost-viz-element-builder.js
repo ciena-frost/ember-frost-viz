@@ -71,36 +71,27 @@ export default Ember.Mixin.create(Area, SVGAffineTransform, SVGClipPathProvider,
     return normalizedDimensions
   }),
 
-  elementOverride (el, ...overrideArray) {
-    const overridden = Ember.get(el, 'overridden') || Ember.Object.create()
-    let didOverride = false
-    for (let overrides of overrideArray) {
-      const keys = Object.keys(overrides)
-      for (let key of keys) {
-        if (el.hasOwnProperty(key)) {
-          Ember.set(overridden, key, Ember.get(el, key))
-          didOverride = true
-        }
-        Ember.set(el, key, Ember.get(overrides, key))
-      }
+  elementGenerate (el, data, ...attributeArray) {
+    const result = Ember.Object.create()
+    for (let attributeObj of attributeArray) {
+      result.setProperties(attributeObj)
     }
-    if (didOverride) {
-      Ember.set(el, 'overridden', overridden)
-    }
-    return el
+    result.set('element', el)
+    return result
   },
 
-  elementBuilder: Ember.computed('scope.actions', 'dimensions', 'dimensionOverrides', function () {
+  elementBuilder: Ember.computed('data', 'scope.actions', 'dimensions', 'dimensionOverrides', function () {
     const callbacks = this.get('scope.callbacks')
     const dimensions = Object.assign({}, this.get('dimensions'), this.get('dimensionOverrides'))
     const dimensionKeys = Object.keys(dimensions)
-    const elementOverride = this.get('elementOverride')
+    const elementGenerate = this.get('elementGenerate')
+    const data = this.get('data')
     return function (element) {
       const transformed = {}
       for (const dimensionKey of dimensionKeys) {
         transformed[dimensionKey] = dimensions[dimensionKey](element)
       }
-      return elementOverride(element, { callbacks }, transformed)
+      return elementGenerate(element, data, { callbacks }, transformed)
     }
   }),
 
