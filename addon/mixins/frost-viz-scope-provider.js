@@ -10,6 +10,6 @@ export default Ember.Mixin.create({
     const parentCallbacks = this.get('scope.callbacks')
     const callbacks = Object.assign({}, parentCallbacks, myCallbacks)
     const area = this.get('innerArea') || Object.assign({}, parent.get('area'), { parentArea: parent.get('area') })
-    return {data, parent, area, callbacks}
+    return { data, parent, area, callbacks }
   })
 })
