@@ -1,0 +1,67 @@
+<!-- Chart element. -->
+{{#frost-viz/chart data
+  as |chart|
+}}
+
+  {{#frost-viz/scope chart
+    (hash
+      dimensions=(hash
+        x=(frost-viz/dimension/linear chart)
+        y=(frost-viz/dimension/linear chart)
+    ))
+    as |scope|
+  }}
+
+    {{#frost-viz/transform/cartesian scope
+      dataBindings=(hash
+        x=(frost-viz/binding scope.dimensions.x 'x')
+        y=(array
+          (frost-viz/binding scope.dimensions.y 'y')
+          (frost-viz/binding scope.dimensions.y 'smooth')
+        )
+      )
+      as |transform dataBindings|
+    }}
+
+      {{frost-viz/scale transform dataBindings.x align="bottom" ticks=model.length}}
+      {{frost-viz/scale transform dataBindings.y.[0] align="left" ticks=10 tickLabelFormat=(frost-viz/format/numeric)}}
+
+      {{#frost-viz/plot/line transform
+        dataBindings=(hash y=transform.dataBindings.y.[0])
+        as |begin end data|
+      }}
+        <line class="frost-viz-kde-overline" x1={{begin.x}} y1={{begin.y}} x2={{begin.x}} y2={{end.y}} />
+        <line class="frost-viz-kde-overline" x1={{begin.x}} y1={{end.y}} x2={{end.x}} y2={{end.y}} />
+      {{/frost-viz/plot/line}}
+
+      {{#frost-viz/plot/path transform
+        dataBindings=(hash y=transform.dataBindings.y.[1])
+        as |path data|
+      }}
+        <path d="{{path}}" />
+      {{/frost-viz/plot/path}}
+
+      {{#frost-viz/plot/scatter transform
+        dataBindings=(hash y=transform.dataBindings.y.[0])
+        as |element|
+      }}
+        {{#if element.element.likelihood}}
+        <defs>
+          <marker id='head' orient='auto' markerWidth='2' markerHeight='4' refX='0.1' refY='2'>
+            <path d='M0,0 V4 L2,2 Z' fill='black' />
+          </marker>
+        </defs>
+        <path
+          marker-end='url(#head)'
+          stroke-width='2' fill='none' stroke='black'
+          d="M{{element.x}},{{element.y}} m0,-60 l0,50"
+        />
+        {{/if}}
+
+      {{/frost-viz/plot/scatter}}
+
+    {{/frost-viz/transform/cartesian}}
+
+  {{/frost-viz/scope}}
+
+{{/frost-viz/chart}}

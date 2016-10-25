@@ -1,78 +1,34 @@
+<h1>NHP visualization simulation</h1>
+
 <div class="nhp">
 
-<!-- Chart element. -->
-{{#frost-viz/chart model.values
-  as |chart|}}
+  <select onchange={{action (mut model.active) value="target.value"}}>
+    <option value="none" selected={{eq model.active}}>(Select a visualization)</option>
+    <option value="kde" selected={{eq model.active}}>Kernel density estimate</option>
+    <option value="roc" selected={{eq model.active}}>ROC curve</option>
+    <option value="fit" selected={{eq model.active}}>Fitted function over time series</option>
+  </select>
 
-  {{#frost-viz/scope chart
-    (hash
-      dimensions=(hash
-        x=(frost-viz/dimension/time chart)
-        y=(frost-viz/dimension/linear chart)
-    ))
-    as |scope|}}
+  {{#if (eq model.active 'kde')}}
+    <div class="kde">
+      <h2>Kernel density estimate</h2>
+      {{nhp-kde model.kde}}
+    </div>
+  {{/if}}
 
-    {{log "scope 1" scope}}
+  {{#if (eq model.active 'roc')}}
+    <div class="roc">
+      <h2>ROC curve</h2>
+      {{nhp-roc model.roc}}
+    </div>
+  {{/if}}
 
-      <!-- Chart has a cartesian transform. (x right, y up).
-      The transform translates data attributes to coordinates via the dimensions. Any dimensions that would be overwritten
-      (in this case, "x" and "y") are saved to an "overridden" attribute (e.g. if the source data had "x" or "y"
-      attributes). -->
-      {{#frost-viz/transform/cartesian scope
-        dataBindings=(hash
-          x=(frost-viz/binding scope.dimensions.x 'time')
-          y=(array
-            (frost-viz/binding scope.dimensions.y 'min')
-            (frost-viz/binding scope.dimensions.y 'center')
-            (frost-viz/binding scope.dimensions.y 'max')
-            (frost-viz/binding scope.dimensions.y 'value')
-          )
-        )
-        as |transform dataBindings|
-      }}
+  {{#if (eq model.active 'fit')}}
+    <div class="fit">
+      <h2>Fitted function over time series</h2>
+      {{nhp-fit model.fit}}
+    </div>
+  {{/if}}
 
-        {{frost-viz/scale transform dataBindings.x align="bottom" ticks=10 labelFormat=(frost-viz/format/time '%m/%d %H:%M')}}
-        {{frost-viz/scale transform dataBindings.y.[0] align="left" ticks=10 labelFormat=(frost-viz/format/numeric)}}
-
-        <!-- Min line -->
-        {{#frost-viz/plot/line transform
-          dataBindings=(hash
-            x=dataBindings.x
-            y=dataBindings.y.[0]
-          )
-          as |begin end data|
-        }}
-          {{frost-viz/plot/element/line-segment begin end stroke-dasharray="5, 5"}}
-        {{/frost-viz/plot/line}}
-
-        <!-- Center line -->
-        {{#frost-viz/plot/line transform
-          dataBindings=(hash y=dataBindings.y.[1])
-          as |begin end data|
-        }}
-          {{frost-viz/plot/element/line-segment begin end}}
-        {{/frost-viz/plot/line}}
-
-        <!-- Max line -->
-        {{#frost-viz/plot/line transform
-          dataBindings=(hash y=dataBindings.y.[2])
-          as |begin end data|
-        }}
-          {{frost-viz/plot/element/line-segment begin end stroke-dasharray="5, 5"}}
-        {{/frost-viz/plot/line}}
-
-        <!-- Raw observations -->
-        {{#frost-viz/plot/scatter transform
-          dataBindings=(hash y=dataBindings.y.[3])
-          as |item data|
-        }}
-          {{frost-viz/plot/element/symbol/circle item data r=2 fill='cyan'}}
-        {{/frost-viz/plot/scatter}}
-
-      {{/frost-viz/transform/cartesian}}
-
-  {{/frost-viz/scope}}
-
-{{/frost-viz/chart}}
 
 </div>

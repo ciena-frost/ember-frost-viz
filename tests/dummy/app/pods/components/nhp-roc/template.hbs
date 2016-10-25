@@ -1,0 +1,57 @@
+<!-- Chart element. -->
+{{#frost-viz/chart data
+  as |chart|
+}}
+
+  {{#frost-viz/scope chart
+    (hash
+      dimensions=(hash
+        x=(frost-viz/dimension/linear chart)
+        y=(frost-viz/dimension/linear chart)
+    ))
+    as |scope|
+  }}
+
+    {{#frost-viz/transform/cartesian scope
+      dataBindings=(hash
+        x=(frost-viz/binding scope.dimensions.x 'x')
+        y=(array
+          (frost-viz/binding scope.dimensions.y 'line')
+          (frost-viz/binding scope.dimensions.y 'curve')
+        )
+      )
+      as |transform dataBindings|
+    }}
+
+      {{frost-viz/scale transform dataBindings.x align="bottom" ticks=model.length}}
+      {{frost-viz/scale transform dataBindings.y.[0] align="left" ticks=10 tickLabelFormat=(frost-viz/format/numeric)}}
+
+      {{#frost-viz/plot/line transform
+        dataBindings=(hash y=transform.dataBindings.y.[0])
+        as |begin end data|
+      }}
+        {{frost-viz/plot/element/line-segment begin end stroke-dasharray="5, 5"}}
+      {{/frost-viz/plot/line}}
+
+      {{#frost-viz/plot/path transform
+        smooth='catmull-rom'
+        dataBindings=(hash y=transform.dataBindings.y.[1])
+        as |path data|
+      }}
+        <path d="{{path}}" />
+      {{/frost-viz/plot/path}}
+
+      {{#frost-viz/plot/scatter transform
+        dataBindings=(hash y=transform.dataBindings.y.[1])
+        as |element|
+      }}
+        {{#if element.element.selected}}
+          {{frost-viz/plot/element/symbol/circle element}}
+        {{/if}}
+      {{/frost-viz/plot/scatter}}
+
+    {{/frost-viz/transform/cartesian}}
+
+  {{/frost-viz/scope}}
+
+{{/frost-viz/chart}}
