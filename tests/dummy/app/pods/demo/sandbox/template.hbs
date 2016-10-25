@@ -1,0 +1,34 @@
+<h1>NHP visualization simulation</h1>
+
+<div class="nhp">
+
+  <select onchange={{action (mut model.active) value="target.value"}}>
+    <option value="none" selected={{eq model.active}}>(Select a visualization)</option>
+    <option value="kde" selected={{eq model.active}}>Kernel density estimate</option>
+    <option value="roc" selected={{eq model.active}}>ROC curve</option>
+    <option value="fit" selected={{eq model.active}}>Fitted function over time series</option>
+  </select>
+
+  {{#if (eq model.active 'kde')}}
+    <div class="kde">
+      <h2>Kernel density estimate</h2>
+      {{nhp-kde model.kde}}
+    </div>
+  {{/if}}
+
+  {{#if (eq model.active 'roc')}}
+    <div class="roc">
+      <h2>ROC curve</h2>
+      {{nhp-roc model.roc}}
+    </div>
+  {{/if}}
+
+  {{#if (eq model.active 'fit')}}
+    <div class="fit">
+      <h2>Fitted function over time series</h2>
+      {{nhp-fit model.fit}}
+    </div>
+  {{/if}}
+
+
+</div>

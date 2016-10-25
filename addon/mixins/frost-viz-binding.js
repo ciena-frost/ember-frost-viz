@@ -5,8 +5,7 @@ const fUndef = () => undefined
 const DataBinding = Ember.Object.extend({
   dimension: null,
   property: null,
-  selector: fUndef,
-  evaluateElement: fUndef
+  selector: fUndef
 })
 
 export default Ember.Mixin.create({
@@ -22,9 +21,11 @@ export default Ember.Mixin.create({
 
   compute (params, hash) {
     const dimension = params.shift()
-    Ember.assert('Dimension object not passed or not valid', Ember.typeOf(dimension) === 'instance')
+    Ember.assert('binding: dimension object not passed or not valid', Ember.typeOf(dimension) === 'instance')
     const selectorIn = params.shift()
-    const binding = this.dataBindingBuilder(dimension, selectorIn, hash)
+    const data = params.shift() || hash.data || dimension.get('scope.data')
+    Ember.assert('binding: data not specified or inherited, or was not array', Array.isArray(data))
+    const binding = this.dataBindingBuilder(dimension, data, selectorIn, hash)
     const scope = dimension.scope
     if (scope && scope.callbacks && scope.callbacks.addDataBinding) {
       scope.callbacks.addDataBinding(binding)
@@ -32,11 +33,11 @@ export default Ember.Mixin.create({
     return binding
   },
 
-  dataBindingBuilder (dimension, selectorIn, hash) {
+  dataBindingBuilder (dimension, data, selectorIn, hash) {
     const property = typeof selectorIn === 'string' ? selectorIn : undefined
     const selector = this.createSelector(selectorIn)
     const selectValue = (element) => selector(element)
-    return DataBinding.create({ dimension, property, selector, selectValue })
+    return DataBinding.create({ dimension, property, data, selector, selectValue })
   }
 
 })

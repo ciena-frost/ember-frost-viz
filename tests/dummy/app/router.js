@@ -15,6 +15,7 @@ Router.map(function () {
     this.route('interaction')
     this.route('dynamic-domains')
     this.route('reference')
+    this.route('sandbox')
   })
 })
 

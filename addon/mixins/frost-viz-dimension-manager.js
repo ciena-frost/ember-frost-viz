@@ -38,10 +38,9 @@ export default Ember.Mixin.create({
   }),
 
   recomputeDomains: Ember.observer('data.[]', 'dynamicDimensions', 'dynamicDimensions.[]', function () {
-    const data = this.get('data')
     const dynamicDimensions = this.get('dynamicDimensions')
     for (let dim of dynamicDimensions) {
-      dim.computeDomain(data)
+      dim.computeDomain()
     }
   })
 
