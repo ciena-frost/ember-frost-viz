@@ -163,21 +163,20 @@ export default Ember.Mixin.create({
         range,
         dataBindings: Ember.A([]),
 
-        domainBuilder (data) {
+        domainBuilder () {
           const dataBindings = this.get('dataBindings')
-          Ember.assert('dimension: Building domain: data not provided', data && data.length)
           Ember.assert('dimension: Building domain: dataBindings not provided', dataBindings && dataBindings.length)
-          if (!(data && data.length)) return undefined
           const domains = []
           for (let binding of dataBindings) {
+            const data = binding.get('data')
             const elementFunc = (element) => parser(binding.selector(element))
             domains.push(domainFunc(data.map(elementFunc)))
           }
           return result.inclusiveDomain(domains)
         },
 
-        computeDomain (data) {
-          const domain = this.domainBuilder(data)
+        computeDomain () {
+          const domain = this.domainBuilder()
           this.setProperties({
             domain,
             evaluateValue: valueEvaluatorBuilder(domain, range),

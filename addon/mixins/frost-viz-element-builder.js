@@ -10,6 +10,7 @@ const NULL_TRANSFORM = (value) => value
 export default Ember.Mixin.create(Area, SVGAffineTransform, SVGClipPathProvider, {
   tagName: 'g',
   classNames: ['frost-viz-plot'],
+  classNameBindings: ['dynamicClassNames'],
   area: Ember.computed.alias('scope.area'),
   x: Ember.computed.alias('area.x'),
   y: Ember.computed.alias('area.y'),
@@ -26,6 +27,20 @@ export default Ember.Mixin.create(Area, SVGAffineTransform, SVGClipPathProvider,
     const scopeBindings = this.get('scope.dataBindings')
     const result = Ember.Object.create(scopeBindings, explicitBindings)
     return result
+  }),
+
+  dynamicClassNames: Ember.computed('selectedBindings', function () {
+    const selectedBindings = this.get('selectedBindings')
+    const keys = Object.keys(selectedBindings)
+    const names = Ember.A([])
+    for (let key of keys) {
+      const binding = selectedBindings.get(key)
+      const property = binding.get('property')
+      if (!property) continue
+      const dasherized = Ember.String.dasherize(property)
+      names.pushObject(`frost-viz-plot-${dasherized}`)
+    }
+    return names.join(' ')
   }),
 
   dimensions: Ember.computed('selectedBindings', function () {

@@ -87,3 +87,20 @@
 rect.frost-viz-plot-bar-element {
     fill: #444;
 }
+
+.nhp .frost-viz-scale rect {
+  fill: #f0f0f0;
+}
+
+.nhp .frost-viz-plot rect {
+  fill-opacity: 0.0;
+}
+
+.nhp .frost-viz-plot line {
+  stroke: #222;
+}
+
+.nhp .frost-viz-plot circle {
+  fill: #088;
+  fill-opacity: 1.0;
+}

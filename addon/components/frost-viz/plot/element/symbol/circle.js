@@ -5,7 +5,10 @@ import Interactions from 'ciena-frost-viz/mixins/frost-viz-element-interactions'
 
 const Component = Ember.Component.extend(PassthroughAttributes, Interactions, {
   layout,
-  tagName: 'circle'
+  tagName: 'circle',
+  attributeBindings: ['cx', 'cy'],
+  cx: Ember.computed.oneWay('item.x'),
+  cy: Ember.computed.oneWay('item.y')
 })
 
 Component.reopenClass({

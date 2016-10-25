@@ -21,7 +21,7 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
     align: PropTypes.string,
     boxObserveElement: PropTypes.string,
     binding: PropTypes.EmberObject.isRequired,
-    // labelFormat: PropTypes.func.isRequired,
+    tickLabelFormat: PropTypes.func,
     tagName: PropTypes.string,
     scope: PropTypes.EmberObject
   },
@@ -30,7 +30,7 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
     return {
       align: 'left',
       boxObserveElement: '.frost-viz-scale-rect',
-      labelFormat: DEFAULT_LABEL_FORMAT,
+      tickLabelFormat: DEFAULT_LABEL_FORMAT,
       tagName: 'g',
       scope: {
         area: Rectangle.create({width: 100, height: 100}),
@@ -96,6 +96,18 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
     return result
   }),
 
+  tickTextAnchor: Ember.computed('align', function () {
+    const align = this.get('align')
+    switch (align) {
+      case 'left':
+        return 'end'
+      case 'top':
+      case 'bottom':
+        return 'middle'
+    }
+    return 'start'
+  }),
+
   tickElements: Ember.computed('domain', 'domain.[]', 'align',
   'transformArea', 'transformArea.{x,y,width,height}',
   'parentArea', 'parentArea.{x,y,width,height}',
@@ -145,17 +157,19 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
     }
 
     const lineCoords = (v) => coords(linesArea, v)
-    const labelCoords = function (v) {
+    const labelCoords = function (v, align) {
       const lc = coords(labelsArea, v)
-      return {x: lc.x1, y: 0.5 * (lc.y1 + lc.y2)}
+      const x = align === 'end' ? lc.x2 : lc.x1
+      return {x, y: 0.5 * (lc.y1 + lc.y2)}
     }
 
-    const labelFormat = this.get('labelFormat')
+    const tickLabelFormat = this.get('tickLabelFormat')
+    const textAnchor = this.get('tickTextAnchor')
     const ticks = tickData.map((v) => {
       const val = dimension.evaluateValue(v)
       return Object.create({
         line: lineCoords(val),
-        label: { position: labelCoords(val), caption: labelFormat(v) }
+        label: { textAnchor, position: labelCoords(val, textAnchor), caption: tickLabelFormat(v) }
       })
     })
     return ticks
