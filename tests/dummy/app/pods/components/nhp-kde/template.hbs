@@ -14,35 +14,57 @@
 
     {{#frost-viz/transform/cartesian scope
       dataBindings=(hash
-        x=(frost-viz/binding scope.dimensions.x 'x')
+        x=(array
+          (frost-viz/binding scope.dimensions.x 'histogram.x')
+          (frost-viz/binding scope.dimensions.x 'pdf.x')
+        )
         y=(array
-          (frost-viz/binding scope.dimensions.y 'y')
-          (frost-viz/binding scope.dimensions.y 'smooth')
+          (frost-viz/binding scope.dimensions.y 'histogram.y')
+          (frost-viz/binding scope.dimensions.y 'pdf.y')
         )
       )
       as |transform dataBindings|
     }}
 
-      {{frost-viz/scale transform dataBindings.x align="bottom" ticks=model.length}}
+      {{frost-viz/scale transform dataBindings.x.[0] align="bottom" ticks=model.length}}
       {{frost-viz/scale transform dataBindings.y.[0] align="left" ticks=10 tickLabelFormat=(frost-viz/format/numeric)}}
 
-      {{#frost-viz/plot/line transform
-        dataBindings=(hash y=transform.dataBindings.y.[0])
+      <!-- {{#frost-viz/plot/line transform
+        dataBindings=(hash
+          x=transform.dataBindings.x.[0]
+          y=transform.dataBindings.y.[0]
+        )
         as |begin end data|
       }}
         <line class="frost-viz-kde-overline" x1={{begin.x}} y1={{begin.y}} x2={{begin.x}} y2={{end.y}} />
         <line class="frost-viz-kde-overline" x1={{begin.x}} y1={{end.y}} x2={{end.x}} y2={{end.y}} />
-      {{/frost-viz/plot/line}}
+      {{/frost-viz/plot/line}} -->
+
+      {{#frost-viz/plot/scatter transform
+        dataBindings=(hash
+          x=transform.dataBindings.x.[1]
+          y=transform.dataBindings.y.[1]
+        )
+        as |element|
+      }}
+        {{log "element" element}}
+      {{/frost-viz/plot/scatter}}
 
       {{#frost-viz/plot/path transform
-        dataBindings=(hash y=transform.dataBindings.y.[1])
+        dataBindings=(hash
+          x=transform.dataBindings.x.[1]
+          y=transform.dataBindings.y.[1]
+        )
         as |path data|
       }}
         <path d="{{path}}" />
       {{/frost-viz/plot/path}}
 
-      {{#frost-viz/plot/scatter transform
-        dataBindings=(hash y=transform.dataBindings.y.[0])
+      <!-- {{#frost-viz/plot/scatter transform
+        dataBindings=(hash
+          x=transform.dataBindings.x.[1]
+          y=transform.dataBindings.y.[1]
+        )
         as |element|
       }}
         {{#if element.element.likelihood}}
@@ -58,7 +80,7 @@
         />
         {{/if}}
 
-      {{/frost-viz/plot/scatter}}
+      {{/frost-viz/plot/scatter}} -->
 
     {{/frost-viz/transform/cartesian}}
 

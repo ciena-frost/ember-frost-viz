@@ -68,7 +68,7 @@ export default Ember.Mixin.create({
   range: [0, 1],
 
   parser (v) {
-    return Number(v) || 0
+    return (v === undefined) ? undefined : (Number(v) || 0)
   },
 
   domainBuilder (elements) {
@@ -131,7 +131,11 @@ export default Ember.Mixin.create({
     const valueEvaluatorBuilder = function (dom, rng) {
       if (!dom) return fUndef
       const rawMapper = rawMapperBuilder(dom.map(parser), rng)
-      return (value) => rawMapper(parser(value))
+      return (value) => {
+        if (value === undefined) return value
+        const parsedValue = parser(value)
+        return (parsedValue === undefined) ? parsedValue : rawMapper(parsedValue)
+      }
     }
 
     const elementEvaluatorBuilder = function (dom, rng) {
@@ -170,7 +174,8 @@ export default Ember.Mixin.create({
           for (let binding of dataBindings) {
             const data = binding.get('data')
             const elementFunc = (element) => parser(binding.selector(element))
-            domains.push(domainFunc(data.map(elementFunc)))
+            const elementData = data.map(elementFunc).filter(v => v !== undefined)
+            domains.push(domainFunc(elementData))
           }
           return result.inclusiveDomain(domains)
         },
