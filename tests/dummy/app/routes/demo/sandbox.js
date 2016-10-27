@@ -69,7 +69,7 @@ function simulateFit () {
 const KERNEL = [0.383103,	0.241843,	0.060626,	0.00598]
 const SMOOTH_WIDTH = KERNEL.length
 
-const SAMPLE_COUNT = 500
+const SAMPLE_COUNT = 10
 const SAMPLE_WEIGHT = 0.027
 
 function simulateKDE () {
@@ -82,15 +82,20 @@ function simulateKDE () {
   const keys = Object.keys(bins)
   const result = []
   for (let key of keys) {
-    result.push({x: Number(key), y: bins[key], smooth: bins[key]})
+    const x = Number(key)
+    result.push({
+      x,
+      histogram: {x, y: bins[key]},
+      pdf: {x, y: bins[key]}
+    })
   }
-  result.sort((a, b) => a.x - b.x)
+  result.sort((a, b) => a.histogram.x - b.histogram.x)
   for (let i = SMOOTH_WIDTH, n = result.length - SMOOTH_WIDTH; i < n; ++i) {
-    result[i].smooth *= KERNEL[0]
+    result[i].pdf.y *= KERNEL[0]
     for (let j = 1; j < SMOOTH_WIDTH; ++j) {
       let f = KERNEL[j]
-      result[i].smooth += result[i + j].y * f
-      result[i].smooth += result[i - j].y * f
+      result[i].pdf.y += result[i + j].pdf.y * f
+      result[i].pdf.y += result[i - j].pdf.y * f
     }
   }
   const likelihoodDirection = randomRange(-1, 1) < 0 ? -1 : 1
@@ -98,8 +103,16 @@ function simulateKDE () {
   const startIndex = likelihoodDirection < 0 ? result.length : 0
   const likelihoodIndex = startIndex + likelihoodDirection * likelihoodSpan
   // console.log(likelihoodIndex)
-  result[likelihoodIndex].likelihood = true
-  // console.log(result)
+  result[likelihoodIndex].pdf.likelihood = true
+  console.log(result)
+  //
+
+  // delete every second smoothed value to test sparse values
+  for (let i = 1, n = result.length; i < n; i += 2) {
+    delete result[i].pdf
+  }
+  console.log(result)
+
   return result
 }
 
@@ -122,7 +135,7 @@ export default Ember.Route.extend({
       kde: simulateKDE(),
       roc: createROCValues(),
       fit: simulateFit(),
-      active: 'none'
+      active: 'kde'
     })
     console.log('data ready')
     return result

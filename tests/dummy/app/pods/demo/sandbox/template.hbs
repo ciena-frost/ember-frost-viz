@@ -3,10 +3,10 @@
 <div class="nhp">
 
   <select onchange={{action (mut model.active) value="target.value"}}>
-    <option value="none" selected={{eq model.active}}>(Select a visualization)</option>
-    <option value="kde" selected={{eq model.active}}>Kernel density estimate</option>
-    <option value="roc" selected={{eq model.active}}>ROC curve</option>
-    <option value="fit" selected={{eq model.active}}>Fitted function over time series</option>
+    <option value="none">(Select a visualization)</option>
+    <option value="kde" selected={{eq 'kde' model.active}}>Kernel density estimate</option>
+    <option value="roc" selected={{eq 'roc' model.active}}>ROC curve</option>
+    <option value="fit" selected={{eq 'fit' model.active}}>Fitted function over time series</option>
   </select>
 
   {{#if (eq model.active 'kde')}}

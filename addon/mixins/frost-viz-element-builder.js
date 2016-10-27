@@ -20,6 +20,8 @@ export default Ember.Mixin.create(Area, SVGAffineTransform, SVGClipPathProvider,
   data: Ember.computed.alias('scope.data'),
   coordinateTransforms: Ember.computed.alias('scope.coordinateTransforms'),
 
+  allowSparseElements: false,
+
   dataBindings: null,
 
   selectedBindings: Ember.computed('dataBindings', 'scope.dataBindings', function () {
@@ -83,7 +85,10 @@ export default Ember.Mixin.create(Area, SVGAffineTransform, SVGClipPathProvider,
       const dimension = Ember.get(binding, 'dimension')
       const transform = Ember.get(transformsForArea, key) || NULL_TRANSFORM
       const normalize = this.buildNormalizer(dimension)
-      normalizedDimensions[key] = (element) => transform(normalize(dimension.evaluateElement(element, binding)))
+      normalizedDimensions[key] = (element) => {
+        const value = dimension.evaluateElement(element, binding)
+        return (value === undefined) ? undefined : transform(normalize(value))
+      }
     }
     return normalizedDimensions
   }),
@@ -103,19 +108,28 @@ export default Ember.Mixin.create(Area, SVGAffineTransform, SVGClipPathProvider,
     const dimensionKeys = Object.keys(dimensions)
     const elementGenerate = this.get('elementGenerate')
     const data = this.get('data')
+    const allowSparseElements = this.get('allowSparseElements')
     return function (element) {
       const transformed = {}
+      let anyValue = false
+      let sparse = false
       for (const dimensionKey of dimensionKeys) {
-        transformed[dimensionKey] = dimensions[dimensionKey](element)
+        const dimValue = dimensions[dimensionKey](element)
+        const isUndefined = dimValue === undefined
+        transformed[dimensionKey] = dimValue
+        anyValue = anyValue || (!isUndefined)
+        sparse = sparse || (isUndefined)
       }
-      return elementGenerate(element, data, { callbacks }, transformed)
+      const allow = (allowSparseElements && anyValue) || (!sparse)
+      // console.log('allow', allow, transformed)
+      return allow ? elementGenerate(element, data, { callbacks }, transformed) : undefined
     }
   }),
 
   elements: Ember.computed('data', 'data.[]', 'elementBuilder', 'renderReady', function () {
     const elementBuilder = this.get('elementBuilder')
     const data = this.get('data') || Ember.A([])
-    const result = data.map(elementBuilder)
+    const result = data.map(elementBuilder).filter(e => e !== undefined)
     return result
   })
 })
