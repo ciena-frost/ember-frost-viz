@@ -15,10 +15,6 @@ export const RectangleDefaults = {
 }
 
 export const Rectangle = Ember.Object.extend(RectangleDefaults, {
-  x: 0,
-  y: 0,
-  width: 0,
-  height: 0,
 
   left: Ember.computed.alias('x'),
   top: Ember.computed.alias('y'),
@@ -45,6 +41,10 @@ export const Rectangle = Ember.Object.extend(RectangleDefaults, {
   edges: Ember.computed(function () {
     const edges = this.getProperties(['left', 'right', 'top', 'bottom'])
     return edges
+  }),
+
+  area: Ember.computed('width', 'height', function () {
+    return (this.get('width') || 0) * (this.get('height' || 0))
   }),
 
   intersectWith (r2) {

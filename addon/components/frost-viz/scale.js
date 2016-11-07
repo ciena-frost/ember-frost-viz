@@ -5,9 +5,10 @@ import Area from 'ciena-frost-viz/mixins/frost-viz-area'
 import DefaultFormatter from 'ciena-frost-viz/helpers/frost-viz/format/default'
 import Rectangle from 'ciena-frost-viz/utils/frost-viz-rectangle'
 import SVGAffineTransformable from 'ciena-frost-viz/mixins/frost-viz-svg-transform-provider'
-import {PropTypes} from 'ember-prop-types'
+import VizComputedProperties from 'ciena-frost-viz/utils/frost-viz-computed'
+import { PropTypes } from 'ember-prop-types'
+import { attributesEqual } from 'ciena-frost-viz/utils/frost-viz-object-operations'
 
-const DEFAULT_LABEL_FORMAT = DefaultFormatter.create().compute()
 const TOP_BOTTOM = Ember.A(['top', 'bottom'])
 const LEFT_RIGHT = Ember.A(['left', 'right'])
 const TOP_BOTTOM_LEFT_RIGHT = Ember.A([...TOP_BOTTOM, ...LEFT_RIGHT])
@@ -23,19 +24,15 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
     binding: PropTypes.EmberObject.isRequired,
     tickLabelFormat: PropTypes.func,
     tagName: PropTypes.string,
-    scope: PropTypes.EmberObject
+    scope: PropTypes.EmberObject.isRequired
   },
 
   getDefaultProps () {
     return {
       align: 'left',
       boxObserveElement: '.frost-viz-scale-rect',
-      tickLabelFormat: DEFAULT_LABEL_FORMAT,
-      tagName: 'g',
-      scope: {
-        area: Rectangle.create({width: 100, height: 100}),
-        parent: Rectangle.create({width: 100, height: 100})
-      }
+      tickLabelFormat: DefaultFormatter.create().compute(),
+      tagName: 'g'
     }
   },
 
@@ -54,39 +51,50 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
       : 0
   }),
 
-  rectArea: Ember.computed('align',
-  'transformArea.{x,y,width,height}',
-  'box.{x,y,width,height}',
-  function () {
-    const align = this.get('align')
-    const box = this.get('box')
-    const transformArea = Rectangle.from(this.get('transformArea'))
-    let rectArea = Rectangle.from(box)
-    if (TOP_BOTTOM_LEFT_RIGHT.includes(align)) {
-      rectArea = rectArea.moveTo(0, 0)
-      if (align === 'right') {
-        rectArea = rectArea.translate(transformArea.get('left') + transformArea.get('width'), 0)
-      }
-      if (align === 'bottom') {
-        rectArea = rectArea.translate(0, transformArea.get('top') + transformArea.get('height'))
-      }
-    }
-    return rectArea
-  }),
-
   dimension: Ember.computed.alias('binding.dimension'),
-
   domain: Ember.computed.alias('dimension.domain'),
 
-  linesArea: Ember.computed('align',
-  'transformArea.{x,y,width,height}', 'parentArea.{x,y,width,height}', 'box.{x,y,width,height}',
+  getValid (property, validator, error) {
+    const value = this.get(property)
+    if (!validator(value)) {
+      console.log('throwing', error, 'for', property, '=', value)
+      throw new Error(error)
+    }
+    return value
+  },
+
+  validators: {
+    area (rect) {
+      return Ember.get(rect, 'area') >= 0
+    },
+    align (align) {
+      return TOP_BOTTOM_LEFT_RIGHT.includes(align)
+    }
+  },
+
+  boxRect: VizComputedProperties.rectangle('box'),
+  parentAreaRect: VizComputedProperties.rectangle('parentArea'),
+  transformAreaRect: VizComputedProperties.rectangle('transformArea'),
+
+  tickData: Ember.computed('dimension', 'tickCount', function () {
+    const dimension = this.get('dimension')
+    const tickCount = this.getWithDefault('tickCount', 10)
+    return dimension.ticks(tickCount)
+  }),
+
+  linesAreaRect: Ember.computed(
+    'align',
+    'boxRect',
+    'parentAreaRect',
+    'transformAreaRect',
   function () {
-    const align = this.get('align')
-    const parentArea = Rectangle.from(this.get('parentArea'))
-    const transformArea = Rectangle.from(this.get('transformArea'))
-    const box = Rectangle.from(this.get('box'))
+    const align = this.getValid('align', this.validators.align, 'align not recognized')
+    const box = this.getValid('boxRect', this.validators.area, 'layout box has zero area')
+    const parentArea = this.getValid('parentAreaRect', this.validators.area, 'parent has zero area')
+    const transformArea = this.getValid('transformAreaRect', this.validators.area, 'parent transform has zero area')
+    const isAlignVertical = this.get('isAlignVertical')
     const result = Rectangle.from(transformArea)
-    if (TOP_BOTTOM.includes(align)) {
+    if (isAlignVertical) {
       result.set('height', transformArea.get('height') + box.get('height'))
       result.set('top', (align === 'top' ? parentArea : transformArea).get('top'))
     } else {
@@ -94,6 +102,25 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
       result.set('left', (align === 'left' ? parentArea : transformArea).get('left'))
     }
     return result
+  }),
+
+  backgroundArea: Ember.computed(
+    'align', 'transformAreaRect', 'box',
+  function () {
+    const align = this.get('align')
+    const box = this.get('box')
+    const transformArea = this.get('transformAreaRect')
+    let backgroundArea = Rectangle.from(box)
+    if (this.validators.align(align)) {
+      backgroundArea = backgroundArea.moveTo(0, 0)
+      if (align === 'right') {
+        backgroundArea = backgroundArea.translate(transformArea.get('left') + transformArea.get('width'), 0)
+      }
+      if (align === 'bottom') {
+        backgroundArea = backgroundArea.translate(0, transformArea.get('top') + transformArea.get('height'))
+      }
+    }
+    return backgroundArea
   }),
 
   tickTextAnchor: Ember.computed('align', function () {
@@ -108,43 +135,38 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
     return 'start'
   }),
 
-  tickElements: Ember.computed('domain', 'domain.[]', 'align',
-  'transformArea', 'transformArea.{x,y,width,height}',
-  'parentArea', 'parentArea.{x,y,width,height}',
-  'box', 'box.{x,y,width,height}',
+  isAlignVertical: Ember.computed('align', function () {
+    return TOP_BOTTOM.includes(this.get('align'))
+  }),
+
+  tickCoordsFunc: Ember.computed('isAlignVertical', function () {
+    const isAlignVertical = this.get('isAlignVertical')
+    return isAlignVertical
+      ? this.get('tickCoordFuncVertical').bind(this)
+      : this.get('tickCoordFuncHorizontal').bind(this)
+  }),
+
+  tickCoordFuncVertical (area, v) {
+    const linesArea = this.get('linesAreaRect')
+    const c = linesArea.get('left') + linesArea.get('width') * v
+    return { x1: c, x2: c, y1: area.get('top'), y2: area.get('bottom') }
+  },
+
+  tickCoordFuncHorizontal (area, v) {
+    const linesArea = this.get('linesAreaRect')
+    const c = linesArea.get('bottom') - linesArea.get('height') * v
+    return { y1: c, y2: c, x1: area.get('left'), x2: area.get('right') }
+  },
+
+  labelsAreaRect: Ember.computed(
+    'boxRect', 'align', 'linesAreaRect', 'parentAreaRect', 'isAlignVertical',
   function () {
-    const align = this.get('align')
-    const dimension = this.get('dimension')
-    const tickCount = this.getWithDefault('tickCount', 10)
-    const tickData = dimension.ticks(tickCount)
-    if (!tickData) {
-      return []
-    }
-    const isAligned = TOP_BOTTOM_LEFT_RIGHT.includes(align)
-    const isTopBottom = TOP_BOTTOM.includes(align)
-
-    const parentArea = Rectangle.from(this.get('parentArea'))
-    const box = Rectangle.from(this.get('box'))
-    if (!(align && isAligned)) {
-      return []
-    }
-    if (!(Ember.get(box, 'width') && Ember.get(box, 'height'))) {
-      return []
-    }
-
-    const linesArea = this.get('linesArea')
-    const coords = isTopBottom
-      ? function (area, v) {
-        const c = linesArea.get('left') + linesArea.get('width') * v
-        return { x1: c, x2: c, y1: area.get('top'), y2: area.get('bottom') }
-      }
-      : function (area, v) {
-        const c = linesArea.get('bottom') - linesArea.get('height') * v
-        return { y1: c, y2: c, x1: area.get('left'), x2: area.get('right') }
-      }
-
-    const labelsArea = Rectangle.from(linesArea)
-    if (isTopBottom) {
+    const box = this.getValid('boxRect', this.validators.area, 'box has zero area')
+    const align = this.getValid('align', this.validators.align, 'unrecognized align')
+    const parentArea = this.get('parentAreaRect', this.validators.area, 'parent has zero area')
+    const labelsArea = Rectangle.from(this.get('linesAreaRect'))
+    const isAlignVertical = this.get('isAlignVertical')
+    if (isAlignVertical) {
       labelsArea.set('height', box.get('height'))
       if (align === 'bottom') {
         labelsArea.set('top', parentArea.get('height') - box.get('height'))
@@ -155,24 +177,41 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
         labelsArea.set('left', parentArea.get('width') - box.get('width'))
       }
     }
+    return labelsArea
+  }),
 
-    const lineCoords = (v) => coords(linesArea, v)
-    const labelCoords = function (v, align) {
-      const lc = coords(labelsArea, v)
-      const x = align === 'end' ? lc.x2 : lc.x1
-      return {x, y: 0.5 * (lc.y1 + lc.y2)}
-    }
+  tickElements: Ember.computed(
+    'dimension', 'tickData', 'tickCoordsFunc', 'linesAreaRect', 'labelsAreaRect',
+    'domain', 'domain.[]',
+  function () {
+    try {
+      const dimension = this.getValid('dimension', k => !!k, 'dimension not set')
+      const tickData = this.getValid('tickData', k => k && k.length, 'tick function returned no ticks')
+      const coords = this.get('tickCoordsFunc')
+      const linesArea = this.get('linesAreaRect')
+      const labelsArea = this.get('labelsAreaRect')
 
-    const tickLabelFormat = this.get('tickLabelFormat')
-    const textAnchor = this.get('tickTextAnchor')
-    const ticks = tickData.map((v) => {
-      const val = dimension.evaluateValue(v)
-      return Object.create({
-        line: lineCoords(val),
-        label: { textAnchor, position: labelCoords(val, textAnchor), caption: tickLabelFormat(v) }
+      const lineCoords = (v) => coords(linesArea, v)
+      const labelCoords = function (v, align) {
+        const lc = coords(labelsArea, v)
+        const x = align === 'end' ? lc.x2 : lc.x1
+        return {x, y: 0.5 * (lc.y1 + lc.y2)}
+      }
+
+      const tickLabelFormat = this.get('tickLabelFormat')
+      const textAnchor = this.get('tickTextAnchor')
+      const ticks = tickData.map((v) => {
+        const val = dimension.evaluateValue(v)
+        return Object.create({
+          line: lineCoords(val),
+          label: { textAnchor, position: labelCoords(val, textAnchor), caption: tickLabelFormat(v) }
+        })
       })
-    })
-    return ticks
+      return ticks
+    } catch (error) {
+      console.log('Not rendering elements', error)
+      return []
+    }
   }),
 
   reportedPadding: null,
@@ -183,28 +222,28 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
     if (!(align && updatePadding)) {
       return
     }
-    const key = this.get('key') || align
-    const reportedPadding = this.get('reportedPadding') || {}
+    const reportedPadding = this.get('reportedPadding') || Ember.Object.create()
     const padding = { top: 0, right: 0, bottom: 0, left: 0 }
     const paddingProperty = TOP_BOTTOM.includes(align) ? 'box.height' : 'box.width'
     Ember.set(padding, align, this.getWithDefault(paddingProperty, 0))
-    if (padding.top === reportedPadding.top &&
-        padding.bottom === reportedPadding.bottom &&
-        padding.left === reportedPadding.left &&
-        padding.right === reportedPadding.right) return
-    this.set('reportedPadding', padding)
-    updatePadding(key, padding)
+    if (!attributesEqual(padding, reportedPadding, TOP_BOTTOM_LEFT_RIGHT)) {
+      updatePadding(align, padding)
+    }
   }),
 
-  keyFromAlign: Ember.computed('align', function () {
+  scaleKey: Ember.computed('align', 'key', function () {
+    const key = this.get('key')
+    if (key) {
+      return key
+    }
     const align = this.get('align')
     return TOP_BOTTOM.includes(align) ? 'x'
          : LEFT_RIGHT.includes(align) ? 'y'
          : null
   }),
 
-  dynamicClassNames: Ember.computed('key', 'keyFromAlign', function () {
-    const key = this.get('key') || this.get('keyFromAlign')
+  dynamicClassNames: Ember.computed('scaleKey', function () {
+    const key = this.get('scaleKey')
     return key ? `frost-viz-scale-${key}` : ''
   })
 

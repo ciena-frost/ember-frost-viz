@@ -1,8 +1,7 @@
 import Ember from 'ember'
-import layout from '../../../../templates/components/frost-viz/plot/element/line-segment'
-import PassthroughAttributes from 'ciena-frost-viz/mixins/frost-viz-passthrough-attributes'
+import layout from 'ciena-frost-viz/templates/components/frost-viz/plot/element/line-segment'
 
-const Component = Ember.Component.extend(PassthroughAttributes, {
+const Component = Ember.Component.extend({
   layout,
   tagName: 'g',
   x1: Ember.computed.alias('begin.x'),

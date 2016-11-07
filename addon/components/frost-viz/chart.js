@@ -17,8 +17,7 @@ const Chart = Ember.Component.extend(DOMBox, Area, DimensionManager, ScopeProvid
   propTypes: {
     data: PropTypes.array.isRequired,
     width: PropTypes.number,
-    height: PropTypes.number,
-    selectedElement: PropTypes.any
+    height: PropTypes.number
   },
   getDefaultProps () {
     return {
@@ -33,34 +32,11 @@ const Chart = Ember.Component.extend(DOMBox, Area, DimensionManager, ScopeProvid
   // No need to set area -- the innerArea.parent of this will be undefined.
 
   callbacks: {
-    // TODO: more fine grained interaction types here
-    setSelection (id, element) {
-      this.set('selectedElement', element)
-      this.set('_selectedId', id)
-    },
-    clearSelection (id) {
-      const _selectedId = this.get('_selectedId')
-      if (id === _selectedId) {
-        this.set('selectedElement', null)
-      }
-    }
   },
 
-  clearSelectionId: Ember.observer('selectedElement', function () {
-    this.set('_selectedId', null)
-  }),
-
-  interaction: Ember.computed('selectedElement', function () {
-    const selectedElement = this.get('selectedElement')
-    return {
-      selectedElement
-    }
-  }),
-
-  childScope: Ember.computed('childScopeBase', 'interaction', function () {
-    const interaction = this.get('interaction')
+  childScope: Ember.computed('childScopeBase', function () {
     const dimensions = this.get('dimensions')
-    return ChartScope.create(this.get('childScopeBase'), { interaction, dimensions })
+    return ChartScope.create(this.get('childScopeBase'), { dimensions })
   })
 
 })
