@@ -1,7 +1,7 @@
 import Ember from 'ember'
 import layout from '../../templates/components/frost-viz/scope'
 import ScopeProvider from 'ciena-frost-viz/mixins/frost-viz-scope-provider'
-// import PropTypesMixin, {PropTypes} from 'ember-prop-types'
+import PropTypesMixin, {PropTypes} from 'ember-prop-types'
 
 const GenericScope = Ember.Object.extend()
 
@@ -10,12 +10,13 @@ const Scope = Ember.Component.extend(ScopeProvider, {
   layout,
 
   // TODO: this surprisingly appears to break all the things
-  // propTypes: {
+  propTypes: {
   //   inject: PropTypes.oneOf([
   //     PropTypes.object,
   //     PropTypes.EmberObject
   //   ])
-  // },
+    scope: PropTypes.EmberObject.isRequired
+  },
   // getDefaultProps () {
   //   inject: null
   // },
