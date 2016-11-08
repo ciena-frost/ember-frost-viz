@@ -3,6 +3,7 @@ import SVGAffineTransform from 'ciena-frost-viz/mixins/frost-viz-svg-transform-p
 import SVGClipPathProvider from 'ciena-frost-viz/mixins/frost-viz-svg-clip-path-provider'
 import Area from 'ciena-frost-viz/mixins/frost-viz-area'
 import {mapObj} from 'ciena-frost-viz/utils/frost-viz-data-transform'
+import PropTypesMixin, {PropTypes} from 'ember-prop-types'
 
 const NULL_BINDING = {evaluateElement: () => 0, dimension: {domain: [0, 1], range: [0, 1], evaluateValue: () => 0}}
 const NULL_TRANSFORM = (value) => value
@@ -11,18 +12,47 @@ export default Ember.Mixin.create(Area, SVGAffineTransform, SVGClipPathProvider,
   tagName: 'g',
   classNames: ['frost-viz-plot'],
   classNameBindings: ['dynamicClassNames'],
+
+  propTypes: {
+    // area: PropTypes.EmberObject, // TODO: Rectangle
+    width: PropTypes.number,
+    height: PropTypes.number,
+    x: PropTypes.number,
+    y: PropTypes.number
+    // dataBindings: PropTypes.oneOf([ // TODO: warns every refresh
+    //   PropTypes.object,
+    //   PropTypes.EmberObject
+    // ]),
+    // selectedBindings: PropTypes.oneOf([ // TODO: warns every refresh
+    //   PropTypes.object,
+    //   PropTypes.EmberObject
+    // ]),
+    // coordinateTransforms: PropTypes.oneOf([ // TODO: warns anyway
+    //   PropTypes.object,
+    //   PropTypes.EmberObject
+    // ])
+    // scope: PropTypes.oneOf([ // TODO: positional, present, warns anyway
+    //   PropTypes.object,
+    //   PropTypes.EmberObject
+    // ]).isRequired
+  },
+
+  getDefaultProps () {
+    return {
+      allowSparseElements: false,
+      dataBindings: null
+    }
+  },
+
+  data: Ember.computed.alias('scope.data'),
+
   area: Ember.computed.alias('scope.area'),
   x: Ember.computed.alias('area.x'),
   y: Ember.computed.alias('area.y'),
-
   width: Ember.computed.alias('area.width'),
   height: Ember.computed.alias('area.height'),
-  data: Ember.computed.alias('scope.data'),
+
   coordinateTransforms: Ember.computed.alias('scope.coordinateTransforms'),
-
-  allowSparseElements: false,
-
-  dataBindings: null,
 
   selectedBindings: Ember.computed('dataBindings', 'scope.dataBindings', function () {
     const explicitBindings = this.get('dataBindings')
@@ -59,6 +89,11 @@ export default Ember.Mixin.create(Area, SVGAffineTransform, SVGClipPathProvider,
   renderReady: false,
 
   didRender () {
+    // There is usually no point in creating elements on first render, because the
+    // root Chart component usually has to render once in order to capture its dimensions
+    // from CSS. This means that the first render is usually in an area of (0x0).
+    // TODO: maybe check whether area is greater than 0x0 and set renderReady to true
+    // immediately if so.
     Ember.run.scheduleOnce('afterRender', () => {
       this.set('renderReady', true)
     })
@@ -69,10 +104,10 @@ export default Ember.Mixin.create(Area, SVGAffineTransform, SVGClipPathProvider,
     return (v) => (v - range[0]) / (range[1] - range[0])
   },
 
-  transformsForArea: Ember.computed('coordinateTransforms', 'area', function () {
-    const area = this.get('area')
+  transformsForArea: Ember.computed('coordinateTransforms', 'innerArea', function () {
+    const innerArea = this.get('innerArea')
     const transforms = this.get('coordinateTransforms')
-    return Ember.Object.create(transforms(area))
+    return Ember.Object.create(transforms(innerArea))
   }),
 
   dimensionOverrides: Ember.computed('selectedBindings', 'transformsForArea', function () {

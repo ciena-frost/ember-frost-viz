@@ -1,5 +1,4 @@
 <div class="scatter left">
-
   <h1>Scatter Plot</h1>
 
   <p>
@@ -8,20 +7,18 @@
   </p>
 
   <div class="element-count">
-    Plotting {{model.length}} elements
+    Plotting {{model.data.length}} elements
   </div>
 
   <!-- BEGIN-SNIPPET demo-scatter -->
 
   <!-- Chart element. -->
-  {{#frost-viz/chart model
+  {{#frost-viz/chart model.data
     as |chart|
   }}
 
     <!-- Chart has a cartesian transform. (x right, y up).
-    The transform translates data attributes to coordinates via the dimensions. Any dimensions that would be overwritten
-    (in this case, "x" and "y") are saved to an "overridden" attribute (e.g. if the source data had "x" or "y"
-    attributes). -->
+    The transform translates data attributes to coordinates via the dimensions. -->
     {{#frost-viz/transform/cartesian chart
       dataBindings=(hash
         x=(frost-viz/binding (frost-viz/dimension/time   chart) 'time')
@@ -40,12 +37,11 @@
         as |item data|
       }}
 
-        <!-- These data points will be plotted using circles. The circle element simply passes through its attributes. -->
-        {{frost-viz/plot/element/symbol/circle item data
+        <!-- These data points will be plotted using stars. The star element will be drawn at (cx,cy) as specified. -->
+        {{frost-viz/plot/element/symbol/star item data
           cx=     item.x
           cy=     item.y
-          r=      5
-          fill=   'blue'
+          theta=  model.clock.interval
         }}
 
       {{/frost-viz/plot/scatter}}

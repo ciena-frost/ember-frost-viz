@@ -16,6 +16,10 @@ const Chart = Ember.Component.extend(DOMBox, Area, DimensionManager, ScopeProvid
 
   propTypes: {
     data: PropTypes.array.isRequired,
+    dimensions: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.EmberObject
+    ]),
     width: PropTypes.number,
     height: PropTypes.number
   },
