@@ -1,12 +1,12 @@
-export const has = function (a, elt) {
+export function has (a, elt) {
   return a.indexOf(elt) >= 0
 }
 
-export const difference = function (a, b) {
+export function difference (a, b) {
   return [...a].filter((x) => !has(b, x))
 }
 
-export const intersection = function (a, b) {
+export function intersection (a, b) {
   return [...a].filter((x) => has(b, x))
 }
 
