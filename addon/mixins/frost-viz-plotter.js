@@ -3,7 +3,7 @@ import SVGAffineTransform from 'ciena-frost-viz/mixins/frost-viz-svg-transform-p
 import SVGClipPathProvider from 'ciena-frost-viz/mixins/frost-viz-svg-clip-path-provider'
 import Area from 'ciena-frost-viz/mixins/frost-viz-area'
 import {mapObj} from 'ciena-frost-viz/utils/frost-viz-data-transform'
-import PropTypesMixin, {PropTypes} from 'ember-prop-types'
+import {PropTypes} from 'ember-prop-types'
 
 const NULL_BINDING = {evaluateElement: () => 0, dimension: {domain: [0, 1], range: [0, 1], evaluateValue: () => 0}}
 const NULL_TRANSFORM = (value) => value
@@ -150,7 +150,7 @@ export default Ember.Mixin.create(Area, SVGAffineTransform, SVGClipPathProvider,
       let sparse = false
       for (const dimensionKey of dimensionKeys) {
         const dimValue = dimensions[dimensionKey](element)
-        const isUndefined = dimValue === undefined
+        const isUndefined = (dimValue === undefined)
         transformed[dimensionKey] = dimValue
         anyValue = anyValue || (!isUndefined)
         sparse = sparse || (isUndefined)

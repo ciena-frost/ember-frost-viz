@@ -1,6 +1,6 @@
 import Ember from 'ember'
 import layout from '../../../templates/components/frost-viz/plot/bar'
-import ElementBuilder from 'ciena-frost-viz/mixins/frost-viz-element-builder'
+import Plotter from 'ciena-frost-viz/mixins/frost-viz-plotter'
 import Rectangle from 'ciena-frost-viz/utils/frost-viz-rectangle'
 
 const VERTICAL_ALIGN = Ember.A(['top', 'bottom'])
@@ -10,7 +10,7 @@ const clamp = function (val, min, max) {
   return Math.min(max, Math.max(val, min))
 }
 
-const Bar = Ember.Component.extend(ElementBuilder, {
+const Bar = Ember.Component.extend(Plotter, {
   layout,
   classNames: ['frost-viz-plot-bar'],
 

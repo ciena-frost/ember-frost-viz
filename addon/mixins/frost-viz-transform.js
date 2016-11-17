@@ -7,8 +7,16 @@ import ScopeProvider from 'ciena-frost-viz/mixins/frost-viz-scope-provider'
 
 const TransformScope = Ember.Object.extend(PropTypesMixin, {
   propTypes: {
-    data: PropTypes.array,
+    data: PropTypes.array
     // area: PropTypes.EmberObject, // TODO: Rectangle
+  }
+})
+
+export default Ember.Mixin.create(Area, ScopeProvider, {
+  tagName: 'g',
+  classNames: ['frost-viz-transform'],
+
+  propTypes: {
     width: PropTypes.number,
     height: PropTypes.number
     // dataBindings: PropTypes.oneOf([ // TODO: warns every refresh
@@ -19,12 +27,10 @@ const TransformScope = Ember.Object.extend(PropTypesMixin, {
     //   PropTypes.object,
     //   PropTypes.EmberObject
     // ]).isRequired
-  }
-})
-
-export default Ember.Mixin.create(Area, ScopeProvider, {
-  tagName: 'g',
-  classNames: ['frost-viz-transform'],
+  },
+  getDefaultProps () {
+    return {}
+  },
 
   data: Ember.computed.alias('scope.data'),
 

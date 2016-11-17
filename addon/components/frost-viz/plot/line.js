@@ -1,8 +1,8 @@
 import Ember from 'ember'
 import layout from '../../../templates/components/frost-viz/plot/line'
-import ElementBuilder from 'ciena-frost-viz/mixins/frost-viz-element-builder'
+import Plotter from 'ciena-frost-viz/mixins/frost-viz-plotter'
 
-const Line = Ember.Component.extend(ElementBuilder, {
+const Line = Ember.Component.extend(Plotter, {
   layout,
   classNames: ['frost-viz-plot-line'],
 

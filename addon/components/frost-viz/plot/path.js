@@ -1,10 +1,10 @@
 import Ember from 'ember'
 import layout from '../../../templates/components/frost-viz/plot/path'
-import ElementBuilder from 'ciena-frost-viz/mixins/frost-viz-element-builder'
+import Plotter from 'ciena-frost-viz/mixins/frost-viz-plotter'
 import { path } from 'd3-path'
 import curves from 'd3-shape'
 
-const Path = Ember.Component.extend(ElementBuilder, {
+const Path = Ember.Component.extend(Plotter, {
   layout,
   classNames: ['frost-viz-plot-path'],
   smooth: 'basis',
