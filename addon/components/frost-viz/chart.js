@@ -1,10 +1,10 @@
 import Ember from 'ember'
 import layout from '../../templates/components/frost-viz/chart'
 import { PropTypes } from 'ember-prop-types'
-import DOMBox from 'ciena-frost-viz/mixins/frost-viz-dom-box'
-import Area from 'ciena-frost-viz/mixins/frost-viz-area'
-import DimensionManager from 'ciena-frost-viz/mixins/frost-viz-dimension-manager'
-import ScopeProvider from 'ciena-frost-viz/mixins/frost-viz-scope-provider'
+import DOMBox from 'ember-frost-viz/mixins/frost-viz-dom-box'
+import Area from 'ember-frost-viz/mixins/frost-viz-area'
+import DimensionManager from 'ember-frost-viz/mixins/frost-viz-dimension-manager'
+import ScopeProvider from 'ember-frost-viz/mixins/frost-viz-scope-provider'
 
 const ChartScope = Ember.Object.extend()
 

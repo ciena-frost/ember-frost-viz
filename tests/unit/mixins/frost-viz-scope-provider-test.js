@@ -5,7 +5,7 @@ import {
   it
 } from 'mocha'
 import Ember from 'ember'
-import FrostVizScopeProviderMixin from 'ciena-frost-viz/mixins/frost-viz-scope-provider'
+import FrostVizScopeProviderMixin from 'ember-frost-viz/mixins/frost-viz-scope-provider'
 
 describe('FrostVizScopeProviderMixin', function () {
   // Replace this with your real tests.

@@ -1,1 +1,1 @@
-export { default } from 'ciena-frost-viz/components/frost-viz/scale'
+export { default } from 'ember-frost-viz/components/frost-viz/scale'

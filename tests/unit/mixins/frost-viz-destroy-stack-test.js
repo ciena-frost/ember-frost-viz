@@ -5,7 +5,7 @@ import {
   it
 } from 'mocha'
 import Ember from 'ember'
-import FrostVizDestroyStackMixin from 'ciena-frost-viz/mixins/frost-viz-destroy-stack'
+import FrostVizDestroyStackMixin from 'ember-frost-viz/mixins/frost-viz-destroy-stack'
 
 describe('FrostVizDestroyStackMixin', function () {
   // Replace this with your real tests.

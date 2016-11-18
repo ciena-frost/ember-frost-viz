@@ -6,7 +6,7 @@ import {
 } from 'mocha'
 import {
   frostVizFormatNumeric
-} from 'ciena-frost-viz/helpers/frost-viz/format/numeric'
+} from 'ember-frost-viz/helpers/frost-viz/format/numeric'
 
 describe('FrostVizFormatNumericHelper', function () {
   // Replace this with your real tests.

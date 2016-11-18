@@ -5,7 +5,7 @@ import {
   it
 } from 'mocha'
 import Ember from 'ember'
-import FrostVizElementBuilderMixin from 'ciena-frost-viz/mixins/frost-viz-element-builder'
+import FrostVizElementBuilderMixin from 'ember-frost-viz/mixins/frost-viz-element-builder'
 
 describe('FrostVizElementBuilderMixin', function () {
   // Replace this with your real tests.

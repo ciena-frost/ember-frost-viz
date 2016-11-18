@@ -11,7 +11,7 @@
     "provider": "teamcity"
   },
   "owner": "bp_frost",
-  "repo": "ciena-frost-viz",
+  "repo": "ember-frost-viz",
   "vcs": {
     "domain": "bitbucket.ciena.com",
     "env": {

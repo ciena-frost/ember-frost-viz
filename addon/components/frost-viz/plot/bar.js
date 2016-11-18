@@ -1,7 +1,7 @@
 import Ember from 'ember'
 import layout from '../../../templates/components/frost-viz/plot/bar'
-import Plotter from 'ciena-frost-viz/mixins/frost-viz-plotter'
-import Rectangle from 'ciena-frost-viz/utils/frost-viz-rectangle'
+import Plotter from 'ember-frost-viz/mixins/frost-viz-plotter'
+import Rectangle from 'ember-frost-viz/utils/frost-viz-rectangle'
 
 const VERTICAL_ALIGN = Ember.A(['top', 'bottom'])
 const DEFAULT_BAR_SPACING = 0.33

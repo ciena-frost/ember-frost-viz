@@ -2,5 +2,5 @@
 'use strict';
 
 module.exports = {
-  name: 'ciena-frost-viz'
+  name: 'ember-frost-viz'
 };

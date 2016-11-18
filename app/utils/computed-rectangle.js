@@ -1,1 +1,1 @@
-export { default } from 'ciena-frost-viz/utils/computed-rectangle';
+export { default } from 'ember-frost-viz/utils/computed-rectangle';

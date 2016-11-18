@@ -1,1 +1,1 @@
-export { default, frostVizDimensionLog } from 'ciena-frost-viz/helpers/frost-viz/dimension/log'
+export { default, frostVizDimensionLog } from 'ember-frost-viz/helpers/frost-viz/dimension/log'

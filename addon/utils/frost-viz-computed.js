@@ -1,5 +1,5 @@
 import Ember from 'ember'
-import Rectangle from 'ciena-frost-viz/utils/frost-viz-rectangle'
+import Rectangle from 'ember-frost-viz/utils/frost-viz-rectangle'
 const {
   computed,
   get

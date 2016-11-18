@@ -1,13 +1,13 @@
 import Ember from 'ember'
 import layout from '../../templates/components/frost-viz/scale'
-import DOMBox from 'ciena-frost-viz/mixins/frost-viz-dom-box'
-import Area from 'ciena-frost-viz/mixins/frost-viz-area'
-import DefaultFormatter from 'ciena-frost-viz/helpers/frost-viz/format/default'
-import Rectangle from 'ciena-frost-viz/utils/frost-viz-rectangle'
-import SVGAffineTransformable from 'ciena-frost-viz/mixins/frost-viz-svg-transform-provider'
-import VizComputedProperties from 'ciena-frost-viz/utils/frost-viz-computed'
+import DOMBox from 'ember-frost-viz/mixins/frost-viz-dom-box'
+import Area from 'ember-frost-viz/mixins/frost-viz-area'
+import DefaultFormatter from 'ember-frost-viz/helpers/frost-viz/format/default'
+import Rectangle from 'ember-frost-viz/utils/frost-viz-rectangle'
+import SVGAffineTransformable from 'ember-frost-viz/mixins/frost-viz-svg-transform-provider'
+import VizComputedProperties from 'ember-frost-viz/utils/frost-viz-computed'
 import { PropTypes } from 'ember-prop-types'
-import { attributesEqual } from 'ciena-frost-viz/utils/frost-viz-object-operations'
+import { attributesEqual } from 'ember-frost-viz/utils/frost-viz-object-operations'
 
 const TOP_BOTTOM = Ember.A(['top', 'bottom'])
 const LEFT_RIGHT = Ember.A(['left', 'right'])

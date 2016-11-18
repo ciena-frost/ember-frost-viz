@@ -6,7 +6,7 @@ import {
 } from 'mocha'
 import {
   frostVizDimensionLinear
-} from 'ciena-frost-viz/helpers/frost-viz/dimension/linear'
+} from 'ember-frost-viz/helpers/frost-viz/dimension/linear'
 
 describe('FrostVizDimensionLinearHelper', function () {
   // Replace this with your real tests.

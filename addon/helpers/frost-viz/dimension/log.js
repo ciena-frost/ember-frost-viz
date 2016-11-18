@@ -1,6 +1,6 @@
 import Ember from 'ember'
-import DimensionBase from 'ciena-frost-viz/mixins/frost-viz-dimension'
-import D3DimensionTicks from 'ciena-frost-viz/mixins/frost-viz-dimension-d3-ticks'
+import DimensionBase from 'ember-frost-viz/mixins/frost-viz-dimension'
+import D3DimensionTicks from 'ember-frost-viz/mixins/frost-viz-dimension-d3-ticks'
 import { scaleLog } from 'd3-scale'
 
 const DEFAULT_MIN = 1e-100

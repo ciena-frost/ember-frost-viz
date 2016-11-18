@@ -6,7 +6,7 @@ import {
 } from 'mocha'
 import {
   frostVizSupportApply
-} from 'ciena-frost-viz/helpers/frost-viz/support/apply'
+} from 'ember-frost-viz/helpers/frost-viz/support/apply'
 
 describe('FrostVizSupportApplyHelper', function () {
   // Replace this with your real tests.

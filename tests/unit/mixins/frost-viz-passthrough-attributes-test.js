@@ -5,7 +5,7 @@ import {
   it
 } from 'mocha'
 import Ember from 'ember'
-import FrostVizPassthroughAttributesMixin from 'ciena-frost-viz/mixins/frost-viz-passthrough-attributes'
+import FrostVizPassthroughAttributesMixin from 'ember-frost-viz/mixins/frost-viz-passthrough-attributes'
 
 describe('FrostVizPassthroughAttributesMixin', function () {
   // Replace this with your real tests.

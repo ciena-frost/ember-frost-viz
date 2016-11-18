@@ -6,7 +6,7 @@ import {
 } from 'mocha'
 import {
   frostVizBinding
-} from 'ciena-frost-viz/helpers/frost-viz/binding'
+} from 'ember-frost-viz/helpers/frost-viz/binding'
 
 describe('FrostVizBindingHelper', function () {
   // Replace this with your real tests.

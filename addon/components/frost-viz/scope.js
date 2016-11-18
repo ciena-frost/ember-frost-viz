@@ -1,6 +1,6 @@
 import Ember from 'ember'
 import layout from '../../templates/components/frost-viz/scope'
-import ScopeProvider from 'ciena-frost-viz/mixins/frost-viz-scope-provider'
+import ScopeProvider from 'ember-frost-viz/mixins/frost-viz-scope-provider'
 import PropTypesMixin, {PropTypes} from 'ember-prop-types'
 
 const GenericScope = Ember.Object.extend()

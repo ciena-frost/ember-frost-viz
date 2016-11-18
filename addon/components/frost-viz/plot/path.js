@@ -1,6 +1,6 @@
 import Ember from 'ember'
 import layout from '../../../templates/components/frost-viz/plot/path'
-import Plotter from 'ciena-frost-viz/mixins/frost-viz-plotter'
+import Plotter from 'ember-frost-viz/mixins/frost-viz-plotter'
 import { path } from 'd3-path'
 import curves from 'd3-shape'
 

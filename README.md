@@ -1,4 +1,4 @@
-# ciena-frost-viz
+# ember-frost-viz
 
 This README outlines the details of collaborating on this Ember addon, as well as a basic usage guide.
 
@@ -166,7 +166,7 @@ The scope component exposes a single property, `inject`. All properties in `inje
 ## Installation
 
 * `git clone <repository-url>` this repository
-* `cd ciena-frost-viz`
+* `cd ember-frost-viz`
 * `npm install && bower install`
 
 ## Running

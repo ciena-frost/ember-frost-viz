@@ -1,1 +1,1 @@
-export { default } from 'ciena-frost-viz/components/frost-viz/plot/scatter'
+export { default } from 'ember-frost-viz/components/frost-viz/plot/scatter'

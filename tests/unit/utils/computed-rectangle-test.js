@@ -4,7 +4,7 @@ import {
   describe,
   it
 } from 'mocha';
-import computedRectangle from 'ciena-frost-viz/utils/computed-rectangle';
+import computedRectangle from 'ember-frost-viz/utils/computed-rectangle';
 
 describe('computedRectangle', function() {
   // Replace this with your real tests.

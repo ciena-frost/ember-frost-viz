@@ -1,6 +1,6 @@
 import Ember from 'ember'
 const {camelize} = Ember.String
-import { mapObj } from 'ciena-frost-viz/utils/frost-viz-data-transform'
+import { mapObj } from 'ember-frost-viz/utils/frost-viz-data-transform'
 
 const CSS_INT_PROPERTIES = [
   'width',

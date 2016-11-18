@@ -1,5 +1,5 @@
 import Ember from 'ember'
-import { bindFunctionMap } from 'ciena-frost-viz/utils/frost-viz-data-transform'
+import { bindFunctionMap } from 'ember-frost-viz/utils/frost-viz-data-transform'
 
 export default Ember.Mixin.create({
   mergedProperties: ['callbacks'],

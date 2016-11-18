@@ -1,5 +1,5 @@
 import Ember from 'ember'
-import layout from 'ciena-frost-viz/templates/components/frost-viz/plot/element/line-segment'
+import layout from 'ember-frost-viz/templates/components/frost-viz/plot/element/line-segment'
 
 const Component = Ember.Component.extend({
   layout,

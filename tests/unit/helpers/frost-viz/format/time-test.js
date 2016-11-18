@@ -6,7 +6,7 @@ import {
 } from 'mocha'
 import {
   frostVizFormatTime
-} from 'ciena-frost-viz/helpers/frost-viz/format/time'
+} from 'ember-frost-viz/helpers/frost-viz/format/time'
 
 describe('FrostVizFormatTimeHelper', function () {
   // Replace this with your real tests.
