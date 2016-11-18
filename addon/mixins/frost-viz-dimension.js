@@ -15,7 +15,7 @@ import Ember from 'ember'
  * In the eager domain case, the helper builds the mapping function and it is directly used.
  *
  * In the lazy domain case, we return a dimension with most of its public API unbound. The domain manager mixin detects
- * this and behaves appropriately. See ember-frost-viz/mixins/frost-viz-dimension-manager
+ * this and behaves appropriately. See ciena-frost-viz/mixins/frost-viz-dimension-manager
  **/
 
 const fUndef = () => undefined
@@ -105,15 +105,14 @@ export default Ember.Mixin.create({
   compute (params, hash) {
     const scope = params.shift()
     Ember.assert('dimension: Scope object not passed or not valid', Ember.typeOf(scope) === 'instance')
-    const selectorIn = params.shift()
-    const dimension = this.buildDimension(scope, selectorIn, hash)
+    const dimension = this.buildDimension(scope, hash)
     if (scope && scope.callbacks && scope.callbacks.addDimension) {
       scope.callbacks.addDimension(dimension)
     }
     return dimension
   },
 
-  buildDimension (scope, selectorIn, hash) {
+  buildDimension (scope, hash) {
     // Build selector
     // Pull defaults from this, override by hash properties
     const { parser, range, domain } = Object.assign({},
@@ -161,7 +160,8 @@ export default Ember.Mixin.create({
       // Determine whether we were passed functions to use, or binding arguments
       // for the standard functions.
       // The domain builder operates on an array of parsed, selected values.
-      const domainFunc = typeof domain === 'function' ? domain : this.get('domainBuilder')
+      // Bind the domain builder to this (needed for e.g. log dimension, which calls other methods on this)
+      const domainFunc = typeof domain === 'function' ? domain : this.get('domainBuilder').bind(this)
       // Return a dimension that redefines its mappers and tick functions when its domain changes.
       result.setProperties({
         range,

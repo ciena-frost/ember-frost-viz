@@ -39,7 +39,7 @@ With a proliferation of different nested components, a simplified API based on p
 1. Components take a positional parameter, usually an instance of a `scope`.
 2. Components yield as their first parameter, an instance of the object needed for the usual child component.
 
-## Component API and Responsibility
+## Components
 
 ### Component and scope visual overview
 
@@ -169,13 +169,88 @@ The scope component exposes a single property, `inject`. All properties in `inje
 | scope | object | Scope object including all `inject`ed overrides.
 
 
+## Helpers
+
+### `frost-viz/dimension`
+
+> *TODO* Better documentation format
+
+A dimension takes a scope, and optionally `domain` and `range` attributes.
+
+The `domain` by default is the *extrema of all bindings using this dimension*. That is, if multiple bindings use the *same dimension object*, the automatically calculated domain is `[ <min of all bound values>, <max of all bound values> ]`.
+
+The `range` by default is `[0, 1]`. For built-in dimensions, the range can optionally
+be objects, colors, ...
+
+See the documentation for [d3-scale](https://github.com/d3/d3-scale).
+
+#### `frost-viz/dimension/linear`
+
+A dimension that defines a linear mapping from domain to range.
+
+#### `frost-viz/dimension/log`
+
+A dimension that defines a logarithmic mapping from domain to range. Note that `lg(0) = -âˆž`, so any domain that incorporates 0 will automatically be adjusted in the direction of the other extreme of the domain: to a small positive value if the domain is positive, and to a small negative value if the domain is negative. This adjustment is primarily intended to support auto-domain calculation.
+
+#### `frost-viz/dimension/date`
+
+A dimension that defines a linear mapping from a Gregorian calendar domain to a range.
+
+### `frost-viz/binding`
+
+> *TODO* Better documentation format
+
+A binding selects an attribute from the elements in the chart data array. The binding takes a dimension (declared inline or previously).
+
+The syntax of a binding is the same as that for `Ember.get`. If each array element is an object containing a `value` attribute, bind to that attribute using `(frost-viz/binding dimension 'value')`. If each array element is an array, bind to the second element of the inner array using `(frost-viz/binding dimension '[1]')`
+
+### `frost-viz/math`
+
+Accepts parameters and returns a calculated result.
+
+Examples:
+`(frost-viz/math 21 '*' 2) --> 42`
+`(frost-viz/math 'round' 41.911386) --> 42`
+
+As shown above, all operators with arity 2 are assumed to be infix, e.g.
+* `6 '+' 3 === 9`
+* `6 'min' 2 === 2`
+
+> *TODO* Math functions with arity 2 should be prefix.
+
+All operators of other arity are assumed to be prefix, e.g.
+* `'!' false === true`
+* `'?' true 'foo' 'bar' === 'foo'`
+
+#### Operators
+
+**NOTE:** If none of the builtin operators below correspond to the supplied operator, the helper will attempt to use the `Math` object method with the same name as the given operator, e.g. `(math 'round' 41.911386)` will return the result of `Math.round(41.911386)`.
+
+| Name | Arity | Order | Notes |
+|------|------|----|---------|
+| identity | 0 | | Any non-operator on its own returns its own value |
+| - | 1 | prefix | *Numerically negates* the operand |
+| ! | 1 | prefix | *Logically inverts* the operand |
+| + | 2 | infix | *Sums* the operands |
+| - | 2 | infix | *Subtracts* the operands |
+| * | 2 | infix | *Multiplies* the operands |
+| / | 2 | infix | *Divides* the first operand by the second |
+| % | 2 | infix | Returns first operand *modulo* second operand |
+| && | 2 | infix | Returns first operand *logical and* second operand |
+| &#124;&#124; | 2 | infix | Returns first operand *logical or* second operand |
+| ^^ | 2 | infix | Returns first operand *logical xor* second operand |
+| & | 2 | infix | Returns first operand *bitwise and* second operand. Operands are converted to 32-bit integers first |
+| &#124; | 2 | infix | Returns first operand *bitwise or* second operand. Operands are converted to 32-bit integers first |
+| ^ | 2 | infix | Returns first operand *bitwise xor* second operand. Operands are converted to 32-bit integers first |
+| ? | 3 | prefix | Returns operand-2 if operand-1; else operand-3. |
+
 ---
 
 
 ## Installation
 
 * `git clone <repository-url>` this repository
-* `cd ember-frost-viz`
+* `cd ciena-frost-viz`
 * `npm install && bower install`
 
 ## Running
