@@ -1,6 +1,15 @@
+[ci-img]: https://img.shields.io/travis/ciena-frost/ember-frost-viz.svg "Travis CI Build Status"
+[ci-url]: https://travis-ci.org/ciena-frost/ember-frost-viz
+[cov-img]: https://img.shields.io/coveralls/ciena-frost/ember-frost-viz.svg "Coveralls Code Coverage"
+[cov-url]: https://coveralls.io/github/ciena-frost/ember-frost-viz
+[npm-img]: https://img.shields.io/npm/v/ember-frost-viz.svg "NPM Version"
+[npm-url]: https://www.npmjs.com/package/ember-frost-viz
+
 # ember-frost-viz
 
-This README outlines the details of collaborating on this Ember addon, as well as a basic usage guide.
+[![Travis][ci-img]][ci-url] [![Coveralls][cov-img]][cov-url] [![NPM][npm-img]][npm-url]
+
+ember-frost-viz lets you build charts and graphs out of combinations of Ember components.
 
 ## Background
 
