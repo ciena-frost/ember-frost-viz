@@ -27,7 +27,7 @@ install:
 - bower install
 script:
 - npm run lint
-- ember try:one $EMBER_TRY_SCENARIO --- ember test
+- ember try:one $EMBER_TRY_SCENARIO 
 after_success:
 - .travis/publish-coverage.sh
 addons:
@@ -41,7 +41,6 @@ env:
   matrix:
   - EMBER_TRY_SCENARIO=ember-2-3
   - EMBER_TRY_SCENARIO=default
-  - EMBER_TRY_SCENARIO=ember-release
   global:
     - COVERAGE=false # FIXME: When coverage is enabled tests never complete
     - CXX=g++-4.8
