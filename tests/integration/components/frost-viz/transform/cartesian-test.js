@@ -13,7 +13,7 @@ describeComponent(
     integration: true
   },
   function () {
-    it('renders', function () {
+    it.skip('renders', function () {
       // Set any properties with this.set('myProperty', 'value');
       // Handle any actions with this.on('myAction', function(val) { ... });
       // Template block usage:
