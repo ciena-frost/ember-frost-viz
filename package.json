@@ -19,7 +19,7 @@
     "Steven Glanzer <sglanzer@ciena.com>",
     "Kamal Ezz <kezz@ciena.com>"
   ],
-  "repository": "https://bitbucket.ciena.com/scm/bp_frost/ember-frost-viz.git",
+  "repository": "git@github.com:ciena-frost/ember-frost-viz.git",
   "engines": {
     "node": ">= 6.0.0"
   },
