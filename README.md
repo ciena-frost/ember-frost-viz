@@ -250,7 +250,7 @@ All operators of other arity are assumed to be prefix, e.g.
 ## Installation
 
 * `git clone <repository-url>` this repository
-* `cd ciena-frost-viz`
+* `cd ember-frost-viz`
 * `npm install && bower install`
 
 ## Running

@@ -137,6 +137,7 @@ export default Ember.Mixin.create(Area, SVGAffineTransform, SVGClipPathProvider,
     return result
   },
 
+  /* eslint-disable complexity */
   elementBuilder: Ember.computed('data', 'scope.actions', 'dimensions', 'dimensionOverrides', function () {
     const callbacks = this.get('scope.callbacks')
     const dimensions = Object.assign({}, this.get('dimensions'), this.get('dimensionOverrides'))
@@ -160,6 +161,7 @@ export default Ember.Mixin.create(Area, SVGAffineTransform, SVGClipPathProvider,
       return allow ? elementGenerate(element, data, { callbacks }, transformed) : undefined
     }
   }),
+  /* eslint-enable complexity */
 
   elements: Ember.computed('data', 'data.[]', 'elementBuilder', 'renderReady', function () {
     const elementBuilder = this.get('elementBuilder')

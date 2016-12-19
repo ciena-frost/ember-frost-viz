@@ -32,6 +32,7 @@ export default Ember.Mixin.create({
     })
   },
 
+  /* eslint-disable complexity */
   getBoxProperties (target) {
     const element = target || this.$()
     const styleProperties = element.css(CSS_STRING_PROPERTIES)
@@ -52,5 +53,6 @@ export default Ember.Mixin.create({
       }
     )
   }
+  /* eslint-enable complexity */
 
 })

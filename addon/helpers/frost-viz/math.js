@@ -65,7 +65,7 @@ const operators = [
 /**
  * Evaluate the given parameters as a prefix or infix expression
  * @param  {Array} params The parameter array to evaluate
- * @return {Number}       The result of the evaluation
+ * @returns {Number}       The result of the evaluation
  */
 const evaluate = function (params) {
   // One operand per expression.
@@ -115,7 +115,7 @@ const evaluate = function (params) {
  * All functions in Math are available, as well as the builtin operators defined above.
  *
  * @param  {Array} params The tokens to evaluate
- * @return {Number}       The result of the evaluation
+ * @returns {Number}       The result of the evaluation
  */
 export function math (params/*, hash*/) {
   if (!Array.isArray(params)) {

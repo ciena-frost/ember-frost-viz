@@ -1,37 +1,52 @@
+sudo: required
+dist: trusty
 language: node_js
-sudo: false
 node_js:
-- '5.3'
+- '6.9'
+- 'stable'
 branches:
   except:
   - /^v[0-9\.]+/
 before_install:
-- npm install -g coveralls pr-bumper
+- npm config set spin false
+- npm install -g coveralls pr-bumper --ignore-scripts
 - pr-bumper check
 ## start modification
 before_script:
+- export CHROME_BIN=/usr/bin/google-chrome
 - "export DISPLAY=:99.0"
 - "sh -e /etc/init.d/xvfb start"
 - sleep 3 # give xvfb some time to start
-## end modification
+- sudo apt-get update
+- sudo apt-get install -y libappindicator1 fonts-liberation
+- wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+- sudo dpkg -i google-chrome*.deb
 install:
-- npm install
+- npm install ember-cli-sass # NOTE: this requies scripts
+- npm install --ignore-scripts
 - bower install
+script:
+- npm run lint
+- ember try:one $EMBER_TRY_SCENARIO 
 after_success:
-- sed -i -- 's/SF:ember-frost-viz\/\(.*\)/SF:addon\/\1.js/' coverage/lcov.info &&
-  rm -f coverage/lcov.info--
-- cat coverage/lcov.info | coveralls
+- .travis/publish-coverage.sh
 addons:
   apt:
     sources:
     - ubuntu-toolchain-r-test
     packages:
     - g++-4.8
+  firefox: "latest-esr"
 env:
   matrix:
-  - CXX=g++-4.8
+  - EMBER_TRY_SCENARIO=ember-2-3
+  - EMBER_TRY_SCENARIO=default
   global:
-    secure: tM7zCD1isZGdCV2VDyThoe1ZcggVYw33aslIPgjjFAU7pll2BXVSkof/YcE6DzEAXLwsB66mNMzV4pwc7AW8xof8g7vhP84euqaqAVxEOW2sYXzWBkfrrfivQy00g9YDbUqGGIOVjkzD+kgC1092zZO8mOBMKGjFHP8ZGYOXMQ4hbvy6+3NtIF+b8ZnK1w2qRv5Dj2tSOho3zHjMQnwC6qzjoS+EhIQQDgyqhNApwIxhNKKxraWkyEsbOMIe/qmXSbu76mJN7Uh94BqjI81hRYVADg6omKsB9o2HBZvEnmyGYxhVOtQ7tJXA3JdmZkt7FPTLv3RezCODQzh7XhZiJsj6Ke3n6fEzxs/Sw98HOsKBVXGnuda/siJbTdFpjwGBj40arjuhS3G9dKd2y7osiNzuDHAf0WSZI40QrsY4+wj0Uny3YARUKZ3/NoLKNcViZTsH/+VNIA26B8xIAX0VfXdJIYSfs6OuVUxeXkzdqhtXmSRK7+1c11VVny+jMQDnBqOK92xvvmDMt+odHSLZnkim2KTMzkZB83+/vz9yIFIQL912LsiJTAexJVZDSJ1PVNjMBxYxB5rJwm/dp7fcTINv8wyB4pSzLYx8waoxq6G2nic7Gg17SpN7HM+gXzf2poI0AD0Q79oFBrLmMYa70tioFNFASjmmaoTHvgno1/k=
+    - COVERAGE=false # FIXME: When coverage is enabled tests never complete
+    - CXX=g++-4.8
+    - secure: tM7zCD1isZGdCV2VDyThoe1ZcggVYw33aslIPgjjFAU7pll2BXVSkof/YcE6DzEAXLwsB66mNMzV4pwc7AW8xof8g7vhP84euqaqAVxEOW2sYXzWBkfrrfivQy00g9YDbUqGGIOVjkzD+kgC1092zZO8mOBMKGjFHP8ZGYOXMQ4hbvy6+3NtIF+b8ZnK1w2qRv5Dj2tSOho3zHjMQnwC6qzjoS+EhIQQDgyqhNApwIxhNKKxraWkyEsbOMIe/qmXSbu76mJN7Uh94BqjI81hRYVADg6omKsB9o2HBZvEnmyGYxhVOtQ7tJXA3JdmZkt7FPTLv3RezCODQzh7XhZiJsj6Ke3n6fEzxs/Sw98HOsKBVXGnuda/siJbTdFpjwGBj40arjuhS3G9dKd2y7osiNzuDHAf0WSZI40QrsY4+wj0Uny3YARUKZ3/NoLKNcViZTsH/+VNIA26B8xIAX0VfXdJIYSfs6OuVUxeXkzdqhtXmSRK7+1c11VVny+jMQDnBqOK92xvvmDMt+odHSLZnkim2KTMzkZB83+/vz9yIFIQL912LsiJTAexJVZDSJ1PVNjMBxYxB5rJwm/dp7fcTINv8wyB4pSzLYx8waoxq6G2nic7Gg17SpN7HM+gXzf2poI0AD0Q79oFBrLmMYa70tioFNFASjmmaoTHvgno1/k=
+matrix:
+  fast_finish: true
 before_deploy:
 - pr-bumper bump
 deploy:
@@ -42,6 +57,8 @@ deploy:
     secure: mvBpFWKYUJ+2/+Sq+SIr1jsnLJ1rBn93IUE2/je7Md6GKXU5gKdaP4eXqT7T7tppD8ITVXLQ8qVcMq9M4HwvMfaOXOxCLAzU54Wf3T9x9XEHNMInn7njz82IDSUnwABdTU83psUConP04fSxaiTEG1hDu6x6/WR/1EKRTUj3GFNeYZ//ClH17Q5uV/j5PuDSjWbkG5255XweO1Qzyx8ehRuJKMW7fuIPt+oUHIX7XIUT2JOUhe6B/sAcUssKjOXiRf3yc9qGwDlvTe8vQL21yI9yuUhOR9YgmZfbarH9Z+cK0VkmJXOBecFAnE3LmyktFbzTuuWPMouhC+wbFZZ1Ca0xubt/INHYNLQNMvwXQ1baSGn+Nnos5g9u44yV+JSl7XxO2CzP7tzVwzyxom84Cb/tFUoiUPndsEtObV72E2Ik5hDBQdURN/3NxrJFb0xz0NibaE7wQk4UTOIVzza3bG0ZhdkdR1VAkT3lN267A3q2iSCHQ7Syk+j8ZCGDTeh59CXeZWqdNkVLA5e7cZL4jcSc/utQnCWy+XUDJbVt0vdOfkum57JaI/uiJrwpKbldwh127smbbhhxJ8yZ71+62YNvWLy5+Oia7Vj45uDDYI2Ee3AAb/ZePUDulVFXqb9JK8HQQ/kGufaHj3rSLKeIj91cf6P8dCdtt0gWyeYq+w0=
   on:
     branch: master
+    condition: "$EMBER_TRY_SCENARIO = 'default'"
+    node: 'stable'
     tags: false
 after_deploy:
 - .travis/publish-gh-pages.sh

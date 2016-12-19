@@ -27,6 +27,7 @@ export default Ember.Mixin.create({
     this.set('padding', padding)
   },
 
+  /* eslint-disable complexity */
   innerArea: Ember.computed('width', 'height', 'padding.{left,right,top,bottom}', function () {
     const width = this.get('width') || 0
     const height = this.get('height') || 0
@@ -43,5 +44,6 @@ export default Ember.Mixin.create({
     }
     return innerArea
   })
+  /* eslint-enable complexity */
 
 })
