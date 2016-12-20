@@ -1,3 +1,7 @@
+# 0.9.2
+
+* Fix "The `ember generate <entity-name>` command requires an entity name to be specified." error during installation
+
 # 0.9.1
 fix up build, tests, linting.
 

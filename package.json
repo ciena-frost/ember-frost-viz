@@ -1,6 +1,6 @@
 {
   "name": "ember-frost-viz",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "Ember Frost visualization.",
   "directories": {
     "doc": "doc",
