@@ -1,3 +1,7 @@
+# 0.10.0
+
+* [#20] Upgraded `ember-frost-core` to 1.3.6
+
 # 0.9.2
 
 * Fix "The `ember generate <entity-name>` command requires an entity name to be specified." error during installation
