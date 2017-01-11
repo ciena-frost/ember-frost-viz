@@ -1,3 +1,7 @@
+# 0.10.1
+
+* Removed graph background
+
 # 0.10.0
 
 * [#20] Upgraded `ember-frost-core` to 1.3.6
