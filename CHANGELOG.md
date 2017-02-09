@@ -1,3 +1,8 @@
+# 0.10.2
+* **Updated** integration/unit tests to remove the deprecated use of `describeComponent()`
+* **Updated** ember-test-utils version to latest
+
+
 # 0.10.1
 
 * Removed graph background
