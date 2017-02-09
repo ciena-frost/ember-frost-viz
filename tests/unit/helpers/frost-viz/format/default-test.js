@@ -1,11 +1,8 @@
-// import { expect } from 'chai'
-import {
-  describe,
-  it
-} from 'mocha'
+// import {expect} from 'chai'
 // import {
 //   frostVizFormatDefault
 // } from 'ember-frost-viz/helpers/frost-viz/format/default'
+import {describe, it} from 'mocha'
 
 describe('FrostVizFormatDefaultHelper', function () {
   // Replace this with your real tests.

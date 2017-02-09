@@ -1,11 +1,8 @@
-// import { expect } from 'chai'
-import {
-  describe,
-  it
-} from 'mocha'
+// import {expect} from 'chai'
 // import {
 //   frostVizFormatNumeric
 // } from 'ember-frost-viz/helpers/frost-viz/format/numeric'
+import {describe, it} from 'mocha'
 
 describe('FrostVizFormatNumericHelper', function () {
   // Replace this with your real tests.
