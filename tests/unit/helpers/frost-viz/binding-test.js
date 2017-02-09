@@ -1,11 +1,8 @@
-// import { expect } from 'chai'
-import {
-  describe,
-  it
-} from 'mocha'
+// import {expect} from 'chai'
 // import {
 //   frostVizBinding
 // } from 'ember-frost-viz/helpers/frost-viz/binding'
+import {describe, it} from 'mocha'
 
 describe('FrostVizBindingHelper', function () {
   it('works', function () {

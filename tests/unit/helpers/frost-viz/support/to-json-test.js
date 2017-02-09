@@ -1,10 +1,8 @@
-import {
-  describe,
-  it
-} from 'mocha'
+// import {expect} from 'chai'
 // import {
 //   frostVizSupportToJson
 // } from 'ember-frost-viz/helpers/frost-viz/support/to-json'
+import {describe, it} from 'mocha'
 
 describe('FrostVizSupportToJsonHelper', function () {
   // Replace this with your real tests.

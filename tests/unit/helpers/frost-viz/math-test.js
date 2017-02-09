@@ -1,12 +1,7 @@
 /* jshint expr:true */
-import { expect } from 'chai'
-import {
-  describe,
-  it
-} from 'mocha'
-import {
-  math
-} from 'ember-frost-viz/helpers/frost-viz/math'
+import {expect} from 'chai'
+import {math} from 'ember-frost-viz/helpers/frost-viz/math'
+import {describe, it} from 'mocha'
 
 describe('FrostVizMathHelper', function () {
   // Replace this with your real tests.

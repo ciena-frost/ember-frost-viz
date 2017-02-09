@@ -1,30 +1,25 @@
 /* jshint expr:true */
-import { expect } from 'chai'
-import {
-  describeComponent,
-  it
-} from 'ember-mocha'
+import {expect} from 'chai'
 import hbs from 'htmlbars-inline-precompile'
+import {describe, it} from 'mocha'
 
-describeComponent(
-  'frost-viz/transform/cartesian',
-  'Integration: FrostVizTransformCartesianComponent',
-  {
-    integration: true
-  },
-  function () {
-    it.skip('renders', function () {
-      // Set any properties with this.set('myProperty', 'value');
-      // Handle any actions with this.on('myAction', function(val) { ... });
-      // Template block usage:
-      // this.render(hbs`
-      //   {{#frost-viz/transform/cartesian}}
-      //     template content
-      //   {{/frost-viz/transform/cartesian}}
-      // `);
+import {integration} from 'dummy/tests/helpers/ember-test-utils/setup-component-test'
 
-      this.render(hbs`{{frost-viz/transform/cartesian}}`)
-      expect(this.$()).to.have.length(1)
-    })
-  }
-)
+const test = integration('frost-viz/transform/cartesian')
+describe(test.label, function () {
+  test.setup()
+
+  it.skip('renders', function () {
+    // Set any properties with this.set('myProperty', 'value');
+    // Handle any actions with this.on('myAction', function(val) { ... });
+    // Template block usage:
+    // this.render(hbs`
+    //   {{#frost-viz/transform/cartesian}}
+    //     template content
+    //   {{/frost-viz/transform/cartesian}}
+    // `);
+
+    this.render(hbs`{{frost-viz/transform/cartesian}}`)
+    expect(this.$()).to.have.length(1)
+  })
+})

@@ -1,30 +1,25 @@
 /* jshint expr:true */
-import { expect } from 'chai'
-import {
-  describeComponent,
-  it
-} from 'ember-mocha'
+import {expect} from 'chai'
 import hbs from 'htmlbars-inline-precompile'
+import {describe, it} from 'mocha'
 
-describeComponent(
-  'frost-viz/support/expose',
-  'Integration: FrostVizSupportExposeComponent',
-  {
-    integration: true
-  },
-  function () {
-    it.skip('renders', function () {
-      // Set any properties with this.set('myProperty', 'value');
-      // Handle any actions with this.on('myAction', function(val) { ... });
-      // Template block usage:
-      // this.render(hbs`
-      //   {{#frost-viz/support/expose}}
-      //     template content
-      //   {{/frost-viz/support/expose}}
-      // `);
+import {integration} from 'dummy/tests/helpers/ember-test-utils/setup-component-test'
 
-      this.render(hbs`{{frost-viz/support/expose}}`)
-      expect(this.$()).to.have.length(1)
-    })
-  }
-)
+const test = integration('frost-viz/support/expose')
+describe(test.label, function () {
+  test.setup()
+
+  it.skip('renders', function () {
+    // Set any properties with this.set('myProperty', 'value');
+    // Handle any actions with this.on('myAction', function(val) { ... });
+    // Template block usage:
+    // this.render(hbs`
+    //   {{#frost-viz/support/expose}}
+    //     template content
+    //   {{/frost-viz/support/expose}}
+    // `);
+
+    this.render(hbs`{{frost-viz/support/expose}}`)
+    expect(this.$()).to.have.length(1)
+  })
+})

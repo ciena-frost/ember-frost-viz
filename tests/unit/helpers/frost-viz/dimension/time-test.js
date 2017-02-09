@@ -1,11 +1,8 @@
-// import { expect } from 'chai'
-import {
-  describe,
-  it
-} from 'mocha'
+// import {expect} from 'chai'
 // import {
 //   frostVizDimensionTime
 // } from 'ember-frost-viz/helpers/frost-viz/dimension/time'
+import {describe, it} from 'mocha'
 
 describe('FrostVizDimensionTimeHelper', function () {
   // Replace this with your real tests.
