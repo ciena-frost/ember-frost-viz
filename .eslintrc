@@ -1,4 +1,3 @@
 {
-  "extends": ["frost-standard"],
-  "no-unexpected-multiline": "error",
+  "extends": ["frost-standard"]
 }
