@@ -1,3 +1,6 @@
+# 0.10.3
+* **Updated** to use latest pr-bumper which supports being able to set a PR to `none` when publishing a new version is not desired.
+
 # 0.10.2
 * **Updated** integration/unit tests to remove the deprecated use of `describeComponent()`
 * **Updated** ember-test-utils version to latest
