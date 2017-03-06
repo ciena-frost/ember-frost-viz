@@ -1,1 +1,1 @@
-export { default, frostVizSupportToJson } from 'ember-frost-viz/helpers/frost-viz/support/to-json'
+export {default, frostVizSupportToJson} from 'ember-frost-viz/helpers/frost-viz/support/to-json'

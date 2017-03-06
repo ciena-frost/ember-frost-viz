@@ -1,6 +1,7 @@
 import Ember from 'ember'
+const {Mixin} = Ember
 
-export default Ember.Mixin.create({
+export default Mixin.create({
   formatter: null,
   formatterArgs: null,
   compute (params /*, hash */) {

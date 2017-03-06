@@ -1,8 +1,6 @@
 import Ember from 'ember'
-import { intersection } from './frost-viz-set-operations'
-const {
-  get
-} = Ember
+import {intersection} from './frost-viz-set-operations'
+const {get} = Ember
 
 /**
  * Returns true if specified or common attributes are equal

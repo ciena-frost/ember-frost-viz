@@ -1,10 +1,11 @@
+import {scaleTime} from 'd3-scale'
+import {isoParse} from 'd3-time-format'
 import Ember from 'ember'
+const {Helper} = Ember
 import DimensionBase from 'ember-frost-viz/mixins/frost-viz-dimension'
 import D3DimensionTicks from 'ember-frost-viz/mixins/frost-viz-dimension-d3-ticks'
-import { scaleTime } from 'd3-scale'
-import { isoParse } from 'd3-time-format'
 
-export default Ember.Helper.extend(DimensionBase, D3DimensionTicks, {
+export default Helper.extend(DimensionBase, D3DimensionTicks, {
 
   parser: isoParse,
 

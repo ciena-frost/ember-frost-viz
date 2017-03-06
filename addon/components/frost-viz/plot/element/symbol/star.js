@@ -1,7 +1,8 @@
 import Ember from 'ember'
-import { PropTypes } from 'ember-prop-types'
+const {Component, computed} = Ember
+import {PropTypes} from 'ember-prop-types'
 
-export default Ember.Component.extend({
+export default Component.extend({
   tagName: 'polygon',
   attributeBindings: ['points'],
 
@@ -22,7 +23,7 @@ export default Ember.Component.extend({
     }
   },
 
-  points: Ember.computed(
+  points: computed(
     'cx', 'cy', 'innerRadius', 'outerRadius', 'rays', 'theta',
   function () {
     const cx = this.get('cx')

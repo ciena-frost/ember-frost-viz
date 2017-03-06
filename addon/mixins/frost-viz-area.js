@@ -1,15 +1,16 @@
 import Ember from 'ember'
-import { mapObj } from 'ember-frost-viz/utils/frost-viz-data-transform'
+const {Mixin, computed, run, set} = Ember
+import {mapObj} from 'ember-frost-viz/utils/frost-viz-data-transform'
 
-export default Ember.Mixin.create({
+export default Mixin.create({
   callbacks: {
     updatePadding (key, padding) {
       let paddingByAlignment = this.get('paddingByAlignment')
       if (!paddingByAlignment) {
         paddingByAlignment = this.set('paddingByAlignment', {})
       }
-      Ember.set(paddingByAlignment, key, padding)
-      Ember.run.once(this, this.recalculatePadding)
+      set(paddingByAlignment, key, padding)
+      run.once(this, this.recalculatePadding)
     }
   },
 
@@ -22,13 +23,13 @@ export default Ember.Mixin.create({
       }
     })
     for (let key in maxima) {
-      Ember.set(padding, key, maxima[key])
+      set(padding, key, maxima[key])
     }
     this.set('padding', padding)
   },
 
   /* eslint-disable complexity */
-  innerArea: Ember.computed('width', 'height', 'padding.{left,right,top,bottom}', function () {
+  innerArea: computed('width', 'height', 'padding.{left,right,top,bottom}', function () {
     const width = this.get('width') || 0
     const height = this.get('height') || 0
     const left = this.get('padding.left') || 0

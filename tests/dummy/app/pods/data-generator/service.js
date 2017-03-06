@@ -1,4 +1,5 @@
 import Ember from 'ember'
+const {A, Service, computed, get} = Ember
 import PropTypeMixin, {PropTypes} from 'ember-prop-types'
 import {GaussianGenerator} from '../../utils/random-lib'
 
@@ -7,11 +8,11 @@ const Brownian = Ember.Object.extend({
   velocity: 0,
   acceleration: 1,
   domain: [-100, 100],
-  accelerator: Ember.computed(function () {
+  accelerator: computed(function () {
     const self = this
     const domain = this.get('domain')
     const variance = function () {
-      return Ember.get(self, 'acceleration')
+      return get(self, 'acceleration')
     }
     let value = GaussianGenerator.create({variance})
     if (value < domain[0] || value > domain[1]) {
@@ -39,7 +40,7 @@ const PointGenerator = Ember.Object.extend(PropTypeMixin, {
       intervalSpacing: 86400,
       currentTime: new Date(1980, 1, 1),
       sample: Brownian.create({center: 0, acceleration: 3}),
-      data: Ember.A([])
+      data: A([])
     }
   },
   addSample (currentTime) {
@@ -64,7 +65,7 @@ const PointGenerator = Ember.Object.extend(PropTypeMixin, {
   }
 })
 
-export default Ember.Service.extend({
+export default Service.extend({
   createScatter (samplesPerInterval) {
     return PointGenerator.create({samplesPerInterval})
   }

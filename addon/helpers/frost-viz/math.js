@@ -1,5 +1,5 @@
 import Ember from 'ember'
-const { assert } = Ember
+const {Helper, assert} = Ember
 
 /**
  * Built in operators.
@@ -128,4 +128,4 @@ export function math (params/*, hash*/) {
   return evaluate(params)
 }
 
-export default Ember.Helper.helper(math)
+export default Helper.helper(math)

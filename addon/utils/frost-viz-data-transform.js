@@ -1,4 +1,5 @@
 import Ember from 'ember'
+const {A, get, set} = Ember
 
 /**
  * An analog of Array.map that operates on object key-value pairs. Returns an
@@ -9,7 +10,7 @@ import Ember from 'ember'
  */
 export function mapObj (obj, func) {
   const result = Ember.Object.create()
-  Object.keys(obj).forEach((key) => Ember.set(result, key, func(key, Ember.get(obj, key), obj)))
+  Object.keys(obj).forEach((key) => set(result, key, func(key, get(obj, key), obj)))
   return result
 }
 
@@ -32,12 +33,12 @@ export function bindFunctionMap (map, target) {
  * @returns {Array}             The property values in obj.
  */
 export function objectValues (obj) {
-  const vals = Ember.A([])
+  const vals = A([])
   if (Array.isArray(obj)) return obj
   const keys = Object.keys(obj)
   for (var key of keys) {
     if (obj.hasOwnProperty(key) && obj.propertyIsEnumerable(key)) {
-      vals.push(Ember.get(obj, key))
+      vals.push(get(obj, key))
     }
   }
   return vals
@@ -54,7 +55,7 @@ export function objectValues (obj) {
 export function filterKeys (obj, ...keys) {
   const out = {}
   keys.forEach(function (key) {
-    const val = Ember.get(obj, key)
+    const val = get(obj, key)
     if (val !== undefined) out[key] = val
   })
   return out

@@ -1,10 +1,12 @@
 import Ember from 'ember'
+const {Mixin, computed} = Ember
+const {htmlSafe} = Ember.String
 
-export default Ember.Mixin.create({
-  clipPathId: Ember.computed('elementId', function () {
+export default Mixin.create({
+  clipPathId: computed('elementId', function () {
     return `frost-viz-clip-${this.get('elementId')}`
   }),
-  clipPathStyle: Ember.computed('clipPathId', function () {
-    return Ember.String.htmlSafe(`clip-path: url(#${this.get('clipPathId')});`)
+  clipPathStyle: computed('clipPathId', function () {
+    return htmlSafe(`clip-path: url(#${this.get('clipPathId')});`)
   })
 })

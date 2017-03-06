@@ -1,17 +1,18 @@
 import Ember from 'ember'
+const {Component, computed} = Ember
 import layout from 'ember-frost-viz/templates/components/frost-viz/plot/element/line-segment'
 
-const Component = Ember.Component.extend({
+const LineSegment = Component.extend({
   layout,
   tagName: 'g',
-  x1: Ember.computed.alias('begin.x'),
-  y1: Ember.computed.alias('begin.y'),
-  x2: Ember.computed.alias('end.x'),
-  y2: Ember.computed.alias('end.y')
+  x1: computed.alias('begin.x'),
+  y1: computed.alias('begin.y'),
+  x2: computed.alias('end.x'),
+  y2: computed.alias('end.y')
 })
 
-Component.reopenClass({
+LineSegment.reopenClass({
   positionalParams: ['begin', 'end']
 })
 
-export default Component
+export default LineSegment

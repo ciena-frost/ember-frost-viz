@@ -1,1 +1,1 @@
-export { default } from 'ember-frost-viz/utils/frost-viz-set-operations'
+export {default} from 'ember-frost-viz/utils/frost-viz-set-operations'

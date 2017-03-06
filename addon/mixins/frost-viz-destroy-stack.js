@@ -1,9 +1,10 @@
 import Ember from 'ember'
+const {A, Mixin} = Ember
 
-export default Ember.Mixin.create({
+export default Mixin.create({
   init () {
     this._super(...arguments)
-    this.set('_destroyStack', Ember.A([]))
+    this.set('_destroyStack', A([]))
   },
 
   onDestroy (func) {

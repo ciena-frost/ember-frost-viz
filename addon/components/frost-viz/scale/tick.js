@@ -1,11 +1,12 @@
 import Ember from 'ember'
+const {Component, computed} = Ember
 import layout from '../../../templates/components/frost-viz/scale/tick'
 
-const TickComponent = Ember.Component.extend({
+const TickComponent = Component.extend({
   layout,
   tagName: 'g',
-  line: Ember.computed.oneWay('tick.line'),
-  label: Ember.computed.oneWay('tick.label')
+  line: computed.oneWay('tick.line'),
+  label: computed.oneWay('tick.label')
 })
 
 TickComponent.reopenClass({

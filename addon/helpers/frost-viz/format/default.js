@@ -1,7 +1,8 @@
 import Ember from 'ember'
-import { NumericFormatterBase } from './numeric'
+const {Helper} = Ember
+import {NumericFormatterBase} from './numeric'
 
-export default Ember.Helper.extend(NumericFormatterBase, {
+export default Helper.extend(NumericFormatterBase, {
   formatterArgs: '.3',
   compute () {
     // Don't allow reconfiguration of the default formatter.

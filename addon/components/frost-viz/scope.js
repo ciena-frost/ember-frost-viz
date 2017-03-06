@@ -1,11 +1,12 @@
 import Ember from 'ember'
+const {Component, computed} = Ember
 import layout from '../../templates/components/frost-viz/scope'
 import ScopeProvider from 'ember-frost-viz/mixins/frost-viz-scope-provider'
 import {PropTypes} from 'ember-prop-types'
 
 const GenericScope = Ember.Object.extend()
 
-const Scope = Ember.Component.extend(ScopeProvider, {
+const Scope = Component.extend(ScopeProvider, {
   tagName: '',
   layout,
 
@@ -21,7 +22,7 @@ const Scope = Ember.Component.extend(ScopeProvider, {
   //   inject: null
   // },
 
-  childScope: Ember.computed('childScopeBase', 'inject', 'inject.@each', function () {
+  childScope: computed('childScopeBase', 'inject', 'inject.@each', function () {
     const inject = this.get('inject')
     const result = GenericScope.create(this.get('childScopeBase'), inject)
     return result

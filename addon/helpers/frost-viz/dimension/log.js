@@ -1,7 +1,8 @@
+import {scaleLog} from 'd3-scale'
 import Ember from 'ember'
+const {Helper} = Ember
 import DimensionBase from 'ember-frost-viz/mixins/frost-viz-dimension'
 import D3DimensionTicks from 'ember-frost-viz/mixins/frost-viz-dimension-d3-ticks'
-import { scaleLog } from 'd3-scale'
 
 const DEFAULT_MIN = 1e-100
 
@@ -15,7 +16,7 @@ const DEFAULT_MIN = 1e-100
  *
  * @type {object}
  */
-export default Ember.Helper.extend(DimensionBase, D3DimensionTicks, {
+export default Helper.extend(DimensionBase, D3DimensionTicks, {
   domainCleanup (domain) {
     const [min, max] = domain
     return [

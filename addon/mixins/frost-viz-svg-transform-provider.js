@@ -1,4 +1,5 @@
 import Ember from 'ember'
+const {A, Mixin, computed, observer} = Ember
 import SetOperations from 'ember-frost-viz/utils/frost-viz-set-operations'
 
 // Wanted to be SVGTransforable but this is a name reserved by SVG 1.1.
@@ -9,7 +10,7 @@ import SetOperations from 'ember-frost-viz/utils/frost-viz-set-operations'
  * To do this, it watches transformAttributes, and maintains a set of property observers for all elements in the list.
  * @type {[type]}
  */
-const SVGTransformed = Ember.Mixin.create({
+const SVGTransformed = Mixin.create({
   concatenatedProperties: ['transformAttributes'],
   attributeBindings: ['transform'],
 
@@ -18,8 +19,8 @@ const SVGTransformed = Ember.Mixin.create({
     this.updateTransformObservers()
   },
 
-  transform: Ember.computed('transformAttributes.[]', function () {
-    const props = this.get('transformAttributes') || Ember.A([])
+  transform: computed('transformAttributes.[]', function () {
+    const props = this.get('transformAttributes') || A([])
     const self = this
     return props.map(function (key) {
       const value = self.get(key)
@@ -32,7 +33,7 @@ const SVGTransformed = Ember.Mixin.create({
   },
 
   updateTransformObservers () {
-    const previouslyObserved = this.get('_lastObservedAttributes') || Ember.A([])
+    const previouslyObserved = this.get('_lastObservedAttributes') || A([])
     const currentlyObserved = this.get('transformAttributes')
     const addedAttributes = SetOperations.difference(currentlyObserved, previouslyObserved)
     const removedAttributes = SetOperations.difference(previouslyObserved, currentlyObserved)
@@ -44,27 +45,27 @@ const SVGTransformed = Ember.Mixin.create({
       self.removeObserver(attr, self, self.transformDidChange)
     })
   },
-  observeTransformAttributes: Ember.observer('transformAttributes', function () {
+  observeTransformAttributes: observer('transformAttributes', function () {
     this.updateTransformObservers()
   })
 })
 
-const SVGPositionable = Ember.Mixin.create(SVGTransformed, {
+const SVGPositionable = Mixin.create(SVGTransformed, {
   tagName: 'g',
   transformAttributes: ['translate'],
   transformDependentAttributes: ['x', 'y'],
-  translate: Ember.computed('x', 'y', function () {
+  translate: computed('x', 'y', function () {
     const x = this.get('x')
     const y = this.get('y')
     return x || y ? `${x || 0} ${y || 0}` : null
   })
 })
 
-const SVGRotatable = Ember.Mixin.create(SVGTransformed, {
+const SVGRotatable = Mixin.create(SVGTransformed, {
   transformAttributes: ['rotate']
 })
 
-const SVGAffineTransformable = Ember.Mixin.create(SVGPositionable, SVGRotatable)
+const SVGAffineTransformable = Mixin.create(SVGPositionable, SVGRotatable)
 
 export default SVGAffineTransformable
 export {

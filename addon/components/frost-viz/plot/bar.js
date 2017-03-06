@@ -1,16 +1,17 @@
 import Ember from 'ember'
+const {A, Component, computed, get} = Ember
 import layout from '../../../templates/components/frost-viz/plot/bar'
 import Plotter from 'ember-frost-viz/mixins/frost-viz-plotter'
 import Rectangle from 'ember-frost-viz/utils/frost-viz-rectangle'
 
-const VERTICAL_ALIGN = Ember.A(['top', 'bottom'])
+const VERTICAL_ALIGN = A(['top', 'bottom'])
 const DEFAULT_BAR_SPACING = 0.33
 
 const clamp = function (val, min, max) {
   return Math.min(max, Math.max(val, min))
 }
 
-const Bar = Ember.Component.extend(Plotter, {
+const Bar = Component.extend(Plotter, {
   layout,
   classNames: ['frost-viz-plot-bar'],
 
@@ -39,17 +40,17 @@ const Bar = Ember.Component.extend(Plotter, {
     }
   }),
 
-  alignDirection: Ember.computed('align', function () {
+  alignDirection: computed('align', function () {
     const align = this.get('align')
     return VERTICAL_ALIGN.includes(align) ? 'y' : 'x'
   }),
 
-  alignSpan: Ember.computed('align', function () {
+  alignSpan: computed('align', function () {
     const align = this.get('aling')
     return VERTICAL_ALIGN.includes(align) ? 'height' : 'width'
   }),
 
-  zero: Ember.computed('alignDirection', 'selectedBindings', 'transformsForArea', function () {
+  zero: computed('alignDirection', 'selectedBindings', 'transformsForArea', function () {
     const alignDirection = this.get('alignDirection')
     const selectedBindings = this.get('selectedBindings') || null
     if (!selectedBindings) return 0
@@ -61,17 +62,17 @@ const Bar = Ember.Component.extend(Plotter, {
     return transform(normalize(dimension.evaluateValue(0)))
   }),
 
-  barWidth: Ember.computed('area', 'data.length', 'alignSpan', function () {
+  barWidth: computed('area', 'data.length', 'alignSpan', function () {
     const alignSpan = this.get('alignSpan')
     const area = this.get('area')
     const data = this.get('data')
-    const span = Ember.get(area, alignSpan) || 100
+    const span = get(area, alignSpan) || 100
     const barSpan = span * (1.0 - DEFAULT_BAR_SPACING)
-    const elements = Ember.get(data, 'length') || 1
+    const elements = get(data, 'length') || 1
     return barSpan / elements
   }),
 
-  bars: Ember.computed('data', 'elements', 'alignDirection', 'scope.area', 'barFunctions', 'zero', 'barWidth',
+  bars: computed('data', 'elements', 'alignDirection', 'scope.area', 'barFunctions', 'zero', 'barWidth',
   'elementGenerate', function () {
     const data = this.get('data')
     const elements = this.get('elements')

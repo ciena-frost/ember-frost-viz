@@ -1,1 +1,1 @@
-export { default, frostVizBinding } from 'ember-frost-viz/helpers/frost-viz/binding'
+export {default, frostVizBinding} from 'ember-frost-viz/helpers/frost-viz/binding'
