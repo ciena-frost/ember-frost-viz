@@ -1,13 +1,13 @@
 import Ember from 'ember'
-const {hbs} = Ember
+const {Component, hbs} = Ember
 
-const Component = Ember.Component.extend({
+const Expose = Component.extend({
   layout: hbs`{{yield model}}`,
   model: null
 })
 
-Component.reopenClass({
+Expose.reopenClass({
   positionalParams: ['model']
 })
 
-export default Component
+export default Expose

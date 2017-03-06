@@ -1,4 +1,5 @@
 import Ember from 'ember'
+const {A, Mixin, computed, observer} = Ember
 
 // import PropTypeMixin, { PropTypes } from 'ember-prop-types'
 // TODO: convert to PropTypes when mixin support PR merges:
@@ -8,11 +9,11 @@ import Ember from 'ember'
  * This mixin, to be used in a component, watches for changes to data and updates dimensions without fixed, predefined
  * domains.
  */
-export default Ember.Mixin.create({
+export default Mixin.create({
 
   init () {
     this._super(...arguments)
-    this.set('_dataBindings', Ember.A([]))
+    this.set('_dataBindings', A([]))
     this.get('dynamicDimensions') // observe me
   },
 
@@ -26,18 +27,18 @@ export default Ember.Mixin.create({
 
   // All dimensions depend on a childScope and all bindings depend on a dimension.
   // Release all known bindings when childScope changes.
-  releaseBindings: Ember.observer('childScope', function () {
+  releaseBindings: observer('childScope', function () {
     this.get('_dataBindings').clear()
   }),
 
-  dynamicDimensions: Ember.computed('_dataBindings', '_dataBindings.[]', function () {
+  dynamicDimensions: computed('_dataBindings', '_dataBindings.[]', function () {
     const bindings = this.get('_dataBindings')
-    const dimensions = Ember.A([])
+    const dimensions = A([])
     bindings.map((b) => dimensions.addObject(b.get('dimension')))
     return dimensions.filter((d) => d.computeDomain)
   }),
 
-  recomputeDomains: Ember.observer('data.[]', 'dynamicDimensions', 'dynamicDimensions.[]', function () {
+  recomputeDomains: observer('data.[]', 'dynamicDimensions', 'dynamicDimensions.[]', function () {
     const dynamicDimensions = this.get('dynamicDimensions')
     for (let dim of dynamicDimensions) {
       dim.computeDomain()

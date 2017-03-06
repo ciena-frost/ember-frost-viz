@@ -1,7 +1,8 @@
 import Ember from 'ember'
+const {Component} = Ember
 import layout from '../../../../templates/components/frost-viz/scale/tick/label'
 
-const LabelComponent = Ember.Component.extend({
+const LabelComponent = Component.extend({
   layout,
   tagName: 'g'
 })

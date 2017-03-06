@@ -1,8 +1,9 @@
 import Ember from 'ember'
+const {Component} = Ember
 import layout from '../../../templates/components/frost-viz/transform'
 import FrostVizTransform from 'ember-frost-viz/mixins/frost-viz-transform'
 
-const Transform = Ember.Component.extend(FrostVizTransform, {
+const Transform = Component.extend(FrostVizTransform, {
   layout,
 
   coordinateTransforms (area) {

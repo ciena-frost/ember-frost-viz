@@ -1,4 +1,5 @@
 import Ember from 'ember'
+const {computed, get} = Ember
 
 export const PaddingDefaults = {
   left: 0,
@@ -16,10 +17,10 @@ export const RectangleDefaults = {
 
 export const Rectangle = Ember.Object.extend(RectangleDefaults, {
 
-  left: Ember.computed.alias('x'),
-  top: Ember.computed.alias('y'),
+  left: computed.alias('x'),
+  top: computed.alias('y'),
 
-  right: Ember.computed({
+  right: computed({
     get () {
       return this.get('x') + this.get('width')
     },
@@ -28,7 +29,7 @@ export const Rectangle = Ember.Object.extend(RectangleDefaults, {
       return value
     }
   }),
-  bottom: Ember.computed({
+  bottom: computed({
     get () {
       return this.get('y') + this.get('height')
     },
@@ -38,12 +39,12 @@ export const Rectangle = Ember.Object.extend(RectangleDefaults, {
     }
   }),
 
-  edges: Ember.computed(function () {
+  edges: computed(function () {
     const edges = this.getProperties(['left', 'right', 'top', 'bottom'])
     return edges
   }),
 
-  area: Ember.computed('width', 'height', function () {
+  area: computed('width', 'height', function () {
     return (this.get('width') || 0) * (this.get('height' || 0))
   }),
 
@@ -80,21 +81,24 @@ export const Rectangle = Ember.Object.extend(RectangleDefaults, {
 
 Rectangle.reopenClass({
   from (object) {
-    const x = Ember.get(object, 'x') || 0
-    const y = Ember.get(object, 'y') || 0
-    const width = Ember.get(object, 'width') || 0
-    const height = Ember.get(object, 'height') || 0
+    const x = get(object, 'x') || 0
+    const y = get(object, 'y') || 0
+    const width = get(object, 'width') || 0
+    const height = get(object, 'height') || 0
     return Rectangle.create({x, y, width, height})
   },
 
   contract (r1, padding) {
-    const { left, right, top, bottom } = Object.assign({}, PaddingDefaults, padding)
-    return Rectangle.expand(r1, { left: -left, right: -right, top: -top, bottom: -bottom })
+    // eslint-disable-next-line ocd/sort-variable-declarator-properties
+    const {left, right, top, bottom} = Object.assign({}, PaddingDefaults, padding)
+    return Rectangle.expand(r1, {left: -left, right: -right, top: -top, bottom: -bottom})
   },
 
   expand (r1, padding) {
-    const { x, y, width, height } = Object.assign({}, RectangleDefaults, r1)
-    const { left, right, top, bottom } = Object.assign({}, PaddingDefaults, padding)
+    // eslint-disable-next-line ocd/sort-variable-declarator-properties
+    const {x, y, width, height} = Object.assign({}, RectangleDefaults, r1)
+    // eslint-disable-next-line ocd/sort-variable-declarator-properties
+    const {left, right, top, bottom} = Object.assign({}, PaddingDefaults, padding)
     return Rectangle.create({
       x: x - left,
       y: y - top,
@@ -106,21 +110,21 @@ Rectangle.reopenClass({
   intersect (ra1, ra2) {
     const r1 = Rectangle.create(ra1)
     const r2 = Rectangle.create(ra2)
-    const x = Math.max(Ember.get(r1, 'x'), Ember.get(r2, 'x'))
-    const y = Math.max(Ember.get(r1, 'y'), Ember.get(r2, 'y'))
-    const x2 = Math.min(Ember.get(r1, 'right'), Ember.get(r2, 'right'))
-    const y2 = Math.min(Ember.get(r1, 'bottom'), Ember.get(r2, 'bottom'))
-    return Rectangle.create({ x, y, width: x2 - x, height: y2 - y })
+    const x = Math.max(get(r1, 'x'), get(r2, 'x'))
+    const y = Math.max(get(r1, 'y'), get(r2, 'y'))
+    const x2 = Math.min(get(r1, 'right'), get(r2, 'right'))
+    const y2 = Math.min(get(r1, 'bottom'), get(r2, 'bottom'))
+    return Rectangle.create({x, y, width: x2 - x, height: y2 - y})
   },
 
   union (ra1, ra2) {
     const r1 = Object.assign({}, RectangleDefaults, ra1)
     const r2 = Object.assign({}, RectangleDefaults, ra2)
-    const x = Math.min(Ember.get(r1, 'x'), Ember.get(r2, 'x'))
-    const y = Math.min(Ember.get(r1, 'y'), Ember.get(r2, 'y'))
-    const x2 = Math.max(Ember.get(r1, 'right'), Ember.get(r2, 'right'))
-    const y2 = Math.max(Ember.get(r1, 'bottom'), Ember.get(r2, 'bottom'))
-    return Rectangle.create({ x, y, width: x2 - x, height: y2 - y })
+    const x = Math.min(get(r1, 'x'), get(r2, 'x'))
+    const y = Math.min(get(r1, 'y'), get(r2, 'y'))
+    const x2 = Math.max(get(r1, 'right'), get(r2, 'right'))
+    const y2 = Math.max(get(r1, 'bottom'), get(r2, 'bottom'))
+    return Rectangle.create({x, y, width: x2 - x, height: y2 - y})
   }
 
 })

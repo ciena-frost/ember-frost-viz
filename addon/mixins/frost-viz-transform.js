@@ -1,9 +1,10 @@
 import Ember from 'ember'
+const {Mixin, computed} = Ember
 import Area from 'ember-frost-viz/mixins/frost-viz-area'
+import ScopeProvider from 'ember-frost-viz/mixins/frost-viz-scope-provider'
 import PropTypesMixin, {PropTypes} from 'ember-prop-types'
 // import Rectangle from 'ember-frost-viz/utils/frost-viz-rectangle'
 // import {ChartScope} from 'ember-frost-viz/utils/chart-scope'
-import ScopeProvider from 'ember-frost-viz/mixins/frost-viz-scope-provider'
 
 const TransformScope = Ember.Object.extend(PropTypesMixin, {
   propTypes: {
@@ -12,7 +13,7 @@ const TransformScope = Ember.Object.extend(PropTypesMixin, {
   }
 })
 
-export default Ember.Mixin.create(Area, ScopeProvider, {
+export default Mixin.create(Area, ScopeProvider, {
   tagName: 'g',
   classNames: ['frost-viz-transform'],
 
@@ -32,17 +33,17 @@ export default Ember.Mixin.create(Area, ScopeProvider, {
     return {}
   },
 
-  data: Ember.computed.alias('scope.data'),
+  data: computed.alias('scope.data'),
 
   // The width and height derive from the scope area unless overridden
-  area: Ember.computed.oneWay('scope.area'),
-  width: Ember.computed.oneWay('area.width'),
-  height: Ember.computed.oneWay('area.height'),
+  area: computed.oneWay('scope.area'),
+  width: computed.oneWay('area.width'),
+  height: computed.oneWay('area.height'),
 
-  childScope: Ember.computed('childScopeBase', 'dataBindings', 'coordinateTransforms', function () {
+  childScope: computed('childScopeBase', 'dataBindings', 'coordinateTransforms', function () {
     const dataBindings = Object.assign({}, this.get('scope.dataBindings'), this.get('dataBindings'))
     const coordinateTransforms = this.get('coordinateTransforms')
-    const result = TransformScope.create(this.get('childScopeBase'), { dataBindings, coordinateTransforms })
+    const result = TransformScope.create(this.get('childScopeBase'), {dataBindings, coordinateTransforms})
     return result
   })
 

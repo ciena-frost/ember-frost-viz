@@ -1,19 +1,20 @@
 import Ember from 'ember'
+const {A, Component, computed, get, observer, set} = Ember
 import layout from '../../templates/components/frost-viz/scale'
-import DOMBox from 'ember-frost-viz/mixins/frost-viz-dom-box'
-import Area from 'ember-frost-viz/mixins/frost-viz-area'
 import DefaultFormatter from 'ember-frost-viz/helpers/frost-viz/format/default'
-import Rectangle from 'ember-frost-viz/utils/frost-viz-rectangle'
+import Area from 'ember-frost-viz/mixins/frost-viz-area'
+import DOMBox from 'ember-frost-viz/mixins/frost-viz-dom-box'
 import SVGAffineTransformable from 'ember-frost-viz/mixins/frost-viz-svg-transform-provider'
 import VizComputedProperties from 'ember-frost-viz/utils/frost-viz-computed'
-import { PropTypes } from 'ember-prop-types'
-import { attributesEqual } from 'ember-frost-viz/utils/frost-viz-object-operations'
+import {attributesEqual} from 'ember-frost-viz/utils/frost-viz-object-operations'
+import Rectangle from 'ember-frost-viz/utils/frost-viz-rectangle'
+import {PropTypes} from 'ember-prop-types'
 
-const TOP_BOTTOM = Ember.A(['top', 'bottom'])
-const LEFT_RIGHT = Ember.A(['left', 'right'])
-const TOP_BOTTOM_LEFT_RIGHT = Ember.A([...TOP_BOTTOM, ...LEFT_RIGHT])
+const TOP_BOTTOM = A(['top', 'bottom'])
+const LEFT_RIGHT = A(['left', 'right'])
+const TOP_BOTTOM_LEFT_RIGHT = A([...TOP_BOTTOM, ...LEFT_RIGHT])
 
-const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
+const Scale = Component.extend(SVGAffineTransformable, DOMBox, Area, {
   layout,
   classNames: ['frost-viz-scale'],
   classNameBindings: ['dynamicClassNames'],
@@ -36,23 +37,23 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
     }
   },
 
-  transformArea: Ember.computed.oneWay('scope.area'),
-  parentArea: Ember.computed.oneWay('scope.area.parent'),
+  transformArea: computed.oneWay('scope.area'),
+  parentArea: computed.oneWay('scope.area.parent'),
 
-  x: Ember.computed('align', 'box.width', 'transformArea.width', function () {
+  x: computed('align', 'box.width', 'transformArea.width', function () {
     return this.get('align') === 'right'
       ? this.getWithDefault('transformArea.left', 0)
       : 0
   }),
 
-  y: Ember.computed('align', 'box.height', 'transformArea.height', function () {
+  y: computed('align', 'box.height', 'transformArea.height', function () {
     return this.get('align') === 'bottom'
       ? this.getWithDefault('transformArea.top', 0)
       : 0
   }),
 
-  dimension: Ember.computed.alias('binding.dimension'),
-  domain: Ember.computed.alias('dimension.domain'),
+  dimension: computed.alias('binding.dimension'),
+  domain: computed.alias('dimension.domain'),
 
   getValid (property, validator, error) {
     const value = this.get(property)
@@ -65,7 +66,7 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
 
   validators: {
     area (rect) {
-      return Ember.get(rect, 'area') >= 0
+      return get(rect, 'area') >= 0
     },
     align (align) {
       return TOP_BOTTOM_LEFT_RIGHT.includes(align)
@@ -76,13 +77,13 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
   parentAreaRect: VizComputedProperties.rectangle('parentArea'),
   transformAreaRect: VizComputedProperties.rectangle('transformArea'),
 
-  tickData: Ember.computed('dimension', 'tickCount', function () {
+  tickData: computed('dimension', 'tickCount', function () {
     const dimension = this.get('dimension')
     const tickCount = this.getWithDefault('tickCount', 10)
     return dimension.ticks(tickCount)
   }),
 
-  linesAreaRect: Ember.computed(
+  linesAreaRect: computed(
     'align',
     'boxRect',
     'parentAreaRect',
@@ -104,7 +105,7 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
     return result
   }),
 
-  backgroundArea: Ember.computed(
+  backgroundArea: computed(
     'align', 'transformAreaRect', 'box',
   function () {
     const align = this.get('align')
@@ -123,7 +124,7 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
     return backgroundArea
   }),
 
-  tickTextAnchor: Ember.computed('align', function () {
+  tickTextAnchor: computed('align', function () {
     const align = this.get('align')
     switch (align) {
       case 'left':
@@ -135,11 +136,11 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
     return 'start'
   }),
 
-  isAlignVertical: Ember.computed('align', function () {
+  isAlignVertical: computed('align', function () {
     return TOP_BOTTOM.includes(this.get('align'))
   }),
 
-  tickCoordsFunc: Ember.computed('isAlignVertical', function () {
+  tickCoordsFunc: computed('isAlignVertical', function () {
     const isAlignVertical = this.get('isAlignVertical')
     return isAlignVertical
       ? this.get('tickCoordFuncVertical').bind(this)
@@ -149,16 +150,16 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
   tickCoordFuncVertical (area, v) {
     const linesArea = this.get('linesAreaRect')
     const c = linesArea.get('left') + linesArea.get('width') * v
-    return { x1: c, x2: c, y1: area.get('top'), y2: area.get('bottom') }
+    return {x1: c, x2: c, y1: area.get('top'), y2: area.get('bottom')}
   },
 
   tickCoordFuncHorizontal (area, v) {
     const linesArea = this.get('linesAreaRect')
     const c = linesArea.get('bottom') - linesArea.get('height') * v
-    return { y1: c, y2: c, x1: area.get('left'), x2: area.get('right') }
+    return {y1: c, y2: c, x1: area.get('left'), x2: area.get('right')}
   },
 
-  labelsAreaRect: Ember.computed(
+  labelsAreaRect: computed(
     'boxRect', 'align', 'linesAreaRect', 'parentAreaRect', 'isAlignVertical',
   function () {
     const box = this.getValid('boxRect', this.validators.area, 'box has zero area')
@@ -180,7 +181,7 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
     return labelsArea
   }),
 
-  tickElements: Ember.computed(
+  tickElements: computed(
     'dimension', 'tickData', 'tickCoordsFunc', 'linesAreaRect', 'labelsAreaRect',
     'domain', 'domain.[]',
   function () {
@@ -204,7 +205,7 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
         const val = dimension.evaluateValue(v)
         return Object.create({
           line: lineCoords(val),
-          label: { textAnchor, position: labelCoords(val, textAnchor), caption: tickLabelFormat(v) }
+          label: {textAnchor, position: labelCoords(val, textAnchor), caption: tickLabelFormat(v)}
         })
       })
       return ticks
@@ -216,22 +217,22 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
 
   reportedPadding: null,
 
-  pushPadding: Ember.observer('align', 'parentArea.width', 'parentArea.height', function () {
+  pushPadding: observer('align', 'parentArea.width', 'parentArea.height', function () {
     const align = this.get('align')
     const updatePadding = this.get('scope.callbacks.updatePadding')
     if (!(align && updatePadding)) {
       return
     }
     const reportedPadding = this.get('reportedPadding') || Ember.Object.create()
-    const padding = { top: 0, right: 0, bottom: 0, left: 0 }
+    const padding = {top: 0, right: 0, bottom: 0, left: 0}
     const paddingProperty = TOP_BOTTOM.includes(align) ? 'box.height' : 'box.width'
-    Ember.set(padding, align, this.getWithDefault(paddingProperty, 0))
+    set(padding, align, this.getWithDefault(paddingProperty, 0))
     if (!attributesEqual(padding, reportedPadding, TOP_BOTTOM_LEFT_RIGHT)) {
       updatePadding(align, padding)
     }
   }),
 
-  scaleKey: Ember.computed('align', 'key', function () {
+  scaleKey: computed('align', 'key', function () {
     const key = this.get('key')
     if (key) {
       return key
@@ -242,7 +243,7 @@ const Scale = Ember.Component.extend(SVGAffineTransformable, DOMBox, Area, {
          : null
   }),
 
-  dynamicClassNames: Ember.computed('scaleKey', function () {
+  dynamicClassNames: computed('scaleKey', function () {
     const key = this.get('scaleKey')
     return key ? `frost-viz-scale-${key}` : ''
   })

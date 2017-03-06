@@ -1,6 +1,7 @@
 import Ember from 'ember'
+const {Mixin} = Ember
 
-export default Ember.Mixin.create({
+export default Mixin.create({
   mouseEnter () {
     this.get('item.callbacks').setSelection(this.get('elementId'), this.get('item'))
   },

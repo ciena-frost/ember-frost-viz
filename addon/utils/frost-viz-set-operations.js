@@ -20,4 +20,4 @@ export const union = typeof Set !== 'undefined'
     return [...a, ...difference(b, a)]
   }
 
-export default { has, difference, intersection, union }
+export default {has, difference, intersection, union}

@@ -1,1 +1,1 @@
-export { default } from 'ember-frost-viz/components/frost-viz/scale/tick/label'
+export {default} from 'ember-frost-viz/components/frost-viz/scale/tick/label'

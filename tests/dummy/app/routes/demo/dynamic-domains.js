@@ -1,15 +1,16 @@
 import Ember from 'ember'
+const {A, Route, inject, run} = Ember
 
-export default Ember.Route.extend({
-  dataGenerator: Ember.inject.service(),
+export default Route.extend({
+  dataGenerator: inject.service(),
   model () {
     const scatter1 = this.get('dataGenerator').createScatter(1)
     const scatter2 = this.get('dataGenerator').createScatter(1)
     const modelData1 = scatter1.addIntervals(40)
     const modelData2 = scatter2.addIntervals(40)
-    const modelData = Ember.A([])
+    const modelData = A([])
     const updateData = function () {
-      Ember.run.later(function () {
+      run.later(function () {
         modelData.removeAt(0, 1)
         scatter1.addInterval()
         scatter2.addInterval()

@@ -1,6 +1,7 @@
 import Ember from 'ember'
+const {Mixin, computed, run, set, setProperties} = Ember
 const {camelize} = Ember.String
-import { mapObj } from 'ember-frost-viz/utils/frost-viz-data-transform'
+import {mapObj} from 'ember-frost-viz/utils/frost-viz-data-transform'
 
 const CSS_INT_PROPERTIES = [
   'width',
@@ -16,9 +17,9 @@ const CSS_STRING_PROPERTIES = [
   'align'
 ]
 
-export default Ember.Mixin.create({
+export default Mixin.create({
 
-  hasLayout: Ember.computed.notEmpty('box'),
+  hasLayout: computed.notEmpty('box'),
 
   init () {
     this.set('box', Ember.Object.create())
@@ -26,9 +27,9 @@ export default Ember.Mixin.create({
   },
 
   didRender () {
-    Ember.run.scheduleOnce('afterRender', () => {
+    run.scheduleOnce('afterRender', () => {
       const observeElement = this.$(this.get('boxObserveElement'))
-      Ember.setProperties(this.get('box'), this.getBoxProperties(observeElement))
+      setProperties(this.get('box'), this.getBoxProperties(observeElement))
     })
   },
 
@@ -36,7 +37,7 @@ export default Ember.Mixin.create({
   getBoxProperties (target) {
     const element = target || this.$()
     const styleProperties = element.css(CSS_STRING_PROPERTIES)
-    mapObj(element.css(CSS_INT_PROPERTIES), (key, value) => Ember.set(styleProperties, camelize(key), parseInt(value)))
+    mapObj(element.css(CSS_INT_PROPERTIES), (key, value) => set(styleProperties, camelize(key), parseInt(value)))
     const rawElement = element[0]
     const observedProperties = rawElement.getBBox ? rawElement.getBBox() : element.position()
     return Object.assign(

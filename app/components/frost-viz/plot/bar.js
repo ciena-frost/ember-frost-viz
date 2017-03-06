@@ -1,1 +1,1 @@
-export { default } from 'ember-frost-viz/components/frost-viz/plot/bar'
+export {default} from 'ember-frost-viz/components/frost-viz/plot/bar'

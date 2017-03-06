@@ -1,14 +1,16 @@
 import Ember from 'ember'
-import SVGAffineTransform from 'ember-frost-viz/mixins/frost-viz-svg-transform-provider'
-import SVGClipPathProvider from 'ember-frost-viz/mixins/frost-viz-svg-clip-path-provider'
+const {A, Mixin, assert, computed, get, run} = Ember
+const {dasherize} = Ember.String
 import Area from 'ember-frost-viz/mixins/frost-viz-area'
+import SVGClipPathProvider from 'ember-frost-viz/mixins/frost-viz-svg-clip-path-provider'
+import SVGAffineTransform from 'ember-frost-viz/mixins/frost-viz-svg-transform-provider'
 import {mapObj} from 'ember-frost-viz/utils/frost-viz-data-transform'
 import {PropTypes} from 'ember-prop-types'
 
 const NULL_BINDING = {evaluateElement: () => 0, dimension: {domain: [0, 1], range: [0, 1], evaluateValue: () => 0}}
 const NULL_TRANSFORM = (value) => value
 
-export default Ember.Mixin.create(Area, SVGAffineTransform, SVGClipPathProvider, {
+export default Mixin.create(Area, SVGAffineTransform, SVGClipPathProvider, {
   tagName: 'g',
   classNames: ['frost-viz-plot'],
   classNameBindings: ['dynamicClassNames'],
@@ -44,41 +46,41 @@ export default Ember.Mixin.create(Area, SVGAffineTransform, SVGClipPathProvider,
     }
   },
 
-  data: Ember.computed.alias('scope.data'),
+  data: computed.alias('scope.data'),
 
-  area: Ember.computed.alias('scope.area'),
-  x: Ember.computed.alias('area.x'),
-  y: Ember.computed.alias('area.y'),
-  width: Ember.computed.alias('area.width'),
-  height: Ember.computed.alias('area.height'),
+  area: computed.alias('scope.area'),
+  x: computed.alias('area.x'),
+  y: computed.alias('area.y'),
+  width: computed.alias('area.width'),
+  height: computed.alias('area.height'),
 
-  coordinateTransforms: Ember.computed.alias('scope.coordinateTransforms'),
+  coordinateTransforms: computed.alias('scope.coordinateTransforms'),
 
-  selectedBindings: Ember.computed('dataBindings', 'scope.dataBindings', function () {
+  selectedBindings: computed('dataBindings', 'scope.dataBindings', function () {
     const explicitBindings = this.get('dataBindings')
     const scopeBindings = this.get('scope.dataBindings')
     const result = Ember.Object.create(scopeBindings, explicitBindings)
     return result
   }),
 
-  dynamicClassNames: Ember.computed('selectedBindings', function () {
+  dynamicClassNames: computed('selectedBindings', function () {
     const selectedBindings = this.get('selectedBindings')
     const keys = Object.keys(selectedBindings)
-    const names = Ember.A([])
+    const names = A([])
     for (let key of keys) {
       const binding = selectedBindings.get(key)
       const property = binding.get('property')
       if (!property) continue
-      const dasherized = Ember.String.dasherize(property)
+      const dasherized = dasherize(property)
       names.pushObject(`frost-viz-plot-${dasherized}`)
     }
     return names.join(' ')
   }),
 
-  dimensions: Ember.computed('selectedBindings', function () {
+  dimensions: computed('selectedBindings', function () {
     const selectedBindings = this.get('selectedBindings')
     return mapObj(selectedBindings, (key, val) => {
-      Ember.assert(
+      assert(
         'element builder: calculating dimensions: Parent scope defines multiple dataBindings for key ' +
         key + ' must override with a single binding',
         !Array.isArray(val))
@@ -94,31 +96,31 @@ export default Ember.Mixin.create(Area, SVGAffineTransform, SVGClipPathProvider,
     // from CSS. This means that the first render is usually in an area of (0x0).
     // TODO: maybe check whether area is greater than 0x0 and set renderReady to true
     // immediately if so.
-    Ember.run.scheduleOnce('afterRender', () => {
+    run.scheduleOnce('afterRender', () => {
       this.set('renderReady', true)
     })
   },
 
   buildNormalizer (dimension) {
-    const range = Ember.get(dimension, 'range')
+    const range = get(dimension, 'range')
     return (v) => (v - range[0]) / (range[1] - range[0])
   },
 
-  transformsForArea: Ember.computed('coordinateTransforms', 'innerArea', function () {
+  transformsForArea: computed('coordinateTransforms', 'innerArea', function () {
     const innerArea = this.get('innerArea')
     const transforms = this.get('coordinateTransforms')
     return Ember.Object.create(transforms(innerArea))
   }),
 
-  dimensionOverrides: Ember.computed('selectedBindings', 'transformsForArea', function () {
+  dimensionOverrides: computed('selectedBindings', 'transformsForArea', function () {
     const selectedBindings = this.get('selectedBindings') || {}
     const transformsForArea = this.get('transformsForArea')
     const keys = Object.keys(transformsForArea)
     const normalizedDimensions = {}
     for (let key of keys) {
-      const binding = Ember.get(selectedBindings, key) || NULL_BINDING
-      const dimension = Ember.get(binding, 'dimension')
-      const transform = Ember.get(transformsForArea, key) || NULL_TRANSFORM
+      const binding = get(selectedBindings, key) || NULL_BINDING
+      const dimension = get(binding, 'dimension')
+      const transform = get(transformsForArea, key) || NULL_TRANSFORM
       const normalize = this.buildNormalizer(dimension)
       normalizedDimensions[key] = (element) => {
         const value = dimension.evaluateElement(element, binding)
@@ -138,7 +140,7 @@ export default Ember.Mixin.create(Area, SVGAffineTransform, SVGClipPathProvider,
   },
 
   /* eslint-disable complexity */
-  elementBuilder: Ember.computed('data', 'scope.actions', 'dimensions', 'dimensionOverrides', function () {
+  elementBuilder: computed('data', 'scope.actions', 'dimensions', 'dimensionOverrides', function () {
     const callbacks = this.get('scope.callbacks')
     const dimensions = Object.assign({}, this.get('dimensions'), this.get('dimensionOverrides'))
     const dimensionKeys = Object.keys(dimensions)
@@ -158,14 +160,14 @@ export default Ember.Mixin.create(Area, SVGAffineTransform, SVGClipPathProvider,
       }
       const allow = (allowSparseElements && anyValue) || (!sparse)
       // console.log('allow', allow, transformed)
-      return allow ? elementGenerate(element, data, { callbacks }, transformed) : undefined
+      return allow ? elementGenerate(element, data, {callbacks}, transformed) : undefined
     }
   }),
   /* eslint-enable complexity */
 
-  elements: Ember.computed('data', 'data.[]', 'elementBuilder', 'renderReady', function () {
+  elements: computed('data', 'data.[]', 'elementBuilder', 'renderReady', function () {
     const elementBuilder = this.get('elementBuilder')
-    const data = this.get('data') || Ember.A([])
+    const data = this.get('data') || A([])
     const result = data.map(elementBuilder).filter(e => e !== undefined)
     return result
   })

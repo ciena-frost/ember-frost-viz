@@ -1,4 +1,5 @@
 import Ember from 'ember'
+const {A, Mixin, assert, typeOf} = Ember
 
 /**
  * @module mixinDimensionBase
@@ -23,7 +24,7 @@ const fUndef = () => undefined
 const Dimension = Ember.Object.extend({
   init () {
     this._super(...arguments)
-    this.set('dataBindings', Ember.A([]))
+    this.set('dataBindings', A([]))
   },
 
   inclusiveDomain (domains) {
@@ -59,7 +60,7 @@ const Dimension = Ember.Object.extend({
  * @param  {function} domainBuilder The default domain-generating function(elements) for this data type.
  * @return {function} compute The function(params, hash) that generates the mapping function.
  */
-export default Ember.Mixin.create({
+export default Mixin.create({
 
   mapperBuilder: null,
   tickBuilder: null,
@@ -104,7 +105,7 @@ export default Ember.Mixin.create({
    */
   compute (params, hash) {
     const scope = params.shift()
-    Ember.assert('dimension: Scope object not passed or not valid', Ember.typeOf(scope) === 'instance')
+    assert('dimension: Scope object not passed or not valid', typeOf(scope) === 'instance')
     const dimension = this.buildDimension(scope, hash)
     if (scope && scope.callbacks && scope.callbacks.addDimension) {
       scope.callbacks.addDimension(dimension)
@@ -115,7 +116,7 @@ export default Ember.Mixin.create({
   buildDimension (scope, hash) {
     // Build selector
     // Pull defaults from this, override by hash properties
-    const { parser, range, domain } = Object.assign({},
+    const {parser, range, domain} = Object.assign({},
       this.getProperties('parser', 'range', 'domain'),
       hash)
 
@@ -165,11 +166,11 @@ export default Ember.Mixin.create({
       // Return a dimension that redefines its mappers and tick functions when its domain changes.
       result.setProperties({
         range,
-        dataBindings: Ember.A([]),
+        dataBindings: A([]),
 
         domainBuilder () {
           const dataBindings = this.get('dataBindings')
-          Ember.assert('dimension: Building domain: dataBindings not provided', dataBindings && dataBindings.length)
+          assert('dimension: Building domain: dataBindings not provided', dataBindings && dataBindings.length)
           const domains = []
           for (let binding of dataBindings) {
             const data = binding.get('data')

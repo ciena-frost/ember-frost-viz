@@ -27,7 +27,7 @@ install:
 - bower install
 script:
 - npm run lint
-- ember try:one $EMBER_TRY_SCENARIO 
+- ember try:one $EMBER_TRY_SCENARIO
 after_success:
 - .travis/publish-coverage.sh
 addons:
@@ -59,7 +59,7 @@ deploy:
     branch: master
     condition: "$EMBER_TRY_SCENARIO = 'default'"
     node: 'stable'
-    tags: false
+    tags: true
 after_deploy:
 - .travis/publish-gh-pages.sh
 notifications:

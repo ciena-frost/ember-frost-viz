@@ -1,5 +1,6 @@
+import {timeFormat} from 'd3-time-format'
 import Ember from 'ember'
-import { timeFormat } from 'd3-time-format'
+const {Helper} = Ember
 
 // If the key was recognized, return that named formatter.
 // If the key was unrecognized, treat the key as a format string and
@@ -13,7 +14,7 @@ const TEMPLATES = Ember.Object.create({
   }
 })
 
-export default Ember.Helper.extend({
+export default Helper.extend({
   compute (params /*, hash */) {
     // If the key is unspecified, use the default format.
     // If the key specified, use that format.
