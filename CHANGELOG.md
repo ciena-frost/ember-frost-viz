@@ -1,3 +1,7 @@
+# 0.10.4
+* **Added** the coverage config and coverage directory to run code coverage
+* **Added** `ember-cli-code-coverage` package
+
 # 0.10.3
 * **Updated** to use latest pr-bumper which supports being able to set a PR to `none` when publishing a new version is not desired.
 
