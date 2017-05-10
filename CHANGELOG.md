@@ -1,3 +1,7 @@
+# 0.10.5 (2017-05-10)
+* **Updated** the secure auth tokens in `.travis.yml`
+
+
 # 0.10.4
 * **Added** the coverage config and coverage directory to run code coverage
 * **Added** `ember-cli-code-coverage` package
