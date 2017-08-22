@@ -1,3 +1,7 @@
+# 0.10.6 (2017-08-22)
+* **Updated** the secure auth tokens in `.travis.yml`
+
+
 # 0.10.5 (2017-05-10)
 * **Updated** the secure auth tokens in `.travis.yml`
 
