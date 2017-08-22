@@ -1,3 +1,7 @@
+**DEPRECATED**
+This addon has been deprecated in favor of [ember-frost-chart](https://github.com/ciena-frost/ember-frost-chart)
+
+
 [ci-img]: https://img.shields.io/travis/ciena-frost/ember-frost-viz.svg "Travis CI Build Status"
 [ci-url]: https://travis-ci.org/ciena-frost/ember-frost-viz
 [cov-img]: https://img.shields.io/coveralls/ciena-frost/ember-frost-viz.svg "Coveralls Code Coverage"
