@@ -104,7 +104,7 @@ export default Mixin.create({
    *
    */
   compute (params, hash) {
-    const scope = params.shift()
+    const scope = params[0]
     assert('dimension: Scope object not passed or not valid', typeOf(scope) === 'instance')
     const dimension = this.buildDimension(scope, hash)
     if (scope && scope.callbacks && scope.callbacks.addDimension) {

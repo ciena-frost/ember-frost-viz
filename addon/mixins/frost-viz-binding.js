@@ -21,10 +21,10 @@ export default Mixin.create({
   },
 
   compute (params, hash) {
-    const dimension = params.shift()
+    const dimension = params[0]
     assert('binding: dimension object not passed or not valid', typeOf(dimension) === 'instance')
-    const selectorIn = params.shift()
-    const data = params.shift() || hash.data || dimension.get('scope.data')
+    const selectorIn = params[1]
+    const data = params[2] || hash.data || dimension.get('scope.data')
     assert('binding: data not specified or inherited, or was not array', Array.isArray(data))
     const binding = this.dataBindingBuilder(dimension, data, selectorIn, hash)
     const scope = dimension.scope
