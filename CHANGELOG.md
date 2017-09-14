@@ -1,3 +1,7 @@
+# 0.10.7 (2017-09-14)
+* Reference elements by id rather than using `.shift()`
+
+
 # 0.10.6 (2017-08-22)
 * **Updated** the secure auth tokens in `.travis.yml`
 
