@@ -1,6 +1,5 @@
 import Ember from 'ember'
 const {Component, computed} = Ember
-import {PropTypes} from 'ember-prop-types'
 
 const DEFAULT_RADIUS = 4.0
 
