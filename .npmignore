@@ -7,7 +7,7 @@
 .bowerrc
 .editorconfig
 .ember-cli
-.eslintrc
+.eslintrc.js
 .github
 .gitignore
 .jshintrc

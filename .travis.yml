@@ -22,14 +22,16 @@ cache:
 
 env:
   matrix:
-  - EMBER_TRY_SCENARIO=ember-2-3
-  - EMBER_TRY_SCENARIO=default
+  - EMBER_TRY_SCENARIO=ember-lts-2.8
+  - EMBER_TRY_SCENARIO=ember-default
   global:
     - COVERAGE=false # FIXME: When coverage is enabled tests never complete
     - CXX=g++-4.8
     - secure: CqP6Yj/1W936/5vNEB6t6GYreLS+JEMacrHWh/tKdFWZZ0/pWBFy4bLyO2Fqu6YKB4cK4U+uVQhTNs4zGPmy4p/ubu2+g5H1QzF5saphryh677C9k/JJ3DzVMHkpjRF8RBXWypOYR2thp6BpKa12PE2eDl2Pw5J1Tg9lnDTLYXbsq2g+bOzvykkK/N61Nl+Q/k70uUYA7CdyoRvMXv3pp3GZ6wcEApXCa1uA2PFkfYlipILXB1TP75Wpp2zjKGW/OCdIJ3fr3v2tFc1BbNoGazmHyVYtBBKP4CktpEUxWTZHk5wU8+aRdYYtgG9YaAVI24l0Nkb/rtf6o/6o8HagOmCijR+nYM1z5F2Nn/cpFqc/5NqOKmnvggFIZmVPrwSKOiCbl2FHCYYPpFGYf4kk29Fr32tJ+oi6DCgh4EkeCl//rPSLgCTxA5DpjrgtbOuXpTi/NzFL5qSDbjgYRzQBleXt75XGIKQfrx6LILbaUiKXse+/vGDyO/Si/fcFF0fJURogpSXJCBBQln/bs8PcCzn1WA/16c/xCnJ/4OOyKA0yG46YKklVuaP1u/GUzT1/PRE8FzEeY9K3dtcO5KtV1jCLQlKtXiVWDFY+MtYl3BbInJ6fzZKwD5clFqYVR/Hz72TUbpxvlKLbODjhaPPYYeMtr8ofGFqd2fEuce5RN/A=
 matrix:
   fast_finish: true
+  allow_failures:
+  - node_js: 'stable'
 
 before_install:
 - npm config set spin false
@@ -60,7 +62,7 @@ deploy:
     secure: A/CHp7XK074p3RilI5a9iRuvL7Y2VakscqGK5UqeBFVA11xFSWwxB1R4ybohNg547d0Yl2KGkltAgS6vAx1T0+Qt8Uwa+kmMFpg2dQ3coe+fAXt2MbPdo1dZwZheZu5mW3+Kj32rR4OR7AnuSi0yYr6ENGozfwhaJoTSFmJL5NttoFC1H0jZ7FHQnFBAgrVqibWj3W0Rm5q8xOIEnJx6QrJtDfLZLU5Er7W+5fX35dxnJwolAf5AQLNyC1TPz1wvpHd22cZc7Jc4OCcEU2g+dvVbS8nCm/LmBNOmn+ch3FG9vvE/yUCjQtflpKAqW48JVGtSPe8XJepiZWCqYzTqLcWh6HMS+qPRp0JovZIXNKpH7qNsUZdL16ShOU0pmWAGnPePQpftqgekQHMYqy6XbD1jOEXjYn3GTbD81P8n/GeeU3oxsxgX1Nh3X6OR7298B2H8iJJ3djoMewkW+XN+9k0eHNuOUN6NH2gPNiT4551kUtYwChs5v5NQFkeG2wx2QJeVn6OetA7RR+VIsZWqvBu9OsI5nfF4z2/CXcrgqX3gMbtsYslDDHHJgBN01vV0PLwNlsOwbPRbRZdjyXAUMKtGBIkml6irMykAi7nKnAKEq2kGJdyFxlC7Wiq7iblLnEKsOqrtO5oAmy1irs9Dp3z01lNGOX08QqblA3UYkug=
   on:
     all_branches: true
-    condition: "$EMBER_TRY_SCENARIO = 'default'"
+    condition: "$EMBER_TRY_SCENARIO = 'ember-default'"
     node: '6.9.1'
     tags: true
 
