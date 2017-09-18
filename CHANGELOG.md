@@ -1,3 +1,7 @@
+# 0.10.8 (2017-09-18)
+* Upgrade to Ember CLI 2.12.3
+* Update 2.12.13 inter-dependencies
+
 # 0.10.7 (2017-09-14)
 * Reference elements by id rather than using `.shift()`
 
