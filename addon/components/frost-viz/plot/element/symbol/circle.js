@@ -5,21 +5,11 @@ import {PropTypes} from 'ember-prop-types'
 const DEFAULT_RADIUS = 4.0
 
 // Example symbol.
-const Circle = Component.extend(PropTypes, {
+const Circle = Component.extend({
   tagName: 'circle',
   attributeBindings: ['cx', 'cy', 'r', 'fill'],
 
-  propTypes: {
-    cx: PropTypes.number.isRequired,
-    cy: PropTypes.number.isRequired,
-    r: PropTypes.number
-  },
-  getDefaultProps () {
-    return {
-      r: DEFAULT_RADIUS
-    }
-  },
-
+  r: DEFAULT_RADIUS,
   cx: computed.oneWay('item.x'),
   cy: computed.oneWay('item.y')
 })
